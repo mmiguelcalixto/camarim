@@ -9,7 +9,7 @@ Stream<List<DocumentSnapshot<Object?>>> filterByServiceType(ServiceType serviceT
   final CollectionReference professionals = FirebaseFirestore.instance.collection("professionals");
   final CollectionReference services = FirebaseFirestore.instance.collection("services");
 
-  final filteredSevices = services.orderBy("type").startAt([serviceType.name]).snapshots();
+  final filteredSevices = services.where("type", isEqualTo: serviceType.name).snapshots();
 
   final professionalsInService = filteredSevices.asyncMap((snapshot) async {
     List<DocumentSnapshot> results = [];

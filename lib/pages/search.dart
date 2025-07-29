@@ -120,16 +120,16 @@ class _SearchState extends State<Search> {
                   ),
                 );
               } else {
-                return Text("");
+                return Text("busca de professionals vazia");
               }    
             }
           ),
           StreamBuilder<List<DocumentSnapshot>>(
             stream: searchResult.professionalsInService,
             builder: (context, snapshot) {
-              final searchResults = snapshot.data;
+              final searchResults = snapshot.data!;
 
-              if (searchResults != null && filteredTypes == null) {
+              if (searchResults.isNotEmpty && filteredTypes == null) {
                 return Expanded(
                   child: ListView(
                     children: searchResults.map<Widget>((doc){
@@ -142,7 +142,7 @@ class _SearchState extends State<Search> {
                   ),
                 );
               } else {
-                return Text("");
+                return Text("busca de serv vazia");
               }    
             }
           ),
