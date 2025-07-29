@@ -1,4 +1,4 @@
-enum Type { 
+enum ServiceType { 
   cabelo, 
   manicure, 
   pedicure,

@@ -28,7 +28,7 @@ class _ProfessionalsState extends State<Professionals> {
   final TextEditingController serviceDescriptionController = TextEditingController();
   final TextEditingController servicePriceController = TextEditingController();
   final TextEditingController serviceDurationController = TextEditingController();
-  final TextEditingController serviceTypeController = TextEditingController();
+  final TextEditingController serviceServiceTypeController = TextEditingController();
 
   void clearTexts() {
     nameController.clear();
@@ -56,28 +56,28 @@ class _ProfessionalsState extends State<Professionals> {
             TextField(controller: serviceDurationController),
 
             Text("Tipo"),
-            TextField(controller: serviceTypeController),
+            TextField(controller: serviceServiceTypeController),
           ]
         ),
       actions: [
         ElevatedButton(onPressed: () {
-          Type type;
+          ServiceType serviceType;
 
-          switch (serviceTypeController.text) {
+          switch (serviceServiceTypeController.text) {
             case "cabelo":
-              type = Type.cabelo;
+              serviceType = ServiceType.cabelo;
               break;
             case "manicure":
-              type = Type.manicure;
+              serviceType = ServiceType.manicure;
               break;
             case "pedicure":
-              type = Type.pedicure;
+              serviceType = ServiceType.pedicure;
               break;
             case "maquiagem":
-              type = Type.maquiagem;
+              serviceType = ServiceType.maquiagem;
               break;
             case "estetica":
-              type = Type.estetica;
+              serviceType = ServiceType.estetica;
             default:
               throw Exception("Invalid service type");
           }
@@ -88,7 +88,7 @@ class _ProfessionalsState extends State<Professionals> {
             duration: int.parse(serviceDurationController.text),
             professionalId: professionalId,
             price: double.parse(servicePriceController.text),
-            type: type.name
+            type: serviceType.name
           );
           
           addService(professionalId, service);
