@@ -11,8 +11,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  
   bool _obscure = true;
   late TapGestureRecognizer _tapGestureRecognizer;
+
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -29,6 +34,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     _tapGestureRecognizer.dispose();
+    // ==== LIBERA CONTROLLERS PARA EVITAR VAZAMENTO ====   pelo oq eu pesquisei, isso serve pra deixar o aplicativo mais leve
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -88,8 +96,10 @@ class _LoginPageState extends State<LoginPage> {
 
                     // email
                     TextField(
+                      // ==== controller adicionado ====
+                      controller: _emailController,
                       decoration: InputDecoration(
-                        labelText: 'Digite seu e-mail...',
+                        labelText: 'Digite seu e‑mail...',
                         labelStyle: TextStyle(color: Color(0xFF737373)),
                         floatingLabelStyle: TextStyle(color: Color(0xFF737373)),
                         border: OutlineInputBorder(
@@ -98,9 +108,14 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
 
+
+
+
                     const SizedBox(height: 16),
                     // senha
                     TextField(
+                      // ==== controller adicionado ====
+                      controller: _passwordController,
                       obscureText: _obscure,
                       decoration: InputDecoration(
                         labelText: 'Digite sua senha...',
@@ -143,7 +158,13 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       height: 48,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // ==== inputs prontos p o backend ====
+                          final email = _emailController.text;
+                          final senha = _passwordController.text;
+                          // TODO: envie email e senha para seu backend
+                          print('Email: $email | Senha: $senha');
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF626BBA),
                           shape: RoundedRectangleBorder(
@@ -211,7 +232,7 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {},
                       icon: const Icon(Icons.facebook),
                       label: const Text('Continue with Facebook'),
-                      style: OutlinedButton.styleFrom(
+                      style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(48),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -223,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {},
                       icon: const Icon(Icons.g_mobiledata),
                       label: const Text('Continue with Google'),
-                      style: OutlinedButton.styleFrom(
+                      style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(48),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
