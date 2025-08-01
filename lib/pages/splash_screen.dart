@@ -35,8 +35,8 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset('assets/img/woman_splash.png', fit: BoxFit.cover),
-          Center(child: Image.asset('assets/img/logo_camarim.png', width: 150)),
+          Image.asset('lib/assets/img/woman_splash.png', fit: BoxFit.cover),
+          Center(child: Image.asset('lib/assets/img/logo_camarim.png', width: 150)),
         ],
       ),
     );

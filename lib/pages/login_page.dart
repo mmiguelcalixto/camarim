@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/img/woman_makeup.png',
+              'lib/assets/img/woman_makeup.png',
               fit: BoxFit.cover,
               alignment: const Alignment(0, -0.3),
             ),
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
           Positioned(
             top: 48,
             left: 24,
-            child: Image.asset('assets/img/logo_camarim.png', width: 100),
+            child: Image.asset('lib/assets/img/logo_camarim.png', width: 100),
           ),
           Positioned(
             left: 24,
