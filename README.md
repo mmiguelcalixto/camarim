@@ -7,7 +7,7 @@
 •Laura Rodrigues Borsagli - 12300802
 •Arthur Bernardo Duarte - 12302864
 
-##Requisitos de implementação da etapa
+## Requisitos de implementação da etapa
 1 O sistema deve permitir o cadastro de usuários.
 
 2 O usuário deve poder redefinir a senha.
