@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'signup_page.dart';
+import 'choose_role_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 
@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
       ..onTap = () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const SignupPage()),
+          MaterialPageRoute(builder: (context) => const ChooseRolePage()),
         );
       };
   }
