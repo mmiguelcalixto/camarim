@@ -26,7 +26,10 @@ class _SignupPageState extends State<SignupPage> {
 
   final _cpfFormatter = MaskTextInputFormatter(mask: '###.###.###-##');
   final _phoneFormatter = MaskTextInputFormatter(mask: '(##) #####-####');
-  final _birthDateMask = MaskTextInputFormatter(mask: '##/##/####', filter: {"#": RegExp(r'\d')});
+  final _birthDateMask = MaskTextInputFormatter(
+    mask: '##/##/####',
+    filter: {"#": RegExp(r'\d')},
+  );
 
   @override
   void initState() {
@@ -78,19 +81,6 @@ class _SignupPageState extends State<SignupPage> {
             left: 24,
             child: Image.asset('assets/img/logo_camarim.png', width: 100),
           ),
-          Positioned(
-            top: 130,
-            left: 20,
-            child: const Text(
-              'Cadastrar',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Montserrat',
-                fontSize: 38,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -106,7 +96,10 @@ class _SignupPageState extends State<SignupPage> {
                   child: Column(
                     children: [
                       const SizedBox(height: 24),
-                      _buildTextFormField(controller: _nameController, label: 'Seu nome completo'),
+                      _buildTextFormField(
+                        controller: _nameController,
+                        label: 'Seu nome completo',
+                      ),
                       _buildTextFormField(
                         controller: _birthDateController,
                         label: 'Data de nascimento',
@@ -118,14 +111,19 @@ class _SignupPageState extends State<SignupPage> {
                           return null;
                         },
                       ),
-                      _buildTextFormField(controller: _usernameController, label: 'Nome de usuário'),
+                      _buildTextFormField(
+                        controller: _usernameController,
+                        label: 'Nome de usuário',
+                      ),
                       _buildTextFormField(
                         controller: _emailController,
                         label: 'E-mail',
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value == null || value.isEmpty) return 'Preencha este campo';
-                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) return 'E-mail inválido';
+                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                            return 'E-mail inválido';
+                          }
                           return null;
                         },
                       ),
@@ -179,7 +177,6 @@ class _SignupPageState extends State<SignupPage> {
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               print('Nome: ${_nameController.text}');
-                              // Enviar dados para backend aqui...
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -219,7 +216,10 @@ class _SignupPageState extends State<SignupPage> {
                           Expanded(child: Divider()),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text('ou', style: TextStyle(color: Color(0xFF737373))),
+                            child: Text(
+                              'ou',
+                              style: TextStyle(color: Color(0xFF737373)),
+                            ),
                           ),
                           Expanded(child: Divider()),
                         ],
@@ -233,6 +233,20 @@ class _SignupPageState extends State<SignupPage> {
                     ],
                   ),
                 ),
+              ),
+            ),
+          ),
+
+          Positioned(
+            top: size.height * 0.14,
+            left: 20,
+            child: const Text(
+              'Cadastrar',
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Montserrat',
+                fontSize: 38,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -261,12 +275,15 @@ class _SignupPageState extends State<SignupPage> {
           labelStyle: const TextStyle(color: Color(0xFF737373)),
           floatingLabelStyle: const TextStyle(color: Color(0xFF737373)),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-          suffixIcon: isPassword ? const Icon(Icons.visibility_off, color: Color(0xFF737373)) : null,
+          suffixIcon: isPassword
+              ? const Icon(Icons.visibility_off, color: Color(0xFF737373))
+              : null,
         ),
-        validator: validator ?? (value) {
-          if (value == null || value.isEmpty) return 'Preencha este campo';
-          return null;
-        },
+        validator: validator ??
+            (value) {
+              if (value == null || value.isEmpty) return 'Preencha este campo';
+              return null;
+            },
       ),
     );
   }

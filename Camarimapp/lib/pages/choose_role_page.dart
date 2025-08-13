@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-//import 'signup_page.dart';
+import 'signup_page.dart';
+import 'signup_page_prof.dart';
 
 class ChooseRolePage extends StatefulWidget {
   const ChooseRolePage({super.key});
@@ -10,8 +11,6 @@ class ChooseRolePage extends StatefulWidget {
 }
 
 class _ChooseRolePageState extends State<ChooseRolePage> {
-  //final _formKey = GlobalKey<FormState>();
-  //bool _obscure = true;
   late TapGestureRecognizer _tapGestureRecognizer;
 
   final TextEditingController _emailController = TextEditingController();
@@ -25,11 +24,18 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
     super.dispose();
   }
 
-  void _selectRole(String role) {
-    // Aqui você pode tratar a seleção, ex: navegar ou salvar estado
-    ScaffoldMessenger.of(
+  void _goToClienteSignup() {
+    Navigator.push(
       context,
-    ).showSnackBar(SnackBar(content: Text('Selecionou: $role')));
+      MaterialPageRoute(builder: (context) => const SignupPage()),
+    );
+  }
+
+  void _goToProfSignup() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SignupPageProf()),
+    );
   }
 
   @override
@@ -38,7 +44,6 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // Imagem de fundo
           Positioned.fill(
             child: Image.asset(
               'assets/img/woman_skincare.png',
@@ -52,7 +57,7 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
             child: Image.asset('assets/img/logo_camarim.png', width: 100),
           ),
           Positioned(
-            top: MediaQuery.of(context).padding.top + 80,
+            bottom: MediaQuery.of(context).size.height * 0.60 - -5,
             left: 20,
             child: const Text(
               'Cadastrar',
@@ -65,7 +70,6 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
             ),
           ),
 
-          // Caixa branca arredondada na parte inferior
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -82,27 +86,47 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Escolha sua função:',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                    Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: 40),
+                          const Text(
+                            'Escolha sua função:',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 24),
+
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         _buildRoleCard(
                           label: 'Sou cliente',
-                          icon: Icons.person,
-                          onTap: () => _selectRole('Cliente'),
+                          icon: Image.asset(
+                            'assets/img/customer_vector.png',
+                            width: 180,
+                            height: 180,
+                          ),
+                          onTap: _goToClienteSignup,
+                          subtitle: 'Quero agendar serviços',
                         ),
                         _buildRoleCard(
                           label: 'Sou profissional',
-                          icon: Icons.work,
-                          onTap: () => _selectRole('Profissional'),
+                          icon: Image.asset(
+                            'assets/img/professional_vector.png',
+                            width: 180,
+                            height: 180,
+                          ),
+                          onTap: _goToProfSignup,
+                          subtitle: 'Quero oferecer serviços',
                         ),
                       ],
                     ),
@@ -118,38 +142,46 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
 
   Widget _buildRoleCard({
     required String label,
-    required IconData icon,
+    required Widget icon,
     required VoidCallback onTap,
+    String? subtitle,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 140,
-        height: 140,
+        width: 180,
+        height: 270,
         decoration: BoxDecoration(
-          color: Colors.grey[200],
+          color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 4,
-              offset: Offset(2, 2),
-            ),
-          ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 56, color: Colors.black87),
-            const SizedBox(height: 12),
             Text(
               label,
               style: const TextStyle(
                 fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
+                fontWeight: FontWeight.w700,
+                color: Color.fromARGB(255, 92, 98, 158),
               ),
             ),
+            const SizedBox(height: 8), 
+            SizedBox(
+              width: 200, 
+              height: 200, 
+              child: icon,
+            ),
+
+            const SizedBox(
+              height: 4,
+            ),
+            if (subtitle != null)
+              Text(
+                subtitle,
+                style: const TextStyle(fontSize: 12, color: Color(0xFF818181)),
+                textAlign: TextAlign.center,
+              ),
           ],
         ),
       ),

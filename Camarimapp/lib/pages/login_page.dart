@@ -57,8 +57,8 @@ class _LoginPageState extends State<LoginPage> {
             child: Image.asset('assets/img/logo_camarim.png', width: 100),
           ),
           Positioned(
-            left: 24,
-            top: MediaQuery.of(context).size.height * 0.34,
+            bottom: MediaQuery.of(context).size.height * 0.60 - -5, 
+  left: 20,
             child: const Text(
               'Log In',
               style: TextStyle(
