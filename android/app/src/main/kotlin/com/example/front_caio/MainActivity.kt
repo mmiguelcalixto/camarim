@@ -1,4 +1,4 @@
-package com.example.camarim_backend
+package com.example.front_caio
 
 import io.flutter.embedding.android.FlutterActivity
 

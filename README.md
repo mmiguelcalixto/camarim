@@ -1,29 +1,16 @@
-# Camarim
-## Integrantes e matrículas 
-•Marina Rocha Vasconcelos - 12400068
-•Caio Martins Caldeira - 12400220
-•Guilherme Miranda Figueiredo de Castro - 12300071
-•Miguel Mendes Calixto - 12300098
-•Laura Rodrigues Borsagli - 12300802
-•Arthur Bernardo Duarte - 12302864
+# front_caio
 
-## Requisitos de implementação da etapa
-1 O sistema deve permitir o cadastro de usuários.
+A new Flutter project.
 
-2 O usuário deve poder redefinir a senha.
+## Getting Started
 
-3 O sistema deve ter um sistema de busca eficiente.
+This project is a starting point for a Flutter application.
 
-04 O usuário deve conseguir visualizar um histórico de atividades.
+A few resources to get you started if this is your first Flutter project:
 
-5 Profissional adicionar selo/tag no perfil para indicar atendimento adaptado a neurodivergentes.
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-6 Opção para contatar o suporte ao usuário.
-
-7 O sistema deve permitir que os profissionais definam sua disponibilidade de horários.
-
-8 Filtro por região, preço, tipo, serviço e etc.
-
-9 O profissional pode adicionar seu portfólio no perfil.
-
-10 Cliente poder contatar o profissional via chat.
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
