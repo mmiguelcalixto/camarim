@@ -47,7 +47,6 @@ cd camarim
 #### Instale as dependências do Flutter
 flutter pub get
 
-## 3. Execução
 #### Execute o aplicativo no dispositivo ou emulador
 flutter run
 
