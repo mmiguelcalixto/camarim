@@ -32,8 +32,8 @@ Camarim é um sistema voltado para conectar clientes a profissionais de beleza e
 ## Como Executar o Projeto
 
 ### 1. Pré-requisitos
-- Flutter ^5.0.0
-- Dart >= 3.0  
+- Flutter 3.35.2
+- Dart 3.9.0  
 - Dependências listadas em `pubspec.yaml`
 
 ### 2. Instalação
