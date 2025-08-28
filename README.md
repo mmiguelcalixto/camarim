@@ -17,19 +17,6 @@ Camarim é um sistema voltado para conectar clientes a profissionais de beleza e
 
 ## Estrutura de Diretórios
 
-
-## Funcionalidades Implementadas
-1. Cadastro de usuários (clientes e profissionais)  
-2. Redefinição de senha  
-3. Sistema de busca eficiente  
-4. Histórico de atividades do usuário  
-5. Profissionais podem adicionar selo/tag indicando atendimento adaptado a neurodivergentes  
-6. Contato com suporte ao usuário  
-7. Definição de disponibilidade de horários pelos profissionais  
-8. Filtros por região, preço, tipo de serviço, entre outros  
-9. Adição de portfólio no perfil do profissional  
-10. Comunicação via chat entre cliente e profissional  
-
 ## Funcionalidades Implementadas
 1. Cadastro de usuários (clientes / profissionais)  
 2. Login de usuários
