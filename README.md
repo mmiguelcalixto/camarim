@@ -38,13 +38,13 @@ Camarim é um sistema voltado para conectar clientes a profissionais de beleza e
 
 ### 2. Instalação
 bash
-# Clone o repositório
+## Clone o repositório
 git clone https://github.com/mmiguelcalixto/camarim.git
 
-# Acesse a pasta do projeto
+## Acesse a pasta do projeto
 cd camarim
 
-# Instale as dependências do Flutter
+## Instale as dependências do Flutter
 flutter pub get
 
 ### 3. Execução
