@@ -1,8 +1,8 @@
 # Camarim
 
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
-![Flutter](https://img.shields.io/badge/Flutter-3.13-blue)
-![Dart](https://img.shields.io/badge/Dart-3.0-blueviolet)
+![Status](https://img.shields.io/badge/status-em%20desenvolvimento-purple)
+![Flutter](https://img.shields.io/badge/Flutter-3.35.2-blue)
+![Dart](https://img.shields.io/badge/Dart-3.9.0-blueviolet)
 
 ## Descrição
 Camarim é um sistema voltado para conectar clientes a profissionais de beleza e estética, proporcionando um ambiente online para cadastro, busca e comunicação entre usuários e profissionais. O sistema inclui funcionalidades como gerenciamento de perfis, histórico de atividades, filtros de busca eficientes e uma interface intuitiva e moderna.
