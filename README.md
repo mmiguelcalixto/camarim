@@ -16,7 +16,7 @@ Camarim é um aplicativo voltado para conectar clientes a profissionais de belez
 - Arthur Bernardo Duarte - 12302864  
 
 ## Funcionalidades Implementadas
-1.  [] Cadastro de clientes
+1.  [x] Cadastro de clientes
 2.  [] Cadastro de profissionais
 3.  [] Login de usuários
 4.  [] Busca por profissionais  
