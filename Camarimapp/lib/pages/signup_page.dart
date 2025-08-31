@@ -176,7 +176,7 @@ class _SignupPageState extends State<SignupPage> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              print('Nome: ${_nameController.text}');
+                              debugPrint('Nome: ${_nameController.text}');
                             }
                           },
                           style: ElevatedButton.styleFrom(

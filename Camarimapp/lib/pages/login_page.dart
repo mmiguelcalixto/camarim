@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'choose_role_page.dart';
+import 'home_page.dart'; 
 import 'package:flutter/gestures.dart';
-import 'package:flutter/services.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,13 +21,14 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _tapGestureRecognizer = TapGestureRecognizer()
-      ..onTap = () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const ChooseRolePage()),
-        );
-      };
+    _tapGestureRecognizer =
+        TapGestureRecognizer()
+          ..onTap = () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ChooseRolePage()),
+            );
+          };
   }
 
   @override
@@ -57,8 +58,8 @@ class _LoginPageState extends State<LoginPage> {
             child: Image.asset('assets/img/logo_camarim.png', width: 100),
           ),
           Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.60 - -5, 
-  left: 20,
+            bottom: MediaQuery.of(context).size.height * 0.60 - -5,
+            left: 20,
             child: const Text(
               'Log In',
               style: TextStyle(
@@ -93,8 +94,9 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: InputDecoration(
                           labelText: 'Digite seu e‑mail...',
                           labelStyle: const TextStyle(color: Color(0xFF737373)),
-                          floatingLabelStyle:
-                              const TextStyle(color: Color(0xFF737373)),
+                          floatingLabelStyle: const TextStyle(
+                            color: Color(0xFF737373),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -116,10 +118,10 @@ class _LoginPageState extends State<LoginPage> {
                         obscureText: _obscure,
                         decoration: InputDecoration(
                           labelText: 'Digite sua senha...',
-                          labelStyle:
-                              const TextStyle(color: Color(0xFF737373)),
-                          floatingLabelStyle:
-                              const TextStyle(color: Color(0xFF737373)),
+                          labelStyle: const TextStyle(color: Color(0xFF737373)),
+                          floatingLabelStyle: const TextStyle(
+                            color: Color(0xFF737373),
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -168,7 +170,14 @@ class _LoginPageState extends State<LoginPage> {
                             if (_formKey.currentState!.validate()) {
                               final email = _emailController.text;
                               final senha = _passwordController.text;
-                              print('Email: $email | Senha: $senha');
+                              debugPrint('Email: $email | Senha: $senha');
+
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomePage(),
+                                ),
+                              );
                             }
                           },
                           style: ElevatedButton.styleFrom(
