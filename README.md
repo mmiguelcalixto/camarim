@@ -5,7 +5,7 @@
 ![Dart](https://img.shields.io/badge/Dart-3.9.0-blueviolet)
 
 ## Descrição
-Camarim é um sistema voltado para conectar clientes a profissionais de beleza e estética, proporcionando um ambiente online para cadastro, busca e comunicação entre usuários e profissionais. O sistema inclui funcionalidades como gerenciamento de perfis, histórico de atividades, filtros de busca eficientes e uma interface intuitiva e moderna.
+Camarim é um aplicativo voltado para conectar clientes a profissionais de beleza e estética, proporcionando um ambiente online para cadastro, busca e comunicação entre usuários e profissionais. O sistema inclui funcionalidades como gerenciamento de perfis, histórico de atividades, filtros de busca eficientes e uma interface intuitiva e moderna.
 
 ## Integrantes
 - Marina Rocha Vasconcelos - 12400068  
@@ -18,16 +18,16 @@ Camarim é um sistema voltado para conectar clientes a profissionais de beleza e
 ## Estrutura de Diretórios
 
 ## Funcionalidades Implementadas
-1. Cadastro de usuários (clientes / profissionais)  
-2. Login de usuários
-3. Sistema de busca eficiente  
-4. Filtros por região, preço, tipo de serviço, entre outros  
-5. CRUD
-6. Adição de portfólio no perfil do profissional
-7.   
-8. 
-9.   
-10. 
+1.  [] Cadastro de clientes
+2.  [] Cadastro de profissionais
+3.  [] Login de usuários
+4.  [] Busca por profissionais  
+5.  [] Filtros na busca por endereço, preço e tipo de serviço
+6.  [] Tela inicial listando alguns profissionais
+7.  [] Usuário poder atualizar dados de sua conta
+8.  [] Usuário poder excluir sua conta
+9.  []
+10. []  
 
 ## Como Executar o Projeto
 
