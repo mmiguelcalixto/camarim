@@ -6,7 +6,6 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      // ... todo o seu código de layout da página de perfil aqui
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [

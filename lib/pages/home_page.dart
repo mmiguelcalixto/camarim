@@ -8,6 +8,13 @@ import '../widgets/square_card.dart';
 import '../widgets/circle_card.dart';
 import '../widgets/horizontal_list.dart';
 
+class Professional {
+  final String name;
+  final String imagePath;
+
+  Professional({required this.name, required this.imagePath});
+}
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -21,9 +28,9 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     HomePageContent(),
     SearchProfPage(),
-    Center(child: Text("Página de Horários")),
+    const Center(child: Text("Página de Horários")),
     ProfilePage(),
-    Center(child: Text("Página de Menu")),
+    const Center(child: Text("Página de Menu")),
   ];
 
   void _onItemTapped(int index) {
@@ -31,8 +38,6 @@ class _HomePageState extends State<HomePage> {
       _selectedIndex = index;
     });
   }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +97,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// Classe do conteúdo da HomePage
 class HomePageContent extends StatefulWidget {
   const HomePageContent({super.key});
 
@@ -101,10 +105,16 @@ class HomePageContent extends StatefulWidget {
 }
 
 class _HomePageContentState extends State<HomePageContent> {
-  // A lógica de navegação foi removida daqui
+
+  // dados dos profissionais sugeridps
+  final List<Professional> topRatedProfessionals = [
+    Professional(name: 'Bruna Nails', imagePath: 'assets/img/nails.jpg'), 
+    Professional(name: 'Gabriel Hair', imagePath: 'assets/img/gabriel.jpg'),
+    Professional(name: 'Jorge SPA', imagePath: 'assets/img/jorge.jpg'), 
+  ];
+
   @override
   Widget build(BuildContext context) {
-    // O seu layout da HomePage está aqui
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,11 +254,9 @@ class _HomePageContentState extends State<HomePageContent> {
           Section(
             title: "Bem avaliados",
             child: HorizontalList(
-              children: const [
-                SquareCard("Nails", 4.5),
-                SquareCard("Gabriel Hair", 5.0),
-                SquareCard("Jorge SPA", 4.5),
-              ],
+              children: topRatedProfessionals.map((prof) {
+                return SquareCard(prof.name, prof.imagePath);
+              }).toList(),
             ),
           ),
           Section(
