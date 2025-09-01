@@ -1,5 +1,9 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'edit_profile_page.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -29,9 +33,9 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 3; // começa na aba Profile
 
   final List<Widget> _pages = const [
-    Center(child: Text("Home")),
-    Center(child: Text("Search")),
-    Center(child: Text("Hours")),
+    Center(child: Text("Início")),
+    Center(child: Text("Pesquisa")),
+    Center(child: Text("Horários")),
     ProfilePage(),
     Center(child: Text("Menu")),
   ];
@@ -54,7 +58,7 @@ class _HomePageState extends State<HomePage> {
             topRight: Radius.circular(16),
           ),
           border: Border.all(
-            color: Colors.deepPurple, // borda roxa
+            color: Colors.deepPurple,
             width: 1.5,
           ),
           boxShadow: const [
@@ -76,19 +80,19 @@ class _HomePageState extends State<HomePage> {
           items: const [
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.house),
-              label: "Home",
+              label: "Início",
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-              label: "Search",
+              label: "Pesquisa",
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.calendar),
-              label: "Hours",
+              label: "Horários",
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.user),
-              label: "Profile",
+              label: "Perfil",
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.bars),
@@ -110,7 +114,7 @@ class ProfilePage extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // HEADER COM IMAGEM
+          // HEADER
           Container(
             height: 150,
             decoration: BoxDecoration(
@@ -154,80 +158,23 @@ class ProfilePage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // BOTÃO EDIT BIOGRAPHY
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepPurple,
-            ),
-            child: const Text(
-              "Edit biography",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
+          // BOTÃO EDIT BIO
+           ElevatedButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const EditProfilePage()),
+    );
+  },
+  child: const Text("Alterar Biografia"),
+),
 
           // LATEST WORKS
-          const Text(
-            "latest works",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.deepPurple,
-            ),
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 100,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 6,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return Container(
-                    width: 80,
-                    margin: const EdgeInsets.only(right: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: const DecorationImage(
-                        image: AssetImage("assets/images/work1.png"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                } else if (index == 1) {
-                  return Container(
-                    width: 80,
-                    margin: const EdgeInsets.only(right: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: const DecorationImage(
-                        image: AssetImage("assets/images/work2.png"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                } else {
-                  return Container(
-                    width: 80,
-                    margin: const EdgeInsets.only(right: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(Icons.add, color: Colors.grey),
-                  );
-                }
-              },
-            ),
-          ),
-          const SizedBox(height: 20),
+          const LatestWorks(),
 
           // SERVICES
           const Text(
-            "services",
+            "Serviços",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.deepPurple,
@@ -251,7 +198,7 @@ class ProfilePage extends StatelessWidget {
 
           // CAREER
           const Text(
-            "career",
+            "Tragetória",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.deepPurple,
@@ -292,11 +239,28 @@ class ProfilePage extends StatelessWidget {
           const SizedBox(height: 20),
 
           // DIFERENCIAIS
-          const Text("✦ Este profissional atende a domicílio"),
-          const Text("✦ Add another differential +"),
-          const SizedBox(height: 20),
 
-          // LOCATION / MAPA
+          
+
+         Text(
+  "✦ Este profissional atende a domicílio",
+  style: TextStyle(
+    color: Colors.deepPurple, 
+    fontWeight: FontWeight.bold,
+    fontSize: 16, 
+  ),
+),
+ Text(
+  "✦ Este profissional oferece atendimento adaptado a pessoas neurodivergentes",
+  style: TextStyle(
+    color: Colors.deepPurple,
+    fontWeight: FontWeight.bold,
+    fontSize: 16,
+  ),
+),
+
+
+          // MAPA
           Container(
             height: 150,
             decoration: BoxDecoration(
@@ -309,26 +273,164 @@ class ProfilePage extends StatelessWidget {
           ),
           const SizedBox(height: 20),
 
-          // SOCIAL MEDIA 
+          // SOCIAL MEDIA
           const Text(
-            "social medias",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.deepPurple,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text("📸 your instagram link"),
-              Text("💼 your linkedin link"),
-              Text("🎵 your tiktok link"),
-              Text("🐦 your X link"),
-            ],
-          ),
-          const SizedBox(height: 30),
+  "social medias",
+  style: TextStyle(
+    fontWeight: FontWeight.bold,
+    color: Colors.deepPurple,
+  ),
+),
+const SizedBox(height: 10),
+Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: const [
+    Row(
+      children: [
+        FaIcon(FontAwesomeIcons.instagram, color: Colors.deepPurple),
+        SizedBox(width: 8),
+        Text("your instagram link"),
+      ],
+    ),
+    SizedBox(height: 8),
+    Row(
+      children: [
+        FaIcon(FontAwesomeIcons.linkedin, color: Colors.deepPurple),
+        SizedBox(width: 8),
+        Text("your linkedin link"),
+      ],
+    ),
+    SizedBox(height: 8),
+    Row(
+      children: [
+        FaIcon(FontAwesomeIcons.tiktok, color: Colors.deepPurple),
+        SizedBox(width: 8),
+        Text("your tiktok link"),
+      ],
+    ),
+    SizedBox(height: 8),
+    Row(
+      children: [
+        FaIcon(FontAwesomeIcons.xTwitter, color: Colors.deepPurple),
+        SizedBox(width: 8),
+        Text("your X link"),
+      ],
+    ),
+  ],
+),
+const SizedBox(height: 30),
+
         ],
+      ),
+    );
+  }
+}
+
+class LatestWorks extends StatefulWidget {
+  const LatestWorks({super.key});
+
+  @override
+  State<LatestWorks> createState() => _LatestWorksState();
+}
+
+class _LatestWorksState extends State<LatestWorks> {
+  final List<Uint8List?> _userImages = List<Uint8List?>.filled(6, null);
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage(int index) async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      final bytes = await pickedFile.readAsBytes();
+      setState(() {
+        _userImages[index] = bytes;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Trabalhos já Feitos",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.deepPurple,
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 100,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 6,
+            itemBuilder: (context, index) {
+              final imageBytes = _userImages[index];
+
+              if (imageBytes != null) {
+                return Container(
+                  width: 80,
+                  margin: const EdgeInsets.only(right: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey[200],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.memory(
+                      imageBytes,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Center(
+                          child: Icon(Icons.error, color: Colors.red),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              }
+
+              // imagens padrão
+              if (index == 0) {
+                return _buildDefaultAsset("assets/images/work1.png");
+              } else if (index == 1) {
+                return _buildDefaultAsset("assets/images/work2.png");
+              }
+
+              // botão para adicionar
+              return GestureDetector(
+                onTap: () => _pickImage(index),
+                child: Container(
+                  width: 80,
+                  margin: const EdgeInsets.only(right: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.add, color: Colors.grey),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 20),
+      ],
+    );
+  }
+
+  Widget _buildDefaultAsset(String path) {
+    return Container(
+      width: 80,
+      margin: const EdgeInsets.only(right: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        image: DecorationImage(
+          image: AssetImage(path),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
