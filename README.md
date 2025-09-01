@@ -18,14 +18,14 @@ Camarim é um aplicativo voltado para conectar clientes a profissionais de belez
 ## Funcionalidades Implementadas
 1.   - [ ] Cadastro de clientes
 2.   - [ ] Cadastro de profissionais
-3.   - [ ] Login de usuários
+3.   - [ ] Profissional poder adicionar imagens de seus trabalhos no perfil
 4.   - [ ] Busca por profissionais  
 5.   - [ ] Filtros na busca por endereço, preço e tipo de serviço
 6.   - [ ] Tela inicial listando alguns profissionais
-7.   - [ ] Usuário poder atualizar dados de sua conta
-8.   - [ ] Usuário poder excluir sua conta
-9.   - [ ]
-10.  - [ ]  
+7.   - [ ] Cliente poder atualizar dados de sua conta
+8.   - [ ] Profissional poder atualizar dados de sua conta
+9.   - [ ] Cliente poder excluir sua conta
+10.  - [ ] Profissional poder excluir dados de sua conta
 
 ## Como Executar o Projeto
 
