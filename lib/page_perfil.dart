@@ -309,7 +309,7 @@ class ProfilePage extends StatelessWidget {
           ),
           const SizedBox(height: 20),
 
-          // SOCIAL MEDIA TESTE
+          // SOCIAL MEDIA 
           const Text(
             "social medias",
             style: TextStyle(
