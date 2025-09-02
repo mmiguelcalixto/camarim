@@ -1,4 +1,8 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'edit_profile_page.dart'; 
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -6,17 +10,15 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      // ... todo o seu código de layout da página de perfil aqui
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // HEADER COM IMAGEM
+          // HEADER
           Container(
             height: 150,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              image: const DecorationImage(
-                image: AssetImage("assets/img/header.png"),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/header.png"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -24,11 +26,11 @@ class ProfilePage extends StatelessWidget {
           const SizedBox(height: 20),
 
           // FOTO DE PERFIL
-          Center(
+          const Center(
             child: CircleAvatar(
               radius: 60,
-              backgroundImage: const AssetImage("assets/img/perfil.png"),
-              backgroundColor: Colors.grey[300],
+              backgroundImage: AssetImage("assets/images/perfil.png"),
+              backgroundColor: Colors.white,
             ),
           ),
           const SizedBox(height: 12),
@@ -54,80 +56,29 @@ class ProfilePage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // BOTÃO EDIT BIOGRAPHY
+          // BOTÃO EDITAR BIOGRAFIA
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const EditProfilePage()),
+              );
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.deepPurple,
             ),
             child: const Text(
-              "Edit biography",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+              "Alterar Perfil",
+              style: TextStyle(color: Colors.white),
             ),
           ),
-          const SizedBox(height: 20),
 
-          // LATEST WORKS
-          const Text(
-            "latest works",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.deepPurple,
-            ),
-          ),
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 100,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 6,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return Container(
-                    width: 80,
-                    margin: const EdgeInsets.only(right: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: const DecorationImage(
-                        image: AssetImage("assets/img/work1.png"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                } else if (index == 1) {
-                  return Container(
-                    width: 80,
-                    margin: const EdgeInsets.only(right: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: const DecorationImage(
-                        image: AssetImage("assets/img/work2.png"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                } else {
-                  return Container(
-                    width: 80,
-                    margin: const EdgeInsets.only(right: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(Icons.add, color: Colors.grey),
-                  );
-                }
-              },
-            ),
-          ),
-          const SizedBox(height: 20),
+          // TRABALHOS RECENTES
+          const LatestWorks(),
 
-          // SERVICES
+          // SERVIÇOS
           const Text(
-            "services",
+            "Serviços",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.deepPurple,
@@ -149,9 +100,9 @@ class ProfilePage extends StatelessWidget {
           ),
           const SizedBox(height: 20),
 
-          // CAREER
+          // TRAJETÓRIA
           const Text(
-            "career",
+            "Trajetória",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.deepPurple,
@@ -169,7 +120,7 @@ class ProfilePage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Center(
-                    child: Text("Add an institution\nWhat do you learn?"),
+                    child: Text("Adicionar instituição\nO que você aprendeu?"),
                   ),
                 ),
               ),
@@ -183,7 +134,7 @@ class ProfilePage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Center(
-                    child: Text("Institution details timeline..."),
+                    child: Text("Detalhes da instituição..."),
                   ),
                 ),
               ),
@@ -192,26 +143,48 @@ class ProfilePage extends StatelessWidget {
           const SizedBox(height: 20),
 
           // DIFERENCIAIS
-          const Text("✦ Este profissional atende a domicílio"),
-          const Text("✦ Add another differential +"),
+          const Text(
+            "Diferenciais",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.deepPurple,
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            "✦ Este profissional atende a domicílio",
+            style: TextStyle(
+              color: Colors.deepPurple,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          const Text(
+            "✦ Este profissional oferece atendimento adaptado a pessoas neurodivergentes",
+            style: TextStyle(
+              color: Colors.deepPurple,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
           const SizedBox(height: 20),
 
-          // LOCATION / MAPA
+          // MAPA
           Container(
             height: 150,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               image: const DecorationImage(
-                image: AssetImage("assets/img/maps.png"),
+                image: AssetImage("assets/images/maps.png"),
                 fit: BoxFit.cover,
               ),
             ),
           ),
           const SizedBox(height: 20),
 
-          // SOCIAL MEDIA
+          // MÍDIAS SOCIAIS
           const Text(
-            "social medias",
+            "Mídias Sociais",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.deepPurple,
@@ -221,14 +194,143 @@ class ProfilePage extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
-              Text("📸 your instagram link"),
-              Text("💼 your linkedin link"),
-              Text("🎵 your tiktok link"),
-              Text("🐦 your X link"),
+              Row(
+                children: [
+                  FaIcon(FontAwesomeIcons.instagram, color: Colors.deepPurple),
+                  SizedBox(width: 8),
+                  Text("Seu link do Instagram"),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  FaIcon(FontAwesomeIcons.linkedin, color: Colors.deepPurple),
+                  SizedBox(width: 8),
+                  Text("Seu link do LinkedIn"),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  FaIcon(FontAwesomeIcons.tiktok, color: Colors.deepPurple),
+                  SizedBox(width: 8),
+                  Text("Seu link do TikTok"),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  FaIcon(FontAwesomeIcons.xTwitter, color: Colors.deepPurple),
+                  SizedBox(width: 8),
+                  Text("Seu link do X"),
+                ],
+              ),
             ],
           ),
           const SizedBox(height: 30),
         ],
+      ),
+    );
+  }
+}
+
+class LatestWorks extends StatefulWidget {
+  const LatestWorks({super.key});
+
+  @override
+  State<LatestWorks> createState() => _LatestWorksState();
+}
+
+class _LatestWorksState extends State<LatestWorks> {
+  final List<Uint8List?> _userImages = List<Uint8List?>.filled(6, null);
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage(int index) async {
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final bytes = await pickedFile.readAsBytes();
+      setState(() {
+        _userImages[index] = bytes;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Trabalhos já Feitos",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.deepPurple,
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 100,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 6,
+            itemBuilder: (context, index) {
+              if (index < 2) {
+                // Imagens padrão para os dois primeiros slots
+                return _buildDefaultAsset("assets/images/work${index + 1}.png");
+              } else {
+                final imageBytes = _userImages[index];
+                if (imageBytes != null) {
+                  return _buildUserImage(imageBytes);
+                }
+                return GestureDetector(
+                  onTap: () => _pickImage(index),
+                  child: Container(
+                    width: 80,
+                    margin: const EdgeInsets.only(right: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.add, color: Colors.grey),
+                  ),
+                );
+              }
+            },
+          ),
+        ),
+        const SizedBox(height: 20),
+      ],
+    );
+  }
+
+  Widget _buildDefaultAsset(String path) {
+    return Container(
+      width: 80,
+      margin: const EdgeInsets.only(right: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        image: DecorationImage(
+          image: AssetImage(path),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUserImage(Uint8List imageBytes) {
+    return Container(
+      width: 80,
+      margin: const EdgeInsets.only(right: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.grey[200],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Image.memory(
+          imageBytes,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
