@@ -24,6 +24,12 @@ class _SignupPageState extends State<SignupPage> {
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _cpfController = TextEditingController();
+  final _streetController = TextEditingController();
+  final _numberController = TextEditingController();
+  final _neighborhoodController = TextEditingController();
+  final _cityController = TextEditingController();
+  final _stateController = TextEditingController();
+  final _cepController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
@@ -154,6 +160,12 @@ class _SignupPageState extends State<SignupPage> {
                           return null;
                         },
                       ),
+                      _buildTextFormField(controller: _streetController, label: 'Rua'),
+                      _buildTextFormField(controller: _numberController, label: 'Número do endereço'),
+                      _buildTextFormField(controller: _neighborhoodController, label: 'Bairro'),
+                      _buildTextFormField(controller: _cityController, label: 'Cidade'),
+                      _buildTextFormField(controller: _stateController, label: 'Estado'),
+                      _buildTextFormField(controller: _cepController, label: 'CEP'),
                       _buildTextFormField(
                         controller: _passwordController,
                         label: 'Senha',
@@ -183,11 +195,17 @@ class _SignupPageState extends State<SignupPage> {
                             if (_formKey.currentState!.validate()) {
                               final customer = Customer(
                                 fullName: _nameController.text,
-                                birthDate: _birthDateController.text,
+                                birthDate: customerService.parseBrazilianDate(_birthDateController.text),
                                 username: _usernameController.text,
                                 email: _emailController.text,
                                 phone: _phoneController.text,
                                 password: _passwordController.text,
+                                addressStreet: _streetController.text,
+                                addressNumber: _numberController.text,
+                                addressNeighborhood: _neighborhoodController.text,
+                                addressCity: _cityController.text,
+                                addressState: _stateController.text,
+                                addressCep: _cepController.text
                               );
                               
                               customerService.addCustomer(customer);

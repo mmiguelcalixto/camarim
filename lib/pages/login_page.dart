@@ -1,3 +1,4 @@
+import 'package:camarim_backend/pages/home_page.dart';
 import 'package:camarim_backend/services/firestore.service.dart';
 import 'package:flutter/material.dart';
 import 'signup_page.dart';
@@ -166,9 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 48,
                         child: ElevatedButton(
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              firestoreService.signIn(_emailController.text, _passwordController.text);
-                            }
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF626BBA),
