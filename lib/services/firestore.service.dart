@@ -1,23 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../models/professional.dart';
+import 'firestore.service.dart';
+
 
 class FirestoreService {
-  Stream<QuerySnapshot> get(CollectionReference collection) {
-    final result = collection.snapshots();
+  final CollectionReference collection;
 
-    return result;
+  FirestoreService(this.collection);
+
+  Future<void> add(String id, Map<String, dynamic> data) async {
+    await collection.doc(id).set(data);
   }
 
-  Future<void> delete(String id, CollectionReference collection) {
-    return collection.doc(id).delete();
+  Future<void> update(String id, Map<String, dynamic> data) async {
+    await collection.doc(id).update(data);
   }
 
-  Future<DocumentSnapshot> getById(String id, CollectionReference collection) async {
+  Future<void> delete(String id) async {
+    await collection.doc(id).delete();
+  }
+
+  Future<Map<String, dynamic>?> getById(String id) async {
     final doc = await collection.doc(id).get();
-    return doc;
+    return doc.data() as Map<String, dynamic>?;
   }
 
-  Future signIn(String email, String password) async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(email: email.trim(), password: password.trim());
+  Stream<List<Map<String, dynamic>>> getAll() {
+    return collection.snapshots().map(
+      (snapshot) => snapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList(),
+    );
   }
 }
