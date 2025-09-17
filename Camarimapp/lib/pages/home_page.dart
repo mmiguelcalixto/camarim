@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'search_prof.dart'; 
-import 'page_perfil.dart'; 
 import '../widgets/category_chip.dart';
 import '../widgets/section.dart';
 import '../widgets/square_card.dart';
 import '../widgets/circle_card.dart';
 import '../widgets/horizontal_list.dart';
 
-// Classe de modelo para os profissionais
+// classe modelo ficticia p os profissionais
 class Professional {
   final String name;
   final String imagePath;
 
   Professional({required this.name, required this.imagePath});
 }
-
+// NAV BAR ----------------------------------------------------------------
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -30,7 +29,7 @@ class _HomePageState extends State<HomePage> {
     HomePageContent(),
     SearchProfPage(),
     const Center(child: Text("Página de Horários")),
-    ProfilePage(),
+    const Center(child: Text("Página do Perfil do Cliente")),
     const Center(child: Text("Página de Menu")),
   ];
 
@@ -68,25 +67,25 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           selectedItemColor: Colors.deepPurple,
-          unselectedItemColor: Colors.deepPurple.withOpacity(0.5),
+          unselectedItemColor: Colors.deepPurple,
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
           items: const [
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.house),
-              label: "Home",
+              label: "Início",
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-              label: "Search",
+              label: "Busca",
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.calendar),
-              label: "Hours",
+              label: "Horários",
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.user),
-              label: "Profile",
+              label: "Perfil",
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.bars),
@@ -98,6 +97,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+//FIM DA NAV BAR ----------------------------------------------------------------
 
 class HomePageContent extends StatefulWidget {
   const HomePageContent({super.key});

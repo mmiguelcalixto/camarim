@@ -1,5 +1,5 @@
 // lib/pages/search_prof.dart
-
+import 'professional_page.dart'
 import 'package:flutter/material.dart';
 
 class SearchProfPage extends StatefulWidget {
@@ -112,59 +112,65 @@ class _SearchProfPageState extends State<SearchProfPage> {
     );
   }
 
+  // ====== card com GestureDetector ======
   Widget _buildProfessionalCard({
     required String name,
     required String address,
     required String imageUrl,
     required double rating,
   }) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.asset(
-              imageUrl,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () {
+        ProfessionalPageClient();
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(
+                imageUrl,
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                Text(address, style: const TextStyle(color: Colors.grey)),
-                const SizedBox(height: 6),
-                const Text(
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 12, color: Colors.black54),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text(rating.toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
-                    const SizedBox(width: 4),
-                    Row(
-                      children: List.generate(5, (index) {
-                        return Icon(
-                          index < rating.floor() ? Icons.star : Icons.star_border,
-                          color: Colors.amber,
-                          size: 18,
-                        );
-                      }),
-                    )
-                  ],
-                )
-              ],
-            ),
-          )
-        ],
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(address, style: const TextStyle(color: Colors.grey)),
+                  const SizedBox(height: 6),
+                  const Text(
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 12, color: Colors.black54),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(rating.toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 4),
+                      Row(
+                        children: List.generate(5, (index) {
+                          return Icon(
+                            index < rating.floor() ? Icons.star : Icons.star_border,
+                            color: Colors.amber,
+                            size: 18,
+                          );
+                        }),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -176,7 +182,7 @@ class _SearchProfPageState extends State<SearchProfPage> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Logo no topo
+            // logo no topo
             Row(
               children: [
                 Image.asset(
@@ -187,7 +193,7 @@ class _SearchProfPageState extends State<SearchProfPage> {
             ),
             const SizedBox(height: 20),
 
-            // Campo de pesquisa
+            // campo de pesquisa
             Row(
               children: [
                 Expanded(
@@ -214,7 +220,7 @@ class _SearchProfPageState extends State<SearchProfPage> {
             ),
             const SizedBox(height: 20),
 
-            // Lista de profissionais
+            // lista de profissionais
             Expanded(
               child: ListView(
                 children: [
