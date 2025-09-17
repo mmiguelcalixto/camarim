@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-// 1. A PÁGINA FOI CONVERTIDA PARA STATEFULWIDGET
-// Isso é necessário para controlar o estado do item selecionado.
 class FavoritosPage extends StatefulWidget {
   const FavoritosPage({super.key});
 
@@ -10,19 +8,16 @@ class FavoritosPage extends StatefulWidget {
 }
 
 class _FavoritosPageState extends State<FavoritosPage> {
-  // Variável para guardar o índice do item selecionado
   int _currentIndex = 4;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // AQUI ESTÁ A BARRA DE NAVEGAÇÃO CORRIGIDA
+      
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
-        // Cor para o item selecionado (ícone e texto)
         selectedItemColor: const Color(0xFF626BBA),
-        // Cor para os itens não selecionados (ícone e texto)
         unselectedItemColor: const Color(0xFF9FA0E4),
         backgroundColor: Colors.white,
         showUnselectedLabels: true,
@@ -92,7 +87,6 @@ class _FavoritosPageState extends State<FavoritosPage> {
   }
 }
 
-// O WIDGET DO CARD CONTINUA O MESMO
 class FavoritoCard extends StatelessWidget {
   final String name;
   final String address;
