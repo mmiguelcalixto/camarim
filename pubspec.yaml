@@ -22,6 +22,8 @@ flutter:
   uses-material-design: true
 
   assets:
+  
+    - assets/images/
     - assets/images/logo.png
     - assets/images/perfil.png
 
@@ -29,3 +31,6 @@ flutter:
   #   - family: Camarim
   #     fonts:
   #       - asset: assets/fonts/Camarim.ttf
+
+
+
