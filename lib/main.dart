@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pagamento_page.dart';
+import 'menu_page.dart'; // Importa a nossa nova página de menu
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: PagamentoPage(), // << aqui você chama a tela de pagamento
+      home: const MenuPage(), // << Agora a home é a MenuPage
     );
   }
 }

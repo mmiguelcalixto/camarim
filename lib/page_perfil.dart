@@ -1,43 +1,29 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
-import 'edit_profile_page.dart';
 
+// Importe as outras páginas que você vai exibir quando o usuário tocar nos ícones
+// import 'outra_pagina.dart'; 
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+// A classe agora é um StatefulWidget para gerenciar o estado da barra de navegação
+class MenuPage extends StatefulWidget {
+  const MenuPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Perfil Profissional',
-      debugShowCheckedModeBanner: false,
-      home: const HomePage(),
-    );
-  }
+  State<MenuPage> createState() => _MenuPageState();
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class _MenuPageState extends State<MenuPage> {
+  // O índice 4 corresponde ao "Menu" na barra de navegação
+  int _selectedIndex = 4;
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 3; // começa na aba Profile
-
+  // Lista de widgets para cada item da barra de navegação
   final List<Widget> _pages = const [
     Center(child: Text("Início")),
     Center(child: Text("Pesquisa")),
     Center(child: Text("Horários")),
-    ProfilePage(),
-    Center(child: Text("Menu")),
+    Center(child: Text("Perfil")),
+    // Esta é a própria página de menu que estamos construindo
+    _MenuContent(), 
   ];
 
   void _onItemTapped(int index) {
@@ -49,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: _pages[_selectedIndex], // Exibe a página selecionada
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: const Color(0xFFF9F9FF),
@@ -105,332 +91,336 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+// Widget auxiliar para o conteúdo da página de menu
+class _MenuContent extends StatelessWidget {
+  const _MenuContent({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // HEADER
-          Container(
-            height: 150,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              image: const DecorationImage(
-                image: AssetImage("assets/images/header.png"),
-                fit: BoxFit.cover,
-              ),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(
+                  'assets/images/logo.png',
+                  height: 40,
+                ),
+                const SizedBox(height: 5),
+                const Text(
+                  'Menu Principal',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple,
+                  ),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 20),
-
-          // FOTO DE PERFIL
-          Center(
-            child: CircleAvatar(
-              radius: 60,
-              backgroundImage: const AssetImage("assets/images/perfil.png"),
-              backgroundColor: Colors.grey[300],
+            const SizedBox(height: 20),
+            const UsernameField(),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                CustomButton(
+                  icon: Icons.star,
+                  label: 'Favoritos',
+                  onTap: () {},
+                ),
+                const SizedBox(width: 10),
+                CustomButton(
+                  icon: Icons.lock,
+                  label: 'Privacidade',
+                  onTap: () {},
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 12),
-
-          // NOME E BIO
-          const Center(
-            child: Text(
-              "Laura Nails & Hair",
+            const SizedBox(height: 20),
+            const Text(
+              'Meus Dados',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.deepPurple,
+                color: Colors.indigo,
               ),
             ),
-          ),
-          const SizedBox(height: 8),
-          const Center(
-            child: Text(
-              "Sou formada pelo Instituto L'Oréal BH e atuo na área há mais de 10 anos.\nVeja meu trabalho e se surpreenda :)",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.black54),
+            const SizedBox(height: 10),
+            PersonalDataField(
+              icon: Icons.person,
+              label: 'Nome',
+              isMultiField: true,
+              secondLabel: 'Sobrenome',
             ),
-          ),
-          const SizedBox(height: 12),
-
-          // BOTÃO EDIT BIO
-           ElevatedButton(
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const EditProfilePage()),
+            PersonalDataField(
+              icon: Icons.phone,
+              label: 'Telefone',
+            ),
+            PersonalDataField(
+              icon: Icons.home,
+              label: 'Endereço',
+            ),
+            PersonalDataField(
+              icon: Icons.email,
+              label: 'E-mail',
+            ),
+            const SizedBox(height: 20),
+            const EditDataButton(),
+            const SizedBox(height: 40),
+            const LogoutButton(),
+          ],
+        ),
+      ),
     );
-  },
-  child: const Text("Alterar Biografia"),
-),
+  }
+}
 
-          // LATEST WORKS
-          const LatestWorks(),
+// O resto dos widgets auxiliares (UsernameField, CustomButton, PersonalDataField, etc.)
+// ... (mantenha todo o código desses widgets que já criamos)
 
-          // SERVICES
-          const Text(
-            "Serviços",
+// Widget para o campo de username
+class UsernameField extends StatelessWidget {
+  const UsernameField({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: const Row(
+        children: [
+          Icon(Icons.person, color: Colors.black),
+          SizedBox(width: 10),
+          Text(
+            '@username',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.deepPurple,
+              fontSize: 16,
             ),
           ),
-          const Wrap(
-            spacing: 8,
-            children: [
-              Chip(label: Text("Unhas de gel")),
-              Chip(label: Text("Manicure/Pedicure")),
-              Chip(label: Text("Corte")),
-              Chip(label: Text("Tintura")),
-              Chip(label: Text("Descoloração")),
-              Chip(label: Text("Tons Fantasia")),
-              Chip(label: Text("Loiros")),
-              Chip(label: Text("Maquiagem")),
-              Chip(label: Text("Add service +")),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          // CAREER
-          const Text(
-            "Tragetória",
+          Spacer(),
+          Icon(Icons.star, color: Colors.deepPurple),
+          SizedBox(width: 5),
+          Text(
+            '4.5',
             style: TextStyle(
-              fontWeight: FontWeight.bold,
               color: Colors.deepPurple,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 150,
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.deepPurple.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Center(
-                    child: Text("Add an institution\nWhat do you learn?"),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Container(
-                  height: 150,
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.deepPurple.shade200,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Center(
-                    child: Text("Institution details timeline..."),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          // DIFERENCIAIS
-
-          
-
-         Text(
-  "✦ Este profissional atende a domicílio",
-  style: TextStyle(
-    color: Colors.deepPurple, 
-    fontWeight: FontWeight.bold,
-    fontSize: 16, 
-  ),
-),
- Text(
-  "✦ Este profissional oferece atendimento adaptado a pessoas neurodivergentes",
-  style: TextStyle(
-    color: Colors.deepPurple,
-    fontWeight: FontWeight.bold,
-    fontSize: 16,
-  ),
-),
-
-
-          // MAPA
-          Container(
-            height: 150,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              image: const DecorationImage(
-                image: AssetImage("assets/images/maps.png"),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          // SOCIAL MEDIA
-          const Text(
-  "social medias",
-  style: TextStyle(
-    fontWeight: FontWeight.bold,
-    color: Colors.deepPurple,
-  ),
-),
-const SizedBox(height: 10),
-Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: const [
-    Row(
-      children: [
-        FaIcon(FontAwesomeIcons.instagram, color: Colors.deepPurple),
-        SizedBox(width: 8),
-        Text("your instagram link"),
-      ],
-    ),
-    SizedBox(height: 8),
-    Row(
-      children: [
-        FaIcon(FontAwesomeIcons.linkedin, color: Colors.deepPurple),
-        SizedBox(width: 8),
-        Text("your linkedin link"),
-      ],
-    ),
-    SizedBox(height: 8),
-    Row(
-      children: [
-        FaIcon(FontAwesomeIcons.tiktok, color: Colors.deepPurple),
-        SizedBox(width: 8),
-        Text("your tiktok link"),
-      ],
-    ),
-    SizedBox(height: 8),
-    Row(
-      children: [
-        FaIcon(FontAwesomeIcons.xTwitter, color: Colors.deepPurple),
-        SizedBox(width: 8),
-        Text("your X link"),
-      ],
-    ),
-  ],
-),
-const SizedBox(height: 30),
-
         ],
       ),
     );
   }
 }
 
-class LatestWorks extends StatefulWidget {
-  const LatestWorks({super.key});
+// Widget de botão personalizado para a página de menu
+class CustomButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
 
-  @override
-  State<LatestWorks> createState() => _LatestWorksState();
-}
-
-class _LatestWorksState extends State<LatestWorks> {
-  final List<Uint8List?> _userImages = List<Uint8List?>.filled(6, null);
-  final ImagePicker _picker = ImagePicker();
-
-  Future<void> _pickImage(int index) async {
-    final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      final bytes = await pickedFile.readAsBytes();
-      setState(() {
-        _userImages[index] = bytes;
-      });
-    }
-  }
+  const CustomButton({
+    Key? key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Trabalhos já Feitos",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.deepPurple,
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+          height: 80,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 30),
+              const SizedBox(height: 5),
+              Text(label),
+            ],
           ),
         ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 100,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 6,
-            itemBuilder: (context, index) {
-              final imageBytes = _userImages[index];
-
-              if (imageBytes != null) {
-                return Container(
-                  width: 80,
-                  margin: const EdgeInsets.only(right: 8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey[200],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.memory(
-                      imageBytes,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Center(
-                          child: Icon(Icons.error, color: Colors.red),
-                        );
-                      },
-                    ),
-                  ),
-                );
-              }
-
-              // imagens padrão
-              if (index == 0) {
-                return _buildDefaultAsset("assets/images/work1.png");
-              } else if (index == 1) {
-                return _buildDefaultAsset("assets/images/work2.png");
-              }
-
-              // botão para adicionar
-              return GestureDetector(
-                onTap: () => _pickImage(index),
-                child: Container(
-                  width: 80,
-                  margin: const EdgeInsets.only(right: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(Icons.add, color: Colors.grey),
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 20),
-      ],
+      ),
     );
   }
+}
 
-  Widget _buildDefaultAsset(String path) {
+// Widget para os campos de dados pessoais com o ícone roxo
+class PersonalDataField extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool isMultiField;
+  final String? secondLabel;
+
+  const PersonalDataField({
+    Key? key,
+    required this.icon,
+    required this.label,
+    this.isMultiField = false,
+    this.secondLabel,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // Container do campo de dados completo
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: isMultiField
+          ? Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        // Container do ícone com fundo roxo para o campo "Nome"
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            color: Colors.deepPurple,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                            ),
+                          ),
+                          child: Icon(icon, color: Colors.white),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            label,
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        secondLabel!,
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          : Container(
+              padding: const EdgeInsets.all(0),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    height: 50,
+                    width: 50,
+                    decoration: const BoxDecoration(
+                      color: Colors.deepPurple,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                      ),
+                    ),
+                    child: Icon(icon, color: Colors.white),
+                  ),
+                  const SizedBox(width: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: Text(label, style: const TextStyle(color: Colors.grey)),
+                  ),
+                ],
+              ),
+            ),
+    );
+  }
+}
+
+// Widget para o botão "Editar Dados"
+class EditDataButton extends StatelessWidget {
+  const EditDataButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      width: 80,
-      margin: const EdgeInsets.only(right: 8),
+      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
       decoration: BoxDecoration(
+        color: Colors.grey[300],
         borderRadius: BorderRadius.circular(10),
-        image: DecorationImage(
-          image: AssetImage(path),
-          fit: BoxFit.cover,
-        ),
+      ),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Editar Dados',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          Icon(Icons.arrow_forward_ios, size: 16),
+        ],
+      ),
+    );
+  }
+}
+
+// Widget para o botão "Logout" com a mesma estrutura de "Editar Dados"
+class LogoutButton extends StatelessWidget {
+  const LogoutButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Logout',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.red,
+            ),
+          ),
+          Icon(Icons.arrow_forward_ios, size: 16, color: Colors.red),
+        ],
       ),
     );
   }
