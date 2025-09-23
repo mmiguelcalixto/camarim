@@ -1,3 +1,4 @@
+import 'package:camarim_app/pages/menu_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'search_prof.dart'; 
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     SearchProfPage(),
     const Center(child: Text("Página de Horários")),
     const Center(child: Text("Página do Perfil do Cliente")),
-    const Center(child: Text("Página de Menu")),
+    MenuPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -51,7 +52,7 @@ class _HomePageState extends State<HomePage> {
             topRight: Radius.circular(16),
           ),
           border: Border.all(
-            color: Colors.deepPurple,
+            color: Color.fromARGB(255, 92, 98, 158),
             width: 1.5,
           ),
           boxShadow: const [
@@ -66,8 +67,8 @@ class _HomePageState extends State<HomePage> {
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          selectedItemColor: Colors.deepPurple,
-          unselectedItemColor: Colors.deepPurple,
+          selectedItemColor: Color.fromARGB(255, 92, 98, 158),
+          unselectedItemColor: Color.fromARGB(255, 92, 98, 158),
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
           items: const [

@@ -1,5 +1,4 @@
-// lib/pages/search_prof.dart
-import 'professional_page.dart'
+import 'professional_page.dart';
 import 'package:flutter/material.dart';
 
 class SearchProfPage extends StatefulWidget {
@@ -83,7 +82,7 @@ class _SearchProfPageState extends State<SearchProfPage> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purple,
+                        backgroundColor: Color.fromARGB(255, 92, 98, 158),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -112,7 +111,6 @@ class _SearchProfPageState extends State<SearchProfPage> {
     );
   }
 
-  // ====== card com GestureDetector ======
   Widget _buildProfessionalCard({
     required String name,
     required String address,
@@ -121,7 +119,13 @@ class _SearchProfPageState extends State<SearchProfPage> {
   }) {
     return GestureDetector(
       onTap: () {
-        ProfessionalPageClient();
+        // 🚀 Agora redireciona pra página ProfessionalPageClient
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfessionalPageClient(),
+          ),
+        );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
@@ -214,7 +218,7 @@ class _SearchProfPageState extends State<SearchProfPage> {
                 const SizedBox(width: 10),
                 IconButton(
                   onPressed: _openFilterModal,
-                  icon: const Icon(Icons.filter_list, color: Colors.purple, size: 28),
+                  icon: const Icon(Icons.filter_list, color: Color.fromARGB(255, 92, 98, 158), size: 28),
                 ),
               ],
             ),

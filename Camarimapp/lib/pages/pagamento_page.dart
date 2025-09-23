@@ -29,21 +29,21 @@ class _PagamentoPageState extends State<PagamentoPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.deepPurple),
+          icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 92, 98, 158)),
           onPressed: () => Navigator.pop(context),
         ),
         title: Column(
           children: [
             Image.asset(
-              "assets/images/logo.png", // <<-- usa sua logo
-              height: 40,        // ajusta o tamanho
+              "assets/img/logo.png", 
+              height: 40,       
             ),
             const SizedBox(height: 4),
             const Text(
               "Escolha a melhor forma de pagamento",
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.deepPurple,
+                color: Color.fromARGB(255, 92, 98, 158),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -64,13 +64,13 @@ class _PagamentoPageState extends State<PagamentoPage> {
                     margin: const EdgeInsets.symmetric(vertical: 6),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.deepPurple.withOpacity(0.3)),
+                      border: Border.all(color: Color.fromARGB(255, 92, 98, 158).withOpacity(0.3)),
                     ),
                     child: RadioListTile<String>(
-                      activeColor: Colors.deepPurple,
+                      activeColor: Color.fromARGB(255, 92, 98, 158),
                       title: Row(
                         children: [
-                          FaIcon(option["icon"], color: Colors.deepPurple),
+                          FaIcon(option["icon"], color: Color.fromARGB(255, 92, 98, 158)),
                           const SizedBox(width: 12),
                           Text(option["label"]),
                         ],
@@ -90,7 +90,7 @@ class _PagamentoPageState extends State<PagamentoPage> {
             const SizedBox(height: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
+                backgroundColor: Color.fromARGB(255, 92, 98, 158),
                 minimumSize: const Size(double.infinity, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25),
@@ -105,7 +105,7 @@ class _PagamentoPageState extends State<PagamentoPage> {
                     },
               child: const Text(
                 "Prosseguir",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color:  Color.fromARGB(255, 255, 255, 255)),
               ),
             ),
           ],
@@ -121,7 +121,7 @@ class _PagamentoPageState extends State<PagamentoPage> {
             topRight: Radius.circular(16),
           ),
           border: Border.all(
-            color: Colors.deepPurple,
+            color: Color.fromARGB(255, 92, 98, 158),
             width: 1.5,
           ),
           boxShadow: const [
@@ -136,8 +136,8 @@ class _PagamentoPageState extends State<PagamentoPage> {
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          selectedItemColor: Colors.deepPurple,
-          unselectedItemColor: Colors.deepPurple.withOpacity(0.5),
+          selectedItemColor: Color.fromARGB(255, 92, 98, 158),
+          unselectedItemColor: Color.fromARGB(255, 92, 98, 158).withOpacity(0.5),
           currentIndex: 4, // "Menu" selecionado
           onTap: (index) {
             Navigator.pop(context);

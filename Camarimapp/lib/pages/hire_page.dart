@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'pagamento_page.dart';
 
 class ContratarPage extends StatefulWidget {
   const ContratarPage({super.key});
@@ -100,7 +101,7 @@ class _ContratarPageState extends State<ContratarPage> {
                 icon: const Icon(Icons.calendar_today),
                 label: const Text("Selecionar Horário"),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
+                  backgroundColor: Color.fromARGB(255, 92, 98, 158),
                   foregroundColor: Colors.white,
                   minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
@@ -128,7 +129,12 @@ class _ContratarPageState extends State<ContratarPage> {
                       const SnackBar(content: Text("Preencha todos os campos!")),
                     );
                   } else {
-                    // redireciona ou faz ação
+                    // **AQUI ESTÁ A MUDANÇA:**
+                    // Redireciona para a PagamentoPage
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const PagamentoPage()),
+                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(
