@@ -75,6 +75,7 @@ class _HomePageState extends State<HomePage> {
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
+              label: "Busca"
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.calendar),
