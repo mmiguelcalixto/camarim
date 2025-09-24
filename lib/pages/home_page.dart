@@ -1,19 +1,21 @@
+import 'package:camarim_backend/pages/menu_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'search_prof.dart'; 
-import 'page_perfil.dart'; 
 import '../widgets/category_chip.dart';
 import '../widgets/section.dart';
 import '../widgets/square_card.dart';
 import '../widgets/circle_card.dart';
 import '../widgets/horizontal_list.dart';
 
+// classe modelo ficticia p os profissionais
 class Professional {
   final String name;
   final String imagePath;
 
   Professional({required this.name, required this.imagePath});
 }
+// NAV BAR ----------------------------------------------------------------
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -28,8 +30,8 @@ class _HomePageState extends State<HomePage> {
     HomePageContent(),
     SearchProfPage(),
     const Center(child: Text("Página de Horários")),
-    ProfilePage(),
-    const Center(child: Text("Página de Menu")),
+    const Center(child: Text("Página do Perfil do Cliente")),
+    MenuPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -37,6 +39,7 @@ class _HomePageState extends State<HomePage> {
       _selectedIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +52,7 @@ class _HomePageState extends State<HomePage> {
             topRight: Radius.circular(16),
           ),
           border: Border.all(
-            color: Colors.deepPurple,
+            color: Color.fromARGB(255, 92, 98, 158),
             width: 1.5,
           ),
           boxShadow: const [
@@ -64,8 +67,8 @@ class _HomePageState extends State<HomePage> {
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          selectedItemColor: Colors.deepPurple,
-          unselectedItemColor: Colors.deepPurple.withValues(),
+          selectedItemColor: Color.fromARGB(255, 92, 98, 158),
+          unselectedItemColor: Color.fromARGB(255, 92, 98, 158),
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
           items: const [
@@ -75,26 +78,28 @@ class _HomePageState extends State<HomePage> {
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-              label: "Busca"
+              label: "Busca",
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.calendar),
-              label: "Hours",
+              label: "Horários",
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.user),
-              label: "Profile",
+              label: "Perfil",
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.bars),
               label: "Menu",
-            )
+            ),
           ],
         ),
       ),
     );
   }
 }
+
+//FIM DA NAV BAR ----------------------------------------------------------------
 
 class HomePageContent extends StatefulWidget {
   const HomePageContent({super.key});
@@ -105,11 +110,11 @@ class HomePageContent extends StatefulWidget {
 
 class _HomePageContentState extends State<HomePageContent> {
 
-  // dados dos profissionais sugeridps
+  // Dados fictícios dos profissionais
   final List<Professional> topRatedProfessionals = [
-    Professional(name: 'Bruna Nails', imagePath: 'assets/img/nails.jpg'), 
-    Professional(name: 'Gabriel Hair', imagePath: 'assets/img/gabriel.jpg'),
-    Professional(name: 'Jorge SPA', imagePath: 'assets/img/jorge.jpg'), 
+    Professional(name: 'Bruna Nails', imagePath: 'lib/assets/img/nails.jpg'), 
+    Professional(name: 'Gabriel Hair', imagePath: 'lib/assets/img/gabriel.jpg'),
+    Professional(name: 'Jorge SPA', imagePath: 'lib/assets/img/jorge.jpg'), 
   ];
 
   @override
@@ -133,7 +138,7 @@ class _HomePageContentState extends State<HomePageContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Image.asset(
-                      'assets/img/logo_camarim.png',
+                      'lib/assets/img/logo_camarim.png',
                       width: 150,
                       color: const Color.fromARGB(255, 255, 255, 255),
                     ),
@@ -174,7 +179,7 @@ class _HomePageContentState extends State<HomePageContent> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16.0),
                     child: Image.asset(
-                      'assets/img/banner1.png',
+                      'lib/assets/img/banner1.png',
                       fit: BoxFit.cover,
                       width: double.infinity,
                     ),
@@ -185,7 +190,7 @@ class _HomePageContentState extends State<HomePageContent> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16.0),
                     child: Image.asset(
-                      'assets/img/banner2.png',
+                      'lib/assets/img/banner2.png',
                       fit: BoxFit.cover,
                       width: double.infinity,
                     ),
@@ -196,7 +201,7 @@ class _HomePageContentState extends State<HomePageContent> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16.0),
                     child: Image.asset(
-                      'assets/img/banner3.png',
+                      'lib/assets/img/banner3.png',
                       fit: BoxFit.cover,
                       width: double.infinity,
                     ),

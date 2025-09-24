@@ -1,5 +1,4 @@
-// lib/pages/search_prof.dart
-
+import 'professional_page.dart';
 import 'package:flutter/material.dart';
 
 class SearchProfPage extends StatefulWidget {
@@ -83,7 +82,7 @@ class _SearchProfPageState extends State<SearchProfPage> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purple,
+                        backgroundColor: Color.fromARGB(255, 92, 98, 158),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -118,53 +117,64 @@ class _SearchProfPageState extends State<SearchProfPage> {
     required String imageUrl,
     required double rating,
   }) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.asset(
-              imageUrl,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
+    return GestureDetector(
+      onTap: () {
+        // 🚀 Agora redireciona pra página ProfessionalPageClient
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfessionalPageClient(),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                Text(address, style: const TextStyle(color: Colors.grey)),
-                const SizedBox(height: 6),
-                const Text(
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 12, color: Colors.black54),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text(rating.toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
-                    const SizedBox(width: 4),
-                    Row(
-                      children: List.generate(5, (index) {
-                        return Icon(
-                          index < rating.floor() ? Icons.star : Icons.star_border,
-                          color: Colors.amber,
-                          size: 18,
-                        );
-                      }),
-                    )
-                  ],
-                )
-              ],
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(
+                imageUrl,
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              ),
             ),
-          )
-        ],
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(address, style: const TextStyle(color: Colors.grey)),
+                  const SizedBox(height: 6),
+                  const Text(
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 12, color: Colors.black54),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(rating.toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 4),
+                      Row(
+                        children: List.generate(5, (index) {
+                          return Icon(
+                            index < rating.floor() ? Icons.star : Icons.star_border,
+                            color: Colors.amber,
+                            size: 18,
+                          );
+                        }),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -176,18 +186,18 @@ class _SearchProfPageState extends State<SearchProfPage> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Logo no topo
+            // logo no topo
             Row(
               children: [
                 Image.asset(
-                  'assets/img/logo.png',
+                  'lib/assets/img/logo.png',
                   height: 40,
                 ),
               ],
             ),
             const SizedBox(height: 20),
 
-            // Campo de pesquisa
+            // campo de pesquisa
             Row(
               children: [
                 Expanded(
@@ -208,32 +218,32 @@ class _SearchProfPageState extends State<SearchProfPage> {
                 const SizedBox(width: 10),
                 IconButton(
                   onPressed: _openFilterModal,
-                  icon: const Icon(Icons.filter_list, color: Colors.purple, size: 28),
+                  icon: const Icon(Icons.filter_list, color: Color.fromARGB(255, 92, 98, 158), size: 28),
                 ),
               ],
             ),
             const SizedBox(height: 20),
 
-            // Lista de profissionais
+            // lista de profissionais
             Expanded(
               child: ListView(
                 children: [
                   _buildProfessionalCard(
                     name: "Giovanna",
                     address: "Hickley Blvd, 774",
-                    imageUrl: "assets/img/person1.png",
+                    imageUrl: "lib/assets/img/person1.png",
                     rating: 4.5,
                   ),
                   _buildProfessionalCard(
                     name: "Mary",
                     address: "Hickley Blvd, 2343",
-                    imageUrl: "assets/img/person2.png",
+                    imageUrl: "lib/assets/img/person2.png",
                     rating: 4.2,
                   ),
                   _buildProfessionalCard(
                     name: "Clara",
                     address: "Sunset St, 12",
-                    imageUrl: "assets/img/person3.png",
+                    imageUrl: "lib/assets/img/person3.png",
                     rating: 4.8,
                   ),
                 ],

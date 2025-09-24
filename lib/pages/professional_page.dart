@@ -1,7 +1,7 @@
-import 'package:camarim_backend/models/professional_profile.dart';
 import 'package:flutter/material.dart';
 import 'hire_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:camarim_backend/models/professional_profile.dart';
 
 class ProfessionalPageClient extends StatelessWidget {
   const ProfessionalPageClient({super.key});
@@ -10,8 +10,8 @@ class ProfessionalPageClient extends StatelessWidget {
   Widget build(BuildContext context) {
     // simula dados de um profissional. é so puxar o back-end pra isso, isso é so um modelo de como deve ser apresentado
     final ProfessionalProfile mockProfile = ProfessionalProfile(
-      profileImageUrl: "assets/img/perfil.png",
-      headerImageUrl: "assets/img/header.png",
+      profileImageUrl: "lib/assets/img/perfil.png",
+      headerImageUrl: "lib/assets/img/header.png",
       name: "Laura Nails Hair",
       bio: "Sou formada pelo Instituto L'Oréal BH e atuo na área há mais de 10 anos.\nVeja meu trabalho e se surpreenda :)",
       socialMediaLinks: [
@@ -28,9 +28,9 @@ class ProfessionalPageClient extends StatelessWidget {
         "Tons Fantasia"
       ],
       workImages: [
-        "assets/img/woman_makeup.png",
-        "assets/img/jorge.jpg",
-        "assets/img/woman_splash.png"
+        "lib/assets/img/woman_makeup.png",
+        "lib/assets/img/jorge.jpg",
+        "lib/assets/img/woman_splash.png"
       ],
     );
 
@@ -213,7 +213,7 @@ class ProfessionalPageClient extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     image: const DecorationImage(
-                      image: AssetImage("assets/img/maps.png"),
+                      image: AssetImage("lib/assets/img/maps.png"),
                       fit: BoxFit.cover,
                     ),
                   ),

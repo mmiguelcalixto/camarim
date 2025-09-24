@@ -59,7 +59,7 @@ class _ContratarPageState extends State<ContratarPage> {
               // foto + título
               const CircleAvatar(
                 radius: 40,
-                backgroundImage: AssetImage("assets/img/gabriel.jpg"),
+                backgroundImage: AssetImage("lib/assets/img/gabriel.jpg"),
               ),
               const SizedBox(height: 12),
               const Text(

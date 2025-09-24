@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // Classe Principal da página, agora um StatefulWidget
 class MenuPage extends StatefulWidget {
@@ -23,7 +24,7 @@ class _MenuPageState extends State<MenuPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Image.asset(
-                    'assets/img/logo.png',
+                    'lib/assets/img/logo.png',
                     height: 40,
                   ),
                   const SizedBox(height: 5),
@@ -96,7 +97,7 @@ class _MenuPageState extends State<MenuPage> {
 }
 
 class _UsernameField extends StatelessWidget {
-  const _UsernameField();
+  const _UsernameField({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -139,10 +140,11 @@ class _CustomButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const _CustomButton({
+    Key? key,
     required this.icon,
     required this.label,
     required this.onTap,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -177,11 +179,12 @@ class _PersonalDataField extends StatelessWidget {
   final String? secondLabel;
 
   const _PersonalDataField({
+    Key? key,
     required this.icon,
     required this.label,
     this.isMultiField = false,
     this.secondLabel,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +278,7 @@ class _PersonalDataField extends StatelessWidget {
 }
 
 class _EditDataButton extends StatelessWidget {
-  const _EditDataButton();
+  const _EditDataButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -303,7 +306,7 @@ class _EditDataButton extends StatelessWidget {
 }
 
 class _LogoutButton extends StatelessWidget {
-  const _LogoutButton();
+  const _LogoutButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

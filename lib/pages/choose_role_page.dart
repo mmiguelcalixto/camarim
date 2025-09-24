@@ -46,7 +46,7 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/img/woman_skincare.png',
+              'lib/assets/img/woman_skincare.png',
               fit: BoxFit.cover,
               alignment: const Alignment(0, -0.3),
             ),
@@ -54,7 +54,7 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
           Positioned(
             top: 48,
             left: 24,
-            child: Image.asset('assets/img/logo_camarim.png', width: 100),
+            child: Image.asset('lib/assets/img/logo_camarim.png', width: 100),
           ),
           Positioned(
             bottom: MediaQuery.of(context).size.height * 0.60 - -5,
@@ -111,7 +111,7 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
                         _buildRoleCard(
                           label: 'Sou cliente',
                           icon: Image.asset(
-                            'assets/img/customer_vector.png',
+                            'lib/assets/img/customer_vector.png',
                             width: 180,
                             height: 180,
                           ),
@@ -121,7 +121,7 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
                         _buildRoleCard(
                           label: 'Sou profissional',
                           icon: Image.asset(
-                            'assets/img/professional_vector.png',
+                            'lib/assets/img/professional_vector.png',
                             width: 180,
                             height: 180,
                           ),

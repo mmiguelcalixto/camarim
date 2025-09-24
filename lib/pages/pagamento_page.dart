@@ -35,7 +35,7 @@ class _PagamentoPageState extends State<PagamentoPage> {
         title: Column(
           children: [
             Image.asset(
-              "assets/img/logo.png", 
+              "lib/assets/img/logo.png", 
               height: 40,       
             ),
             const SizedBox(height: 4),
