@@ -68,7 +68,7 @@ class ProfilePage extends StatelessWidget {
               backgroundColor: Colors.deepPurple,
             ),
             child: const Text(
-              "Alterar Biografia",
+              "Alterar Perfil",
               style: TextStyle(color: Colors.white),
             ),
           ),

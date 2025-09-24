@@ -71,7 +71,7 @@ class _SignupPageProfState extends State<SignupPageProf> {
             right: 0,
             height: size.height * 0.40,
             child: Image.asset(
-              'assets/img/woman_skincare.png',
+              'lib/assets/img/woman_skincare.png',
               fit: BoxFit.cover,
               alignment: Alignment.topCenter,
             ),
@@ -79,7 +79,7 @@ class _SignupPageProfState extends State<SignupPageProf> {
           Positioned(
             top: 48,
             left: 24,
-            child: Image.asset('assets/img/logo_camarim.png', width: 100),
+            child: Image.asset('lib/assets/img/logo_camarim.png', width: 100),
           ),
           Align(
             alignment: Alignment.bottomCenter,
