@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'menu_page.dart'; // Importa a nossa nova página de menu
-
+import 'privacy_policy_page.dart'; 
 void main() {
   runApp(const MyApp());
 }
@@ -12,7 +11,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const MenuPage(), // << Agora a home é a MenuPage
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
+      ),
+      home:  PrivacyPolicyPage(), // 👈 define como tela inicial
     );
   }
 }
