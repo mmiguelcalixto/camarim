@@ -17,7 +17,7 @@ class Professional {
     required this.password,
   });
 
-  Map<String, dynamic> getProfessional() {
+  Map<String, dynamic> toJson() {
     return {
       "name": name,
       "document": document,
