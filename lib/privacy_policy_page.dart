@@ -65,7 +65,7 @@ Sed et sem finibus, auctor sapien nec, tincidunt dolor.""",
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Checkbox(
@@ -105,78 +105,47 @@ Sed et sem finibus, auctor sapien nec, tincidunt dolor.""",
                 ),
               ),
             ),
+            const SizedBox(height: 24),
           ],
         ),
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         decoration: BoxDecoration(
-          color: Colors.grey[300],
+          color: const Color(0xFFF9F9FF),
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
           ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _NavItem(
-              icon: Icons.home,
-              label: 'Início',
-              isSelected: paginaAtual == 0,
-              onTap: () => setState(() => paginaAtual = 0),
-            ),
-            _NavItem(
-              icon: Icons.search,
-              label: 'Buscar',
-              isSelected: paginaAtual == 1,
-              onTap: () => setState(() => paginaAtual = 1),
-            ),
-            _NavItem(
-              icon: Icons.person,
-              label: 'Perfil',
-              isSelected: paginaAtual == 2,
-              onTap: () => setState(() => paginaAtual = 2),
+          border: Border.all(
+            color: Color.fromARGB(255, 92, 98, 158),
+            width: 1.5,
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 6,
+              offset: Offset(0, -2),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _NavItem extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _NavItem({
-    super.key,
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(10),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: isSelected ? Color(0xFF626BBA) : Colors.grey),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? Color(0xFF626BBA) : Colors.grey,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          selectedItemColor: Color.fromARGB(255, 92, 98, 158),
+          unselectedItemColor: Color.fromARGB(255, 92, 98, 158).withOpacity(0.5),
+          currentIndex: 4, // "Menu" selecionado
+          onTap: (index) {
+            Navigator.pop(context);
+          },
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Início"),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: "Pesquisa"),
+            BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: "Horários"),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Perfil"),
+            BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Menu"),
+          ],
+        ),
       ),
     );
   }
