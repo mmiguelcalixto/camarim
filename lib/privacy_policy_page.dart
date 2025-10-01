@@ -15,27 +15,59 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF626BBA)),
-          onPressed: () {},
-        ),
-        title: const Text(
-          "termos de uso e política de privacidade",
-          style: TextStyle(
-            color: Color(0xFF626BBA),
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
+
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(140),
+        child: SafeArea(
+          child: Container(
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(
+                  'assets/img/logo(1).png', 
+                  width: 250,
+                  height: 41,
+                  fit: BoxFit.contain,
+                ),
+
+                const SizedBox(height: 8),
+
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Color(0xFF626BBA)),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+
+                const Padding(
+                  padding: EdgeInsets.only(left: 11, top: 4),
+                  child: Text(
+                    "termos de uso e política de privacidade",
+                    style: TextStyle(
+                      color: Color(0xFF626BBA),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ],
+            ),
           ),
-          textAlign: TextAlign.left,
         ),
-        centerTitle: false,
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start, 
           children: [
             Expanded(
               child: Container(
@@ -109,6 +141,7 @@ Sed et sem finibus, auctor sapien nec, tincidunt dolor.""",
           ],
         ),
       ),
+
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: const Color(0xFFF9F9FF),
@@ -134,7 +167,7 @@ Sed et sem finibus, auctor sapien nec, tincidunt dolor.""",
           elevation: 0,
           selectedItemColor: Color.fromARGB(255, 92, 98, 158),
           unselectedItemColor: Color.fromARGB(255, 92, 98, 158).withOpacity(0.5),
-          currentIndex: 4, // "Menu" selecionado
+          currentIndex: 4, 
           onTap: (index) {
             Navigator.pop(context);
           },
