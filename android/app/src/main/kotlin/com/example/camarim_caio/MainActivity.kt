@@ -1,4 +1,4 @@
-package com.example.redefinirsenha
+package com.example.camarim_caio
 
 import io.flutter.embedding.android.FlutterActivity
 
