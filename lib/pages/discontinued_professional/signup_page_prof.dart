@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'login_page.dart';
+import '../login_page.dart';
 
 class SignupPageProf extends StatefulWidget {
   const SignupPageProf({super.key});
