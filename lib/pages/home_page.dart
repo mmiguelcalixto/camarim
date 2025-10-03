@@ -1,3 +1,4 @@
+import 'package:camarim_backend/pages/horarios_page.dart';
 import 'package:camarim_backend/pages/menu_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     HomePageContent(),
     SearchProfPage(),
-    const Center(child: Text("Página de Horários")),
+    HorariosPage(),
     const Center(child: Text("Página do Perfil do Cliente")),
     MenuPage(),
   ];
