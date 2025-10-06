@@ -1,10 +1,7 @@
-// Arquivo: lib/home_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'schedule_page.dart'; // Sua página de horários
+import 'schedule_page.dart'; 
 
-// Placeholder para as outras 4 abas, já que o foco é na SchedulePage.
 class PlaceholderPage extends StatelessWidget {
   final String title;
   const PlaceholderPage(this.title, {super.key});
@@ -22,15 +19,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // Índice 2 é "Hours" (0=Home, 1=Search, 2=Hours)
-  // Eu mudei o índice inicial para 2 para que a tela de horários apareça ao iniciar.
+ 
   int _selectedIndex = 2; 
 
   final List<Widget> _pages = const [
     PlaceholderPage("Home"),
     PlaceholderPage("Search"),
     
-    // ⭐️ A PÁGINA DE AGENDAMENTO DE HORÁRIOS ESTÁ AQUI (Índice 2)
     SchedulePage(),
     
     PlaceholderPage("Profile"),
@@ -46,10 +41,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Exibe a página selecionada
       body: _pages[_selectedIndex],
       
-      // ⭐️ SUA BARRA DE NAVEGAÇÃO CUSTOMIZADA ⭐️
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: const Color(0xFFF9F9FF),
@@ -58,7 +51,7 @@ class _HomePageState extends State<HomePage> {
             topRight: Radius.circular(16),
           ),
           border: Border.all(
-            color: Colors.deepPurple, // borda roxa
+            color: Colors.deepPurple, 
             width: 1.5,
           ),
           boxShadow: const [
