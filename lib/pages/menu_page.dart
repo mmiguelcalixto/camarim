@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-// Classe Principal da página, agora um StatefulWidget
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
 
@@ -12,7 +11,6 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
-    // Scaffold sem o BottomNavigationBar
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -97,7 +95,7 @@ class _MenuPageState extends State<MenuPage> {
 }
 
 class _UsernameField extends StatelessWidget {
-  const _UsernameField({super.key});
+  const _UsernameField();
 
   @override
   Widget build(BuildContext context) {

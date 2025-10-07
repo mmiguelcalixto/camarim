@@ -1,8 +1,8 @@
 import 'package:camarim_backend/pages/horarios_page.dart';
-import 'package:camarim_backend/pages/menu_page.dart';
+import 'package:camarim_backend/pages/menu_page.dart';  
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'search_prof.dart'; 
+import 'search_prof.dart';
 import '../widgets/category_chip.dart';
 import '../widgets/section.dart';
 import '../widgets/square_card.dart';
@@ -111,11 +111,10 @@ class HomePageContent extends StatefulWidget {
 
 class _HomePageContentState extends State<HomePageContent> {
 
-  // Dados fictícios dos profissionais
   final List<Professional> topRatedProfessionals = [
-    Professional(name: 'Bruna Nails', imagePath: 'lib/assets/img/nails.jpg'), 
+    Professional(name: 'Bruna Nails', imagePath: 'lib/assets/img/nails.jpg'),
     Professional(name: 'Gabriel Hair', imagePath: 'lib/assets/img/gabriel.jpg'),
-    Professional(name: 'Jorge SPA', imagePath: 'lib/assets/img/jorge.jpg'), 
+    Professional(name: 'Jorge SPA', imagePath: 'lib/assets/img/jorge.jpg'),
   ];
 
   @override

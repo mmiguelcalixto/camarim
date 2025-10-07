@@ -6,9 +6,10 @@ class AppointmentCard extends StatelessWidget {
   final String date;
   final String imageUrl;
   final bool isHistory;
-  //pra ver se o agendamento foi cancelado
   final bool isCancelled;
-  final VoidCallback? onCancel; 
+  final VoidCallback? onCancel;
+  final double rating;
+  final VoidCallback? onRate;
 
   const AppointmentCard({
     super.key,
@@ -18,7 +19,9 @@ class AppointmentCard extends StatelessWidget {
     required this.imageUrl,
     this.isHistory = false,
     this.isCancelled = false,
+    this.rating = 0.0, 
     this.onCancel,
+    this.onRate, 
   });
 
   void _showModal(BuildContext context) {
@@ -36,7 +39,7 @@ class AppointmentCard extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
               },
               child: const Text("Não"),
             ),
@@ -45,8 +48,7 @@ class AppointmentCard extends StatelessWidget {
                 backgroundColor: Colors.red,
               ),
               onPressed: () {
-                Navigator.of(context).pop(); 
-// se for clicar em cancelar vai chamar a função oncancel e vai empurrar pro historico
+                Navigator.of(context).pop();
                 if (onCancel != null) {
                   onCancel!();
                 }
@@ -55,7 +57,7 @@ class AppointmentCard extends StatelessWidget {
                 "Sim, cancelar",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 16, 
+                  fontSize: 16,
                   color: Colors.white,
                 ),
               ),
@@ -70,7 +72,7 @@ class AppointmentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding( 
+      child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +81,7 @@ class AppointmentCard extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.only(left: 8.0, bottom: 8.0),
                 child: Text(
-                  "Agendamento ancelado pelo cliente",
+                  "Agendamento cancelado pelo cliente",
                   style: TextStyle(
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
@@ -87,7 +89,7 @@ class AppointmentCard extends StatelessWidget {
                   ),
                 ),
               ),
-              
+
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -132,7 +134,9 @@ class AppointmentCard extends StatelessWidget {
                                   vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: isCancelled ? Colors.grey : const Color.fromARGB(255, 177, 221, 179),
+                                  color: isCancelled
+                                      ? Colors.grey
+                                      : const Color.fromARGB(255, 177, 221, 179),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
@@ -162,6 +166,53 @@ class AppointmentCard extends StatelessWidget {
                     ),
                   ),
                 ),
+
+                if (isHistory && !isCancelled)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      if (rating > 0)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                rating.toStringAsFixed(1),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.amber,
+                                ),
+                              ),
+                              const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                                size: 16,
+                              ),
+                            ],
+                          ),
+                        ),
+
+                      if (onRate != null)
+                        IconButton(
+                          icon: Icon(
+                            rating > 0 ? Icons.star : Icons.star_border,
+                            color: rating > 0 ? Colors.amber : Colors.grey,
+                            size: 32,
+                          ),
+                          onPressed: onRate, 
+                        )
+                      else if (rating == 0.0)
+                         const Padding(
+                          padding: EdgeInsets.only(top: 10.0, right: 8.0),
+                          child: Text(
+                            "Avalie!",
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                        ),
+                    ],
+                  ),
               ],
             ),
           ],

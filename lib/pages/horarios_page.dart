@@ -9,7 +9,6 @@ class HorariosPage extends StatefulWidget {
 }
 
 class _HorariosPageState extends State<HorariosPage> {
-
   List<Map<String, dynamic>> upcomingAppointments = [
     {
       "id": 1,
@@ -19,11 +18,11 @@ class _HorariosPageState extends State<HorariosPage> {
       "imageUrl": "lib/assets/img/perfil.png",
       "isCancelled": false,
     },
-     {
-      "id": 1,
+    {
+      "id": 5,
       "name": "Giovanna Hair",
-      "time": "14:00hs",
-      "date": "Segunda-feira, 17 de setembro",
+      "time": "10:30hs",
+      "date": "Terça-feira, 25 de Outubro",
       "imageUrl": "lib/assets/img/perfil.png",
       "isCancelled": false,
     },
@@ -36,7 +35,8 @@ class _HorariosPageState extends State<HorariosPage> {
       "time": "14:00hs",
       "date": "Segunda-feira, 17 de Abril",
       "imageUrl": "lib/assets/img/perfil.png",
-      "isCancelled": false, 
+      "isCancelled": false,
+      "rating": 0.0, 
     },
     {
       "id": 3,
@@ -45,6 +45,7 @@ class _HorariosPageState extends State<HorariosPage> {
       "date": "Segunda-feira, 17 de Abril",
       "imageUrl": "lib/assets/img/perfil.png",
       "isCancelled": false,
+      "rating": 4.0, 
     },
     {
       "id": 4,
@@ -53,8 +54,11 @@ class _HorariosPageState extends State<HorariosPage> {
       "date": "Segunda-feira, 17 de Abril",
       "imageUrl": "lib/assets/img/perfil.png",
       "isCancelled": false,
+      "rating": 0.0,
     },
   ];
+
+  double _currentRating = 0.0;
 
   void _cancelAppointment(int appointmentId) {
     setState(() {
@@ -62,12 +66,79 @@ class _HorariosPageState extends State<HorariosPage> {
 
       if (index != -1) {
         final cancelledAppointment = upcomingAppointments.removeAt(index);
-        
+
         cancelledAppointment['isCancelled'] = true;
+        cancelledAppointment['rating'] = 0.0; 
 
         historyAppointments.insert(0, cancelledAppointment);
       }
     });
+  }
+// salva  o numero da avaliacao do cliente
+  void _saveRating(int appointmentId, double rating) {
+    setState(() {
+      final index = historyAppointments.indexWhere((item) => item['id'] == appointmentId);
+      if (index != -1) {
+        historyAppointments[index]['rating'] = rating;
+      }
+    });
+  }
+
+  void _showRatingDialog(BuildContext context, int appointmentId, String name, double initialRating) {
+    _currentRating = initialRating; 
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return AlertDialog(
+              title: Text("Avaliar $name"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Avalie a sua experiência:"),
+                  const SizedBox(height: 16),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(5, (index) {
+                      return IconButton(
+                        icon: Icon(
+                          index < _currentRating
+                              ? Icons.star
+                              : Icons.star_border,
+                          color: Colors.amber,
+                        ),
+                        onPressed: () {
+                          setModalState(() {
+                            _currentRating = index + 1.0;
+                          });
+                        },
+                      );
+                    }),
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text("Fechar", style: TextStyle(color: Colors.black54)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ElevatedButton(
+                  child: const Text("Salvar Avaliação"),
+                  onPressed: () {
+                    _saveRating(appointmentId, _currentRating);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   void _showCancelDialog(BuildContext context, int appointmentId) {
@@ -87,8 +158,8 @@ class _HorariosPageState extends State<HorariosPage> {
             TextButton(
               child: const Text("Confirmar Cancelamento", style: TextStyle(color: Colors.red)),
               onPressed: () {
-                Navigator.of(context).pop(); 
-                _cancelAppointment(appointmentId); 
+                Navigator.of(context).pop();
+                _cancelAppointment(appointmentId);
               },
             ),
           ],
@@ -134,12 +205,12 @@ class _HorariosPageState extends State<HorariosPage> {
                   date: data['date'],
                   imageUrl: data['imageUrl'],
                   isHistory: false,
-                  isCancelled: data['isCancelled'], 
-                  onCancel: () => _showCancelDialog(context, data['id']),
+                  isCancelled: data['isCancelled'],
+                  onCancel: () => _showCancelDialog(context, data['id']), rating: 0.0,
                 ),
               );
             }).toList(),
-            
+
             if (upcomingAppointments.isEmpty)
               const Padding(
                 padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
@@ -172,7 +243,11 @@ class _HorariosPageState extends State<HorariosPage> {
                     date: data['date'],
                     imageUrl: data['imageUrl'],
                     isHistory: true,
-                    isCancelled: data['isCancelled'], 
+                    isCancelled: data['isCancelled'],
+                    rating: data['rating'],
+                    onRate: data['isCancelled'] == false && data['rating'] < 5
+                        ? () => _showRatingDialog(context, data['id'], data['name'], data['rating'])
+                        : null,
                   ),
                 );
               }).toList(),
