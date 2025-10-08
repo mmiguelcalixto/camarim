@@ -67,8 +67,7 @@ class _EditMenuPageState extends State<EditMenuPage> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.indigo,
-                ),
+color: Color.fromARGB(255, 92, 98, 158),                ),
               ),
               const SizedBox(height: 10),
               _EditableMultiField(
