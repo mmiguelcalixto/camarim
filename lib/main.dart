@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           labelSmall: const TextStyle(fontWeight: FontWeight.w400),
         ),
       ),
-      home: const ProfHorariosPage(),
+      home: const SplashScreen(),
     );
   }
 }
