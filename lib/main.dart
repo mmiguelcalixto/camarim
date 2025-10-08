@@ -1,4 +1,5 @@
 //import 'package:camarim_backend/firebase_options.dart';
+import 'package:camarim_backend/pages/professional_pages/prof_horarios_page.dart';
 import 'package:camarim_backend/pages/splash_screen.dart';
 //import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
           labelSmall: const TextStyle(fontWeight: FontWeight.w400),
         ),
       ),
-      home: const SplashScreen(),
+      home: const ProfHorariosPage(),
     );
   }
 }
