@@ -138,7 +138,7 @@ class _PagamentoPageState extends State<PagamentoPage> {
           elevation: 0,
           selectedItemColor: Color.fromARGB(255, 92, 98, 158),
           unselectedItemColor: Color.fromARGB(255, 92, 98, 158).withOpacity(0.5),
-          currentIndex: 4, // "Menu" selecionado
+          currentIndex: 4, 
           onTap: (index) {
             Navigator.pop(context);
           },
@@ -146,7 +146,6 @@ class _PagamentoPageState extends State<PagamentoPage> {
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Início"),
             BottomNavigationBarItem(icon: Icon(Icons.search), label: "Pesquisa"),
             BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: "Horários"),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Perfil"),
             BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Menu"),
           ],
         ),

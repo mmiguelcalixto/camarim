@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     HomePageContent(),
     SearchProfPage(),
     HorariosPage(),
-    const Center(child: Text("Página do Perfil do Cliente")),
+    //const Center(child: Text("Página do Perfil do Cliente")),
     MenuPage(),
   ];
 
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
             topRight: Radius.circular(16),
           ),
           border: Border.all(
-            color: Color.fromARGB(255, 92, 98, 158),
+            color: const Color.fromARGB(255, 92, 98, 158),
             width: 1.5,
           ),
           boxShadow: const [
@@ -68,8 +68,8 @@ class _HomePageState extends State<HomePage> {
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.transparent,
           elevation: 0,
-          selectedItemColor: Color.fromARGB(255, 92, 98, 158),
-          unselectedItemColor: Color.fromARGB(255, 92, 98, 158),
+          selectedItemColor: const Color.fromARGB(255, 92, 98, 158),
+          unselectedItemColor: const Color.fromARGB(255, 92, 98, 158),
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
           items: const [
@@ -85,10 +85,10 @@ class _HomePageState extends State<HomePage> {
               icon: FaIcon(FontAwesomeIcons.calendar),
               label: "Horários",
             ),
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.user),
-              label: "Perfil",
-            ),
+            //  BottomNavigationBarItem(
+            //   icon: FaIcon(FontAwesomeIcons.user),
+            //   label: "Perfil",
+            // ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.bars),
               label: "Menu",
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-//FIM DA NAV BAR ----------------------------------------------------------------
+// FIM DA NAV BAR ----------------------------------------------------------------
 
 class HomePageContent extends StatefulWidget {
   const HomePageContent({super.key});
@@ -222,22 +222,12 @@ class _HomePageContentState extends State<HomePageContent> {
                   onTap: () {},
                 ),
                 CategoryChip(
-                  label: "Patrocinados",
-                  isSelected: false,
-                  onTap: () {},
-                ),
-                CategoryChip(
-                  label: "Sugestões",
-                  isSelected: false,
-                  onTap: () {},
-                ),
-                CategoryChip(
                   label: "Bem avaliados",
                   isSelected: false,
                   onTap: () {},
                 ),
                 CategoryChip(
-                  label: "Categorias",
+                  label: "Por Localização",
                   isSelected: false,
                   onTap: () {},
                 ),
@@ -245,16 +235,6 @@ class _HomePageContentState extends State<HomePageContent> {
             ),
           ),
           const SizedBox(height: 16),
-          Section(
-            title: "Serviços Recentes",
-            child: HorizontalList(
-              children: const [
-                CircleCard("Jussy Makeup"),
-                CircleCard("Mafê Nails"),
-                CircleCard("Afonsa Cortes"),
-              ],
-            ),
-          ),
           Section(
             title: "Bem avaliados",
             child: HorizontalList(

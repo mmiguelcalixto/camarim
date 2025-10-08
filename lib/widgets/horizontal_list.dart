@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class HorizontalList extends StatelessWidget {
   final List<Widget> children;
-  final double spacing; // espaçamento lateral entre os itens
+  final double spacing; 
 
   const HorizontalList({
     super.key,
