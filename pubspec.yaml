@@ -1,27 +1,29 @@
 name: camarim_caio
 description: "A new Flutter project."
+
 publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.4.0 <4.0.0' # Forma mais comum de definir a versão do SDK
+  sdk: '>=3.4.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-
-  intl: ^0.20.2
+  
+  intl: 0.20.2 # Versão atualizada para compatibilidade
   cupertino_icons: ^1.0.8
   font_awesome_flutter: ^10.7.0
-
+  google_fonts: ^6.2.1 # Adicionado para usar a fonte Poppins
+  fl_chart: ^0.68.0 # Adicionado para os gráficos de pizza e barra
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0 # Versão atualizada para compatibilidade
+  flutter_lints: ^4.0.0
 
 flutter:
   uses-material-design: true
