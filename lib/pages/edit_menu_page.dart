@@ -56,8 +56,6 @@ class _EditMenuPageState extends State<EditMenuPage> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  _CustomButton(icon: Icons.star, label: 'Favoritos', onTap: () {}),
-                  const SizedBox(width: 10),
                   _CustomButton(icon: Icons.lock, label: 'Privacidade', onTap: () {}),
                 ],
               ),
@@ -105,7 +103,6 @@ color: Color.fromARGB(255, 92, 98, 158),                ),
     );
   }
 }
-
 class _EditableField extends StatelessWidget {
   final IconData icon;
   final TextEditingController controller;
@@ -132,6 +129,8 @@ class _EditableField extends StatelessWidget {
         child: Row(
           children: [
             Container(
+              // ADICIONAR a altura de 50px aqui para garantir
+              height: 50, // <--- CORREÇÃO APLICADA AQUI
               width: 50,
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 92, 98, 158),
@@ -163,6 +162,7 @@ class _EditableField extends StatelessWidget {
     );
   }
 }
+
 
 class _EditableMultiField extends StatelessWidget {
   final IconData icon;
@@ -196,6 +196,7 @@ class _EditableMultiField extends StatelessWidget {
                 children: [
                   Container(
                     width: 50,
+                    height: 50,
                     decoration: const BoxDecoration(
                       color: Color.fromARGB(255, 92, 98, 158),
                       borderRadius: BorderRadius.only(

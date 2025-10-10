@@ -42,13 +42,7 @@ class _MenuPageState extends State<MenuPage> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  _CustomButton(
-                    icon: Icons.star,
-                    label: 'Favoritos',
-                    onTap: () {},
-                  ),
-                  const SizedBox(width: 10),
-                  _CustomButton(
+                      _CustomButton(
                     icon: Icons.lock,
                     label: 'Privacidade',
                     onTap: () {},
