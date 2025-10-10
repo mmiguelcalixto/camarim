@@ -129,8 +129,7 @@ class _EditableField extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              // ADICIONAR a altura de 50px aqui para garantir
-              height: 50, // <--- CORREÇÃO APLICADA AQUI
+              height: 50, 
               width: 50,
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 92, 98, 158),
