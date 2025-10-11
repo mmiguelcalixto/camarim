@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'edit_menu_page.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MenuPage extends StatefulWidget {
@@ -41,13 +42,7 @@ class _MenuPageState extends State<MenuPage> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  _CustomButton(
-                    icon: Icons.star,
-                    label: 'Favoritos',
-                    onTap: () {},
-                  ),
-                  const SizedBox(width: 10),
-                  _CustomButton(
+                      _CustomButton(
                     icon: Icons.lock,
                     label: 'Privacidade',
                     onTap: () {},
@@ -60,7 +55,7 @@ class _MenuPageState extends State<MenuPage> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.indigo,
+                  color: Color.fromARGB(255, 92, 98, 158),
                 ),
               ),
               const SizedBox(height: 10),
@@ -280,28 +275,44 @@ class _EditDataButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Editar Dados',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+    const Color primaryColor = Color.fromARGB(255, 92, 98, 158);
+
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const EditMenuPage()),
+        );
+      },
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+        decoration: BoxDecoration(
+          color: primaryColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Center(
+                child: Text(
+                  'Editar Dados',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ),
-          ),
-          Icon(Icons.arrow_forward_ios, size: 16),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
+
 
 class _LogoutButton extends StatelessWidget {
   const _LogoutButton({Key? key}) : super(key: key);

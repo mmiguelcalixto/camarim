@@ -66,7 +66,6 @@ class _HorariosPageState extends State<HorariosPage> {
 
       if (index != -1) {
         final cancelledAppointment = upcomingAppointments.removeAt(index);
-
         cancelledAppointment['isCancelled'] = true;
         cancelledAppointment['rating'] = 0.0; 
 
@@ -74,7 +73,7 @@ class _HorariosPageState extends State<HorariosPage> {
       }
     });
   }
-// salva  o numero da avaliacao do cliente
+
   void _saveRating(int appointmentId, double rating) {
     setState(() {
       final index = historyAppointments.indexWhere((item) => item['id'] == appointmentId);
@@ -170,91 +169,108 @@ class _HorariosPageState extends State<HorariosPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
+    // Retorna o Scaffold, e o corpo é movido para o widget separado
+    return const Scaffold(
+      backgroundColor: Color(0xFFF7F7F7),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            SizedBox(
-              height: 30,
-              child: Container(
-                color: const Color(0xFFF7F7F7),
-                child: Image.asset("lib/assets/img/logo.png"),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            RichText(
-              text: TextSpan(
-                text: "Meus Horários",
-                style: DefaultTextStyle.of(context).style.copyWith(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            ...upcomingAppointments.map((data) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: AppointmentCard(
-                  name: data['name'],
-                  time: data['time'],
-                  date: data['date'],
-                  imageUrl: data['imageUrl'],
-                  isHistory: false,
-                  isCancelled: data['isCancelled'],
-                  onCancel: () => _showCancelDialog(context, data['id']), rating: 0.0,
-                ),
-              );
-            }).toList(),
-
-            if (upcomingAppointments.isEmpty)
-              const Padding(
-                padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                child: Text(
-                  "Nenhum horário agendado",
-                  style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54),
-                ),
-              ),
-
-            const SizedBox(height: 24),
-
-            RichText(
-              text: TextSpan(
-                text: "Meu Histórico ",
-                style: DefaultTextStyle.of(context).style.copyWith(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            Column(
-              children: historyAppointments.map((data) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: AppointmentCard(
-                    name: data['name'],
-                    time: data['time'],
-                    date: data['date'],
-                    imageUrl: data['imageUrl'],
-                    isHistory: true,
-                    isCancelled: data['isCancelled'],
-                    rating: data['rating'],
-                    onRate: data['isCancelled'] == false && data['rating'] < 5
-                        ? () => _showRatingDialog(context, data['id'], data['name'], data['rating'])
-                        : null,
-                  ),
-                );
-              }).toList(),
-            ),
-          ],
-        ),
+        child: _HorariosPageBody(),
       ),
+    );
+  }
+}
+
+// --------------------------------------------------------------------------
+// NOVO WIDGET: Contém a estrutura visual do ListView
+// --------------------------------------------------------------------------
+
+class _HorariosPageBody extends StatelessWidget {
+  const _HorariosPageBody();
+
+  @override
+  Widget build(BuildContext context) {
+    // Acessa o estado pai para obter os dados e funções
+    final state = context.findAncestorStateOfType<_HorariosPageState>()!;
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        SizedBox(
+          height: 30,
+          child: Container(
+            color: const Color(0xFFF7F7F7),
+            child: Image.asset("lib/assets/img/logo.png"),
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        RichText(
+          text: TextSpan(
+            text: "Meus Horários",
+            style: DefaultTextStyle.of(context).style.copyWith(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        ...state.upcomingAppointments.map((data) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: AppointmentCard(
+              name: data['name'],
+              time: data['time'],
+              date: data['date'],
+              imageUrl: data['imageUrl'],
+              isHistory: false,
+              isCancelled: data['isCancelled'],
+              onCancel: () => state._showCancelDialog(context, data['id']), rating: 0.0,
+            ),
+          );
+        }).toList(),
+
+        if (state.upcomingAppointments.isEmpty)
+          const Padding(
+            padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+            child: Text(
+              "Nenhum horário agendado",
+              style: TextStyle(fontStyle: FontStyle.italic, color: Colors.black54),
+            ),
+          ),
+
+        const SizedBox(height: 24),
+
+        RichText(
+          text: TextSpan(
+            text: "Meu Histórico ",
+            style: DefaultTextStyle.of(context).style.copyWith(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        Column(
+          children: state.historyAppointments.map((data) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: AppointmentCard(
+                name: data['name'],
+                time: data['time'],
+                date: data['date'],
+                imageUrl: data['imageUrl'],
+                isHistory: true,
+                isCancelled: data['isCancelled'],
+                rating: data['rating'],
+                onRate: data['isCancelled'] == false && data['rating'] < 5
+                    ? () => state._showRatingDialog(context, data['id'], data['name'], data['rating'])
+                    : null,
+              ),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }
