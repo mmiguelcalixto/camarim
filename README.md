@@ -15,6 +15,15 @@ Camarim é um aplicativo voltado para conectar clientes a profissionais de belez
 - Laura Rodrigues Borsagli - 12300802  
 - Arthur Bernardo Duarte - 12302864  
 
+## Atualizações
+- Reorganização da Home Page;
+- Histórico de Cancelamento de horário marcado;
+- Avaliação do profissional;
+- Página de Menu implementada;
+- Editar seus Dados na Página de Menu;
+
+
+
 ## Funcionalidades Implementadas
 1.   - [ ] Cadastro de clientes
 2.   - [ ] Cadastro de profissionais
