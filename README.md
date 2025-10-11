@@ -26,6 +26,8 @@ Camarim é um aplicativo voltado para conectar clientes a profissionais de belez
 8.   - [ ] Profissional poder atualizar dados de sua conta
 9.   - [ ] Cliente poder excluir sua conta
 10.  - [ ] Profissional poder excluir sua conta
+11.  - [ ] Agendamento de horário com um profissional
+12.  - [ ] Sistema de avaliação de profissionais
 
 ## Como Executar o Projeto
 
