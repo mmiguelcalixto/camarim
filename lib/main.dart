@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home:  PrivacyPolicyPage(), // 👈 define como tela inicial
+      home:  PrivacyPolicyPage(), 
     );
   }
 }
