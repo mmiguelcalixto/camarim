@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'edit_menu_page.dart';
+import 'privacy_policy_page.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MenuPage extends StatefulWidget {
@@ -45,7 +46,14 @@ class _MenuPageState extends State<MenuPage> {
                       _CustomButton(
                     icon: Icons.lock,
                     label: 'Privacidade',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PrivacyPolicyPage(),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
