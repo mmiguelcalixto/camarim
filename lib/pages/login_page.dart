@@ -1,8 +1,8 @@
 import 'package:camarim_backend/pages/home_page.dart';
 import 'package:camarim_backend/services/firestore.service.dart';
 import 'package:flutter/material.dart';
-import 'signup_page.dart';
 import 'package:flutter/gestures.dart';
+import 'choose_role_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
       ..onTap = () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const SignupPage()),
+          MaterialPageRoute(builder: (context) => const ChooseRolePage()),
         );
       };
   }

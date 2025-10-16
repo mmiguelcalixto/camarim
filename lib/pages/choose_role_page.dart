@@ -117,7 +117,7 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
                           ),
                           onTap: _goToClienteSignup,
                           subtitle: 'Quero agendar serviços',
-                        ),
+                         ),
                         _buildRoleCard(
                           label: 'Sou profissional',
                           icon: Image.asset(
