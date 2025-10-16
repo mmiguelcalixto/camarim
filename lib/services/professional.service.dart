@@ -1,29 +1,36 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:camarim_backend/models/professional.dart';
-import 'package:camarim_backend/services/firestore.service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 class ProfessionalService {
-  final FirestoreService firestoreService = FirestoreService();
-  final CollectionReference professionals = FirebaseFirestore.instance.collection("professionals");
-  final CollectionReference services = FirebaseFirestore.instance.collection("services");
+  final url = Uri.parse("http://192.168.15.69:3000/professionals");
 
-  Future<void> addProfessional(Professional professional) async {
-    final createdProfessional = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: professional.email.trim(), 
-      password: professional.password.trim(),
+  Future<StreamedResponse> createProfessional(Professional professional, File imageFile) async {
+    var request = http.MultipartRequest('POST', url);
+
+
+    request.fields['name'] = professional.name;
+    request.fields['document'] = professional.document;
+    request.fields['email'] = professional.email;
+    request.fields['phone'] = professional.phone;
+    request.fields['password'] = professional.password;
+    request.fields['addressStreet'] = professional.addressStreet;
+    request.fields['addressNumber'] = professional.addressNumber;
+    request.fields['addressNeighborhood'] = professional.addressNeighborhood;
+    request.fields['addressCity'] = professional.addressCity;
+    request.fields['addressState'] = professional.addressState;
+    request.fields['addressCep'] = professional.addressCep;
+
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'profileImage',
+        imageFile.path,
+      ),
     );
 
-    professionals.doc(createdProfessional.user!.uid).set(professional.getProfessional());
-  }
-
-  Future<void> updateProfessional(String id, Professional data) {
-    return professionals.doc(id).update({
-      "name": data.name,
-      "document": data.document,
-      "email": data.email,
-      "phone": data.phone,
-      "password": data.password,
-    });
+    return await request.send();
   }
 }

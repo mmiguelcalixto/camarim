@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/appointment_card.dart';
+import '../../widgets/appointment_card.dart';
 
 class HorariosPage extends StatefulWidget {
   const HorariosPage({super.key});
@@ -227,7 +227,7 @@ class _HorariosPageBody extends StatelessWidget {
               onCancel: () => state._showCancelDialog(context, data['id']), rating: 0.0,
             ),
           );
-        }).toList(),
+        }),
 
         if (state.upcomingAppointments.isEmpty)
           const Padding(

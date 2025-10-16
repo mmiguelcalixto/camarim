@@ -1,13 +1,13 @@
-import 'package:camarim_backend/pages/horarios_page.dart';
-import 'package:camarim_backend/pages/menu_page.dart';  
+import 'package:camarim_backend/pages/customer/horarios_page.dart';
+import 'package:camarim_backend/pages/customer/menu_page.dart';  
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'search_prof.dart';
-import '../widgets/category_chip.dart';
-import '../widgets/section.dart';
-import '../widgets/square_card.dart';
-import '../widgets/circle_card.dart';
-import '../widgets/horizontal_list.dart';
+import '../../widgets/category_chip.dart';
+import '../../widgets/section.dart';
+import '../../widgets/square_card.dart';
+import '../../widgets/circle_card.dart';
+import '../../widgets/horizontal_list.dart';
 
 // classe modelo ficticia p os profissionais
 class Professional {

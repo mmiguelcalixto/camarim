@@ -1,8 +1,7 @@
-import 'package:camarim_backend/pages/home_page.dart';
-import 'package:camarim_backend/services/firestore.service.dart';
+import 'package:camarim_backend/pages/customer/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'choose_role_page.dart';
+import '../choose_role_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,7 +15,6 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscure = true;
   late TapGestureRecognizer _tapGestureRecognizer;
 
-  final FirestoreService firestoreService = FirestoreService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 

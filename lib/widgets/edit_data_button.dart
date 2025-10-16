@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class EditDataButton extends StatelessWidget {
-  const EditDataButton({Key? key}) : super(key: key);
+  const EditDataButton({super.key});
 
   @override
   Widget build(BuildContext context) {
