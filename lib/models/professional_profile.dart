@@ -1,13 +1,8 @@
-// models/professional_profile.dart
-
 class ProfessionalProfile {
-  // CAMPOS DO 'RG' (INFORMAÇÕES BÁSICAS)
-  final int id;
+  final int id; 
   final String name;
-  final String email;
+  final String email; 
   final String phone;
-  final String addressCity;
-
   final String profileImageUrl;
   final String headerImageUrl;
   final String bio;
@@ -20,9 +15,6 @@ class ProfessionalProfile {
     required this.name,
     required this.email,
     required this.phone,
-    required this.addressCity,
-    
-    // Detalhados
     required this.profileImageUrl,
     required this.headerImageUrl,
     required this.bio,
@@ -32,25 +24,16 @@ class ProfessionalProfile {
   });
 
   factory ProfessionalProfile.fromJson(Map<String, dynamic> json) {
-    List<String> parseList(dynamic list) {
-      if (list is List) {
-        return List<String>.from(list.map((item) => item.toString()));
-      }
-      return []; 
-    }
-    
+    List<String> parseList(dynamic list) => (list is List) ? List<String>.from(list) : [];
+
     return ProfessionalProfile(
-      // Dados básicos
       id: int.tryParse(json['id'].toString()) ?? 0,
-      name: json['name'] ?? 'Nome não encontrado',
+      name: json['name'] ?? '',
       email: json['email'] ?? '',
       phone: json['phone'] ?? '',
-      addressCity: json['addressCity'] ?? '',
-      
       profileImageUrl: json['profileImageUrl'] ?? '',
-      headerImageUrl: json['headerImageUrl'] ?? '', 
-      bio: json['bio'] ?? 'Bio não disponível.', 
-      
+      headerImageUrl: json['headerImageUrl'] ?? '',
+      bio: json['bio'] ?? 'Bio não disponível.',
       socialMediaLinks: parseList(json['socialMediaLinks']),
       services: parseList(json['services']),
       workImages: parseList(json['workImages']),

@@ -137,7 +137,7 @@ class _HomePageContentState extends State<HomePageContent> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-          Container( //header
+          Container( 
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             decoration: const BoxDecoration(
               color: Color(0xFF9FA0E4),
@@ -253,14 +253,12 @@ Section(
                 title: "Bem avaliados",
                 child: HorizontalList(
                   children: professionals.map((prof) {
-                    // MUDANÇA AQUI: Adicionamos o GestureDetector
                     return GestureDetector(
                       onTap: () {
                         print('Clicou em (SquareCard): ${prof.name} com ID: ${prof.id}'); 
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            // Enviando o ID para a ProfessionalPageClient
                             builder: (context) => ProfessionalPageClient(professionalId: prof.id), 
                           ),
                         );
@@ -271,7 +269,6 @@ Section(
                 ),
               ),
 
-              // --- SEÇÃO BASEADO NAS SUAS ESCOLHAS (AGORA É CLICÁVEL) ---
               Section(
                 title: "Baseado nas suas escolhas",
                 child: HorizontalList(
@@ -292,10 +289,8 @@ Section(
                 ),
               ),
 
-              // --- SEÇÃO PERTINHO DE VOCÊ (AGORA É CLICÁVEL) ---
               Section(
                 title: "Pertinho de você",
-                // MUDANÇA AQUI: Adicionamos o GestureDetector
                 child: GestureDetector(
                   onTap: () {
                     print('Clicou em (Destaque): ${firstProfessional.name} com ID: ${firstProfessional.id}'); 

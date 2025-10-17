@@ -2,6 +2,7 @@ import 'package:camarim_backend/models/service.dart';
 
 class Professional {
   final int id;
+  final String profileImageUrl;
   final String name;
   final String document;
   final String email;
@@ -9,15 +10,15 @@ class Professional {
   final String password;
   final List<Service>? services;
   final String addressStreet;
-  final String addressNumber;
+  final String addressNumber; 
   final String addressNeighborhood;
-  final String addressCity;
-  final String addressState;
+  final String addressCity; 
+  final String addressState; 
   final String addressCep;
-  final String profileImageUrl;
 
   Professional({
-        required this.id,
+    required this.id, 
+    required this.profileImageUrl, 
     required this.name,
     required this.document,
     required this.email,
@@ -30,12 +31,12 @@ class Professional {
     required this.addressCep,
     this.services,
     required this.password,
-    required this.profileImageUrl,
   });
 
   factory Professional.fromJson(Map<String, dynamic> json) {
     return Professional(
-      id: json['id'],
+      id: int.tryParse(json['id'].toString()) ?? 0,
+      profileImageUrl: json['profileImageUrl'] ?? '',
       name: json['name'] ?? '',
       document: json['document'] ?? '',
       email: json['email'] ?? '',
@@ -47,24 +48,6 @@ class Professional {
       addressCity: json['addressCity'] ?? '',
       addressState: json['addressState'] ?? '',
       addressCep: json['addressCep'] ?? '',
-      profileImageUrl: json['profileImageUrl'] ?? '',
     );
-  }
-
-  Map<String, dynamic> getProfessional() {
-    return {
-      "name": name,
-      "document": document,
-      "email": email,
-      "phone": phone,
-      "services": services,
-      "password": password,
-      "addressStreet": addressStreet,
-      "addressNumber": addressNumber,
-      "addressNeighborhood": addressNeighborhood,
-      "addressCity": addressCity,
-      "addressState": addressState,
-      "addressCep": addressCep,
-    };
   }
 }

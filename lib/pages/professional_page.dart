@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'hire_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../models/professional.dart';
+import '../models/professional_profile.dart';
 import '../services/professional.service.dart';
 
 class ProfessionalPageClient extends StatefulWidget {
@@ -14,16 +14,15 @@ class ProfessionalPageClient extends StatefulWidget {
 }
 
 class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
-  late Future<Professional> _futureProfessional;
+late Future<ProfessionalProfile> _futureProfile;
   final ProfessionalService _service = ProfessionalService();
 
   @override
   void initState() {
     super.initState();
-    _futureProfessional = _service.getProfessionalById(widget.professionalId);
+    _futureProfile = _service.getProfessionalById(widget.professionalId);
   }
-
-  // FUNÇÃO AUXILIAR PARA IMAGENS DE TRABALHO
+  
   Widget _buildWorkImage(String imageUrl) {
     return Container(
       width: 80,
@@ -40,7 +39,6 @@ class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
     );
   }
 
-  // FUNÇÃO AUXILIAR PARA MÍDIAS SOCIAIS
   Widget _buildSocialMediaRow(List<String> links, Color color) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,8 +79,8 @@ class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<Professional>(
-        future: _futureProfessional,
+      body: FutureBuilder<ProfessionalProfile>(
+        future: _futureProfile,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -96,7 +94,7 @@ class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
             return const Center(child: Text('Profissional não encontrado.'));
           }
 
-          final professional = snapshot.data!;
+final profile = snapshot.data!;
 
           return SafeArea(
             child: Stack(
@@ -104,28 +102,32 @@ class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
                 ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
-                    Container(
-                      height: 150,
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 211, 203, 234),
-                      ),
-                    ),
+              Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 211, 203, 234),
+                  image: profile.headerImageUrl.isNotEmpty
+                      ? DecorationImage(
+                          image: NetworkImage(profile.headerImageUrl),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
+                ),
+              ),
                     const SizedBox(height: 20),
 
-                    // FOTO DE PERFIL
                     Center(
                       child: CircleAvatar(
                         radius: 60,
-                        backgroundImage: NetworkImage(professional.profileImageUrl),
+                        backgroundImage: NetworkImage(profile.profileImageUrl),
                         backgroundColor: Colors.white,
                       ),
                     ),
                     const SizedBox(height: 12),
 
-                    // NOME E BIO
                     Center(
                       child: Text(
-                        professional.name,
+                        profile.name,
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -134,34 +136,31 @@ class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Center(
+         Center(
                       child: Text(
-                        '${professional.email}\n${professional.phone}',
+                        profile.bio,
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: Colors.black54),
                       ),
                     ),
                     const SizedBox(height: 12),
-
-                    // BOTÃO CONTRATAR
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const ContratarPage()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 92, 98, 158),
-                      ),
-                      child: const Text(
-                        "Contratar",
-                        style: TextStyle(color: Colors.white),
-                      ),
+ElevatedButton(
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ContratarPage())),
+                      style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 92, 98, 158)),
+                      child: const Text("Contratar", style: TextStyle(color: Colors.white)),
+                    ),
+                    const SizedBox(height: 20),
+                    
+                    const Text("Serviços", style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(255, 92, 98, 158))),
+                    const SizedBox(height: 10),
+                    Wrap(
+                      spacing: 8,
+                      children: profile.services.isNotEmpty
+                          ? profile.services.map((service) => Chip(label: Text(service))).toList()
+                          : [const Chip(label: Text("Nenhum serviço cadastrado"))],
                     ),
                     const SizedBox(height: 20),
 
-                    // TRABALHOS JÁ FEITOS
                     const Text("Trabalhos já Feitos", style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(255, 92, 98, 158))),
                     const SizedBox(height: 10),
                     Container(
@@ -176,13 +175,12 @@ class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: <Widget>[
-                          _buildWorkImage(professional.profileImageUrl),
+                          _buildWorkImage(profile.profileImageUrl),
                         ],
                       ),
                     ),
                     const SizedBox(height: 20),
 
-                    // SERVIÇOS
                 const Text("Serviços", style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(255, 92, 98, 158))),
                     const SizedBox(height: 10),
                     const Align(
@@ -191,7 +189,6 @@ class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
                     ),
                     const SizedBox(height: 20),
 
-                    // TRAJETÓRIA
                     const Text(
                       "Trajetória",
                       style: TextStyle(
@@ -233,7 +230,6 @@ class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
                     ),
                     const SizedBox(height: 20),
 
-                    // DIFERENCIAIS
                     const Text(
                       "Diferenciais",
                       style: TextStyle(
@@ -260,7 +256,7 @@ class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
                     ),
                     const SizedBox(height: 20),
 
-                    // MAPA
+                    
                     Container(
                       height: 150,
                       decoration: BoxDecoration(
@@ -273,7 +269,6 @@ class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
                     ),
                     const SizedBox(height: 20),
 
-                    // MÍDIAS SOCIAIS
                     const Text(
                       "Mídias Sociais",
                       style: TextStyle(
@@ -283,13 +278,12 @@ class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
                     ),
                     const SizedBox(height: 10),
                     _buildSocialMediaRow(
-                        [], // no social media links available on Professional model
+                        [], 
                         const Color.fromARGB(255, 92, 98, 158)),
                     const SizedBox(height: 30),
                   ],
                 ),
 
-                // Botão de voltar
                 Positioned(
                   top: 16,
                   left: 16,

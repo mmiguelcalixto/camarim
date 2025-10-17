@@ -1,30 +1,38 @@
 import 'dart:convert';
 import 'dart:io';
-import '../models/professional.dart'; 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import '../models/professional.dart'; 
+import '../models/professional_profile.dart';
 
 class ProfessionalService {
-  final url = Uri.parse("http://localhost:3000/professionals");
+  final String baseUrl = "http://localhost:3000/professionals";
 
-
-//get professionals
+ //get professionals
   Future<List<Professional>> getProfessionals() async {
-    final response = await http.get(url);
-
+    final response = await http.get(Uri.parse(baseUrl));
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      return data.map((json) => Professional.fromJson(json)).toList();
+      return data.map((json) => Professional.fromJson(json)).toList(); 
     } else {
       throw Exception('Falha ao carregar profissionais');
     }
   }
 
-// create professional
+  //  get professional byid
+  Future<ProfessionalProfile> getProfessionalById(int id) async {
+    final response = await http.get(Uri.parse('$baseUrl/$id'));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return ProfessionalProfile.fromJson(data);
+    } else {
+      throw Exception('Falha ao carregar dados do profissional');
+    }
+  }
 
- Future<StreamedResponse> createProfessional(Professional professional, File imageFile) async {
-    var request = http.MultipartRequest('POST', url);
-
+  // create professional 
+  Future<StreamedResponse> createProfessional(Professional professional, File imageFile) async {
+    var request = http.MultipartRequest('POST', Uri.parse(baseUrl));
 
     request.fields['name'] = professional.name;
     request.fields['document'] = professional.document;
@@ -48,17 +56,4 @@ class ProfessionalService {
     return await request.send();
   }
 
- // get professionals by id
-  Future<Professional> getProfessionalById(int id) async {
-    final url = Uri.parse('http://localhost:3000/professionals/$id');
-    
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return Professional.fromJson(data);
-    } else {
-      throw Exception('Falha ao carregar dados do profissional.');
-    }
-  }
 }
