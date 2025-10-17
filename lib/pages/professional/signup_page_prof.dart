@@ -7,6 +7,7 @@ import 'package:camarim_backend/services/professional.service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../customer/login_page.dart';
 import 'package:image_picker/image_picker.dart';
@@ -47,6 +48,7 @@ class _SignupPageProfState extends State<SignupPageProf> {
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
   final professionalService = ProfessionalService();
+  bool _imageError = false;
 
 
   @override
@@ -76,6 +78,27 @@ class _SignupPageProfState extends State<SignupPageProf> {
   }
 
   Future<void> _createProfessional() async {
+    if (_selectedImage == null) {
+      setState(() {
+        _imageError = true;
+      });
+      Fluttertoast.showToast(
+        msg: 'Por favor, selecione uma foto de perfil',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 10,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+      return;
+    }
+    if (_imageError) {
+      setState(() {
+        _imageError = false;
+      });
+    }
+
     final data = Professional(
       name: _nameController.text, 
       document: _documentController.text, 
@@ -91,19 +114,16 @@ class _SignupPageProfState extends State<SignupPageProf> {
     );
 
     final response = await professionalService.createProfessional(data, _selectedImage!);
-    final responseBody = await response.stream.bytesToString();
-    final professionalJson = jsonDecode(responseBody);
-    
-    print("$professionalJson, -----------------------------------------------------------------------");
 
-    if (response.statusCode == 201) {
+    if(response != null && response.statusCode == 201) {
+      final data = jsonDecode(response.body);
+      final professionalId = data['id'];
+
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const ProfilePage()),
+        MaterialPageRoute(builder: (context) => ProfilePage(professionalId)),
       );
     }
-
-
   }
 
   @override
@@ -368,6 +388,14 @@ class _SignupPageProfState extends State<SignupPageProf> {
                   ),
           ),
         ),
+        if (_imageError)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              'Selecione uma foto de perfil',
+              style: TextStyle(color: Colors.red[700], fontSize: 12),
+            ),
+          ),
       ],
     );
   }

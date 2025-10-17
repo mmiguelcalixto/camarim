@@ -133,7 +133,6 @@ class _CustomButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const _CustomButton({
-    super.key,
     required this.icon,
     required this.label,
     required this.onTap,
@@ -172,7 +171,6 @@ class _PersonalDataField extends StatelessWidget {
   final String? secondLabel;
 
   const _PersonalDataField({
-    super.key,
     required this.icon,
     required this.label,
     this.isMultiField = false,
@@ -271,7 +269,7 @@ class _PersonalDataField extends StatelessWidget {
 }
 
 class _EditDataButton extends StatelessWidget {
-  const _EditDataButton({super.key});
+  const _EditDataButton();
 
   @override
   Widget build(BuildContext context) {
@@ -315,7 +313,7 @@ class _EditDataButton extends StatelessWidget {
 
 
 class _LogoutButton extends StatelessWidget {
-  const _LogoutButton({super.key});
+  const _LogoutButton();
 
   @override
   Widget build(BuildContext context) {
