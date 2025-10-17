@@ -27,11 +27,10 @@ class Customer {
     required this.addressCep,
   });
 
-  // Apenas renomeamos o método para toJson()
   Map<String, dynamic> toJson() {
     return {
       "fullName": fullName,
-      "birthDate": birthDate.toIso8601String(), // Perfeito usar toIso8601String()!
+      "birthDate": birthDate.toIso8601String(),
       "username": username,
       "email": email,
       "phone": phone,

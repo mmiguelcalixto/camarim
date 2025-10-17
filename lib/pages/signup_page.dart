@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'login_page.dart';
-import '../models/customer.dart'; 
+import '../models/customer.dart';
 import '../services/customer.service.dart';
 
 class SignupPage extends StatefulWidget {
@@ -26,6 +26,13 @@ class _SignupPageState extends State<SignupPage> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  final _addressCepController = TextEditingController();
+  final _addressStreetController = TextEditingController();
+  final _addressNumberController = TextEditingController();
+  final _addressNeighborhoodController = TextEditingController();
+  final _addressCityController = TextEditingController();
+  final _addressStateController = TextEditingController();
+
   final _cpfFormatter = MaskTextInputFormatter(mask: '###.###.###-##');
   final _phoneFormatter = MaskTextInputFormatter(mask: '(##) #####-####');
   final _birthDateMask = MaskTextInputFormatter(
@@ -39,13 +46,14 @@ class _SignupPageState extends State<SignupPage> {
   @override
   void initState() {
     super.initState();
-    _loginTapRecognizer = TapGestureRecognizer()
-      ..onTap = () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-        );
-      };
+    _loginTapRecognizer =
+        TapGestureRecognizer()
+          ..onTap = () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+            );
+          };
   }
 
   @override
@@ -59,6 +67,12 @@ class _SignupPageState extends State<SignupPage> {
     _cpfController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _addressCepController.dispose();
+    _addressStreetController.dispose();
+    _addressNumberController.dispose();
+    _addressNeighborhoodController.dispose();
+    _addressCityController.dispose();
+    _addressStateController.dispose();
     super.dispose();
   }
 
@@ -66,12 +80,12 @@ class _SignupPageState extends State<SignupPage> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
 
-final dateParts = _birthDateController.text.split('/'); 
-final day = int.parse(dateParts[0]);
-final month = int.parse(dateParts[1]);
-final year = int.parse(dateParts[2]);
+      final dateParts = _birthDateController.text.split('/');
+      final day = int.parse(dateParts[0]);
+      final month = int.parse(dateParts[1]);
+      final year = int.parse(dateParts[2]);
 
-final birthDate = DateTime.utc(year, month, day);
+      final birthDate = DateTime.utc(year, month, day);
 
       final newCustomer = Customer(
         fullName: _nameController.text,
@@ -80,12 +94,16 @@ final birthDate = DateTime.utc(year, month, day);
         email: _emailController.text,
         phone: _phoneFormatter.getUnmaskedText(),
         password: _passwordController.text,
-        addressStreet: '',
-        addressNumber: '',
-        addressNeighborhood: '',
-        addressCity: '',
-        addressState: '',
-        addressCep: '',
+
+        addressStreet: _addressStreetController.text,
+        addressNumber: _addressNumberController.text,
+        addressNeighborhood: _addressNeighborhoodController.text,
+        addressCity: _addressCityController.text,
+        addressState: _addressStateController.text,
+        addressCep: _addressCepController.text.replaceAll(
+          RegExp(r'[^0-9]'),
+          '',
+        ),
       );
 
       final bool success = await _customerService.registerCustomer(newCustomer);
@@ -216,6 +234,38 @@ final birthDate = DateTime.utc(year, month, day);
                           return null;
                         },
                       ),
+
+                      _buildTextFormField(
+                        controller: _addressCepController,
+                        label: 'CEP',
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          MaskTextInputFormatter(mask: '#####-###'),
+                        ],
+                      ),
+                      _buildTextFormField(
+                        controller: _addressStreetController,
+                        label: 'Rua / Logradouro',
+                      ),
+                      _buildTextFormField(
+                        controller: _addressNumberController,
+                        label: 'Número',
+                        keyboardType: TextInputType.number,
+                      ),
+                      _buildTextFormField(
+                        controller: _addressNeighborhoodController,
+                        label: 'Bairro',
+                      ),
+                      _buildTextFormField(
+                        controller: _addressCityController,
+                        label: 'Cidade',
+                      ),
+                      _buildTextFormField(
+                        controller: _addressStateController,
+                        label: 'Estado (UF)',
+                      ),
+
                       _buildTextFormField(
                         controller: _passwordController,
                         label: 'Senha',
@@ -246,28 +296,29 @@ final birthDate = DateTime.utc(year, month, day);
                       SizedBox(
                         width: double.infinity,
                         height: 48,
-                        child: _isLoading
-                            ? const Center(
-                                child: CircularProgressIndicator(
-                                  color: Color(0xFF626BBA),
-                                ),
-                              )
-                            : ElevatedButton(
-                                onPressed: _registerCustomer,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF626BBA),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                        child:
+                            _isLoading
+                                ? const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Color(0xFF626BBA),
+                                  ),
+                                )
+                                : ElevatedButton(
+                                  onPressed: _registerCustomer,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF626BBA),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Criar minha conta!',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
                                   ),
                                 ),
-                                child: const Text(
-                                  'Criar minha conta!',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
                       ),
                       const SizedBox(height: 16),
                       RichText(
@@ -305,9 +356,15 @@ final birthDate = DateTime.utc(year, month, day);
                       const SizedBox(height: 24),
                       _buildSocialButton('Continue com Apple', Icons.apple),
                       const SizedBox(height: 12),
-                      _buildSocialButton('Continue com Facebook', Icons.facebook),
+                      _buildSocialButton(
+                        'Continue com Facebook',
+                        Icons.facebook,
+                      ),
                       const SizedBox(height: 12),
-                      _buildSocialButton('Continue com Google', Icons.g_mobiledata),
+                      _buildSocialButton(
+                        'Continue com Google',
+                        Icons.g_mobiledata,
+                      ),
                     ],
                   ),
                 ),
@@ -352,11 +409,13 @@ final birthDate = DateTime.utc(year, month, day);
           labelStyle: const TextStyle(color: Color(0xFF737373)),
           floatingLabelStyle: const TextStyle(color: Color(0xFF737373)),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-          suffixIcon: isPassword
-              ? const Icon(Icons.visibility_off, color: Color(0xFF737373))
-              : null,
+          suffixIcon:
+              isPassword
+                  ? const Icon(Icons.visibility_off, color: Color(0xFF737373))
+                  : null,
         ),
-        validator: validator ??
+        validator:
+            validator ??
             (value) {
               if (value == null || value.isEmpty) return 'Preencha este campo';
               return null;
