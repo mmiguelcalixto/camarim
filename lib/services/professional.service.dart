@@ -7,6 +7,8 @@ import 'package:http/http.dart';
 class ProfessionalService {
   final url = Uri.parse("http://localhost:3000/professionals");
 
+
+//get professionals
   Future<List<Professional>> getProfessionals() async {
     final response = await http.get(url);
 
@@ -17,6 +19,8 @@ class ProfessionalService {
       throw Exception('Falha ao carregar profissionais');
     }
   }
+
+// create professional
 
  Future<StreamedResponse> createProfessional(Professional professional, File imageFile) async {
     var request = http.MultipartRequest('POST', url);
@@ -42,5 +46,19 @@ class ProfessionalService {
     );
 
     return await request.send();
+  }
+
+ // get professionals by id
+  Future<Professional> getProfessionalById(int id) async {
+    final url = Uri.parse('http://localhost:3000/professionals/$id');
+    
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return Professional.fromJson(data);
+    } else {
+      throw Exception('Falha ao carregar dados do profissional.');
+    }
   }
 }

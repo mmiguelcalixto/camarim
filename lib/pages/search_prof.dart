@@ -119,11 +119,10 @@ class _SearchProfPageState extends State<SearchProfPage> {
   }) {
     return GestureDetector(
       onTap: () {
-        // 🚀 Agora redireciona pra página ProfessionalPageClient
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProfessionalPageClient(),
+            builder: (context) => ProfessionalPageClient(professionalId: 1), // Substitua pelo ID real do profissional
           ),
         );
       },

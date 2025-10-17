@@ -1,6 +1,7 @@
 import 'package:camarim_backend/models/service.dart';
 
 class Professional {
+  final int id;
   final String name;
   final String document;
   final String email;
@@ -16,6 +17,7 @@ class Professional {
   final String profileImageUrl;
 
   Professional({
+        required this.id,
     required this.name,
     required this.document,
     required this.email,
@@ -33,6 +35,7 @@ class Professional {
 
   factory Professional.fromJson(Map<String, dynamic> json) {
     return Professional(
+      id: json['id'],
       name: json['name'] ?? '',
       document: json['document'] ?? '',
       email: json['email'] ?? '',

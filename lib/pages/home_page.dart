@@ -3,6 +3,7 @@ import 'package:camarim_backend/pages/menu_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'search_prof.dart';
+import 'package:camarim_backend/pages/professional_page.dart';
 import '../widgets/category_chip.dart';
 import '../widgets/section.dart';
 import '../widgets/square_card.dart';
@@ -115,7 +116,7 @@ class _HomePageContentState extends State<HomePageContent> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Professional>>(
-      future: _futureProfessionals,
+     future: _futureProfessionals,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -128,14 +129,15 @@ class _HomePageContentState extends State<HomePageContent> {
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(child: Text("Nenhum profissional foi encontrado"));
         }
-                final professionals = snapshot.data!;
+        
+        final professionals = snapshot.data!;
         final firstProfessional = professionals.first;
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+          Container( //header
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             decoration: const BoxDecoration(
               color: Color(0xFF9FA0E4),
@@ -247,76 +249,103 @@ class _HomePageContentState extends State<HomePageContent> {
             ),
           ),
           const SizedBox(height: 16),
-
-              Section(
+Section(
                 title: "Bem avaliados",
                 child: HorizontalList(
                   children: professionals.map((prof) {
-                    return SquareCard(prof.name, prof.profileImageUrl);
+                    // MUDANÇA AQUI: Adicionamos o GestureDetector
+                    return GestureDetector(
+                      onTap: () {
+                        print('Clicou em (SquareCard): ${prof.name} com ID: ${prof.id}'); 
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            // Enviando o ID para a ProfessionalPageClient
+                            builder: (context) => ProfessionalPageClient(professionalId: prof.id), 
+                          ),
+                        );
+                      },
+                      child: SquareCard(prof.name, prof.profileImageUrl),
+                    );
                   }).toList(),
                 ),
               ),
 
+              // --- SEÇÃO BASEADO NAS SUAS ESCOLHAS (AGORA É CLICÁVEL) ---
               Section(
                 title: "Baseado nas suas escolhas",
                 child: HorizontalList(
                   children: professionals.map((prof) {
-                    return CircleCard(prof.name);
+                    return GestureDetector(
+                      onTap: () {
+                        print('Clicou em (CircleCard): ${prof.name} com ID: ${prof.id}'); 
+                         Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfessionalPageClient(professionalId: prof.id), 
+                          ),
+                        );
+                      },
+                      child: CircleCard(prof.name),
+                    );
                   }).toList(),
                 ),
               ),
 
+              // --- SEÇÃO PERTINHO DE VOCÊ (AGORA É CLICÁVEL) ---
               Section(
                 title: "Pertinho de você",
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      children: [
-                        ClipRRect(// isso é so pra imagem n ficar vazando fora do circulo
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            firstProfessional.profileImageUrl,
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                width: 80,
-                                height: 80,
-                                color: Colors.grey,
-                                child: const Icon(Icons.person, color: Colors.white),
-                              );
-                            },
+                // MUDANÇA AQUI: Adicionamos o GestureDetector
+                child: GestureDetector(
+                  onTap: () {
+                    print('Clicou em (Destaque): ${firstProfessional.name} com ID: ${firstProfessional.id}'); 
+                     Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfessionalPageClient(professionalId: firstProfessional.id), 
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              firstProfessional.profileImageUrl,
+                              width: 80, height: 80, fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(width: 80, height: 80, color: Colors.grey, child: const Icon(Icons.person, color: Colors.white));
+                              },
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                firstProfessional.name, 
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  firstProfessional.name, 
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                                 ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "Especialista em ${firstProfessional.addressCity}",
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
+                                const SizedBox(height: 4),
+                                Text(
+                                  "Especialista em ${firstProfessional.addressCity}",
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
