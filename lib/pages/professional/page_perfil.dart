@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:camarim_backend/models/professional.dart';
 import 'package:camarim_backend/services/professional.service.dart';
+import 'package:camarim_backend/services/professionalPortfolio.service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,6 +25,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Professional? professional;
+  final List<Uint8List?> _userImages = List<Uint8List?>.filled(6, null);
+  final ImagePicker _picker = ImagePicker();
 
   Future<void> _loadProfessional() async {
     final service = ProfessionalService();
@@ -30,27 +34,11 @@ class _ProfilePageState extends State<ProfilePage> {
     if (result != null) {
       final data = jsonDecode(result.body);
 
-      print("$data ---------------------------------------------");
       setState(() {
-        professional = Professional(
-          id: data['id'],
-          name: data['name'], 
-          document: data['document'], 
-          email: data['email'], 
-          phone: data['phone'], 
-          addressStreet: data['addressStreet'], 
-          addressNumber: data['addressNumber'], 
-          addressNeighborhood: data['addressNeighborhood'], 
-          addressCity: data['addressCity'], 
-          addressState: data['addressState'], 
-          addressCep: data['addressCep'], 
-          profileImage: data['profileImage'],
-          averageRating: data['averageRating'],
-        );
+        professional = Professional.fromJson(data);
       });
 
-      print("${professional?.profileImage} -----------------------------------------");
-
+      print("${professional?.services} ----------------------------------------------");
     }
   }
 
@@ -98,21 +86,23 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             const SizedBox(height: 8),
-            const Center(
+            Center(
               child: Text(
-                "",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black54),
+                professional?.description ?? "",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple,
+                ),
               ),
             ),
-            const SizedBox(height: 12),
 
             // BOTÃO EDITAR BIOGRAFIA
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const EditProfilePage()),
+                  MaterialPageRoute(builder: (context) => EditProfilePage(professional!.id!)),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -125,9 +115,10 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
 
             // TRABALHOS RECENTES
-            const LatestWorks(),
+            SizedBox(height: 20),
 
-            // SERVIÇOS
+            _buildLatestWorks(),
+
             const Text(
               "Serviços",
               style: TextStyle(
@@ -135,180 +126,177 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Colors.deepPurple,
               ),
             ),
-            const Wrap(
+            Wrap(
               spacing: 8,
-              children: [
-                Chip(label: Text("Unhas de gel")),
-                Chip(label: Text("Manicure/Pedicure")),
-                Chip(label: Text("Corte")),
-                Chip(label: Text("Tintura")),
-                Chip(label: Text("Descoloração")),
-                Chip(label: Text("Tons Fantasia")),
-                Chip(label: Text("Loiros")),
-                Chip(label: Text("Maquiagem")),
-                Chip(label: Text("Add service +")),
-              ],
+              children: (professional?.services ?? [])
+                  .map((s) => Chip(label: Text(s.name)))
+                  .toList(),
             ),
-            const SizedBox(height: 20),
+            // const SizedBox(height: 20),
 
-            // TRAJETÓRIA
-            const Text(
-              "Trajetória",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.deepPurple,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 150,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple.shade100,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Center(
-                      child: Text("Adicionar instituição\nO que você aprendeu?"),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Container(
-                    height: 150,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple.shade200,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Center(
-                      child: Text("Detalhes da instituição..."),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
+            // const Text(
+            //   "Trajetória",
+            //   style: TextStyle(
+            //     fontWeight: FontWeight.bold,
+            //     color: Colors.deepPurple,
+            //   ),
+            // ),
+            // const SizedBox(height: 10),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: Container(
+            //         height: 150,
+            //         padding: const EdgeInsets.all(12),
+            //         decoration: BoxDecoration(
+            //           color: Colors.deepPurple.shade100,
+            //           borderRadius: BorderRadius.circular(12),
+            //         ),
+            //         child: const Center(
+            //           child: Text("Adicionar instituição\nO que você aprendeu?"),
+            //         ),
+            //       ),
+            //     ),
+            //     const SizedBox(width: 12),
+            //     Expanded(
+            //       child: Container(
+            //         height: 150,
+            //         padding: const EdgeInsets.all(12),
+            //         decoration: BoxDecoration(
+            //           color: Colors.deepPurple.shade200,
+            //           borderRadius: BorderRadius.circular(12),
+            //         ),
+            //         child: const Center(
+            //           child: Text("Detalhes da instituição..."),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // const SizedBox(height: 20),
 
-            // DIFERENCIAIS
-            const Text(
-              "Diferenciais",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.deepPurple,
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              "✦ Este profissional atende a domicílio",
-              style: TextStyle(
-                color: Colors.deepPurple,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            const Text(
-              "✦ Este profissional oferece atendimento adaptado a pessoas neurodivergentes",
-              style: TextStyle(
-                color: Colors.deepPurple,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 20),
+            // // DIFERENCIAIS
+            // const Text(
+            //   "Diferenciais",
+            //   style: TextStyle(
+            //     fontWeight: FontWeight.bold,
+            //     color: Colors.deepPurple,
+            //   ),
+            // ),
+            // const SizedBox(height: 10),
+            // const Text(
+            //   "✦ Este profissional atende a domicílio",
+            //   style: TextStyle(
+            //     color: Colors.deepPurple,
+            //     fontWeight: FontWeight.bold,
+            //     fontSize: 16,
+            //   ),
+            // ),
+            // const Text(
+            //   "✦ Este profissional oferece atendimento adaptado a pessoas neurodivergentes",
+            //   style: TextStyle(
+            //     color: Colors.deepPurple,
+            //     fontWeight: FontWeight.bold,
+            //     fontSize: 16,
+            //   ),
+            // ),
+            SizedBox(height: 20),
 
-            // MAPA
             Container(
               height: 150,
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
+                color: Colors.deepPurple,
                 borderRadius: BorderRadius.circular(12),
-                image: const DecorationImage(
-                  image: AssetImage("assets/images/maps.png"),
-                  fit: BoxFit.cover,
-                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${professional?.addressStreet}, ${professional?.addressNumber}",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Bairro ${professional?.addressNeighborhood}",
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "${professional?.addressCity} - ${professional?.addressState}",
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
             ),
+
             const SizedBox(height: 20),
 
-            // MÍDIAS SOCIAIS
-            const Text(
-              "Mídias Sociais",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.deepPurple,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Row(
-                  children: [
-                    FaIcon(FontAwesomeIcons.instagram, color: Colors.deepPurple),
-                    SizedBox(width: 8),
-                    Text("Seu link do Instagram"),
-                  ],
-                ),
-                SizedBox(height: 8),
-                Row(
-                  children: [
-                    FaIcon(FontAwesomeIcons.linkedin, color: Colors.deepPurple),
-                    SizedBox(width: 8),
-                    Text("Seu link do LinkedIn"),
-                  ],
-                ),
-                SizedBox(height: 8),
-                Row(
-                  children: [
-                    FaIcon(FontAwesomeIcons.tiktok, color: Colors.deepPurple),
-                    SizedBox(width: 8),
-                    Text("Seu link do TikTok"),
-                  ],
-                ),
-                SizedBox(height: 8),
-                Row(
-                  children: [
-                    FaIcon(FontAwesomeIcons.xTwitter, color: Colors.deepPurple),
-                    SizedBox(width: 8),
-                    Text("Seu link do X"),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
+            // // MÍDIAS SOCIAIS
+            // const Text(
+            //   "Mídias Sociais",
+            //   style: TextStyle(
+            //     fontWeight: FontWeight.bold,
+            //     color: Colors.deepPurple,
+            //   ),
+            // ),
+            // const SizedBox(height: 10),
+            // Column(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: const [
+            //     Row(
+            //       children: [
+            //         FaIcon(FontAwesomeIcons.instagram, color: Colors.deepPurple),
+            //         SizedBox(width: 8),
+            //         Text("Seu link do Instagram"),
+            //       ],
+            //     ),
+            //     SizedBox(height: 8),
+            //     Row(
+            //       children: [
+            //         FaIcon(FontAwesomeIcons.linkedin, color: Colors.deepPurple),
+            //         SizedBox(width: 8),
+            //         Text("Seu link do LinkedIn"),
+            //       ],
+            //     ),
+            //     SizedBox(height: 8),
+            //     Row(
+            //       children: [
+            //         FaIcon(FontAwesomeIcons.tiktok, color: Colors.deepPurple),
+            //         SizedBox(width: 8),
+            //         Text("Seu link do TikTok"),
+            //       ],
+            //     ),
+            //     SizedBox(height: 8),
+            //     Row(
+            //       children: [
+            //         FaIcon(FontAwesomeIcons.xTwitter, color: Colors.deepPurple),
+            //         SizedBox(width: 8),
+            //         Text("Seu link do X"),
+            //       ],
+            //     ),
+            //   ],
+            // ),
+            // const SizedBox(height: 30),
           ],
         ),
       ),
     );
   }
-}
 
-class LatestWorks extends StatefulWidget {
-  const LatestWorks({super.key});
-
-  @override
-  State<LatestWorks> createState() => _LatestWorksState();
-}
-
-class _LatestWorksState extends State<LatestWorks> {
-  final List<Uint8List?> _userImages = List<Uint8List?>.filled(6, null);
-  final ImagePicker _picker = ImagePicker();
-
-  Future<void> _pickImage(int index) async {
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      final bytes = await pickedFile.readAsBytes();
-      setState(() {
-        _userImages[index] = bytes;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildLatestWorks() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -334,7 +322,20 @@ class _LatestWorksState extends State<LatestWorks> {
                   return _buildUserImage(imageBytes);
                 }
                 return GestureDetector(
-                  onTap: () => _pickImage(index),
+                  onTap: () async {
+                    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+                    if (pickedFile != null) {
+                      final bytes = await pickedFile.readAsBytes();
+                      setState(() {
+                        _userImages[index] = bytes;
+                      });
+
+                      final service = ProfessionalPortfolioService();
+                      
+                      await service.addImageToPortfolio(professional!.id!, File(pickedFile.path));
+                    }
+                  },
                   child: Container(
                     width: 80,
                     margin: const EdgeInsets.only(right: 8),
@@ -353,6 +354,7 @@ class _LatestWorksState extends State<LatestWorks> {
       ],
     );
   }
+}
 
   Widget _buildDefaultAsset(String path) {
     return Container(
@@ -385,4 +387,3 @@ class _LatestWorksState extends State<LatestWorks> {
       ),
     );
   }
-}

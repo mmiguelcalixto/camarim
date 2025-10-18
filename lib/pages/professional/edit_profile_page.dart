@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key});
+  final String professionalId;
+  const EditProfilePage(this.professionalId, {super.key});
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();

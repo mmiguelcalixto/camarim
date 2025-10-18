@@ -74,7 +74,6 @@ class ProfessionalService {
 
       return null;
     }
-    
   }
 
   Future<Response?> getProfessionalById(String id) async {
