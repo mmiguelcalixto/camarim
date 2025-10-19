@@ -25,7 +25,6 @@ class _SignupPageProfState extends State<SignupPageProf> {
 
   final _nameController = TextEditingController();
   final _birthDateController = TextEditingController();
-  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _documentController = TextEditingController();
@@ -68,7 +67,6 @@ class _SignupPageProfState extends State<SignupPageProf> {
     _loginTapRecognizer.dispose();
     _nameController.dispose();
     _birthDateController.dispose();
-    _usernameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
     _documentController.dispose();
@@ -118,6 +116,8 @@ class _SignupPageProfState extends State<SignupPageProf> {
     if(response != null && response.statusCode == 201) {
       final data = jsonDecode(response.body);
       final professionalId = data['id'];
+
+      if (!mounted) return;
 
       Navigator.push(
         context,

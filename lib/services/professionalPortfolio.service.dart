@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:camarim_backend/models/professional.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;

@@ -5,7 +5,6 @@ import 'package:camarim_backend/models/professional.dart';
 import 'package:camarim_backend/services/professional.service.dart';
 import 'package:camarim_backend/services/professionalPortfolio.service.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'edit_profile_page.dart'; 
 
@@ -37,8 +36,6 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         professional = Professional.fromJson(data);
       });
-
-      print("${professional?.services} ----------------------------------------------");
     }
   }
 
@@ -89,21 +86,23 @@ class _ProfilePageState extends State<ProfilePage> {
             Center(
               child: Text(
                 professional?.description ?? "",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepPurple,
-                ),
               ),
             ),
 
-            // BOTÃO EDITAR BIOGRAFIA
+            // BOTÃO EDITAR PERFIL
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                final updated = await Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EditProfilePage(professional!.id!)),
+                  MaterialPageRoute(
+                    builder: (context) => EditProfilePage(professional!.id!),
+                  ),
                 );
+
+                if (updated == true) {
+                  await _loadProfessional();
+                  setState(() {});
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
@@ -128,82 +127,25 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Wrap(
               spacing: 8,
-              children: (professional?.services ?? [])
-                  .map((s) => Chip(label: Text(s.name)))
-                  .toList(),
+              children: (professional?.services?.isNotEmpty ?? false)
+                  ? professional!.services!
+                      .map((s) => Chip(label: Text(s.name)))
+                      .toList()
+                  : [const Text('Nenhum serviço cadastrado')],
             ),
-            // const SizedBox(height: 20),
-
-            // const Text(
-            //   "Trajetória",
-            //   style: TextStyle(
-            //     fontWeight: FontWeight.bold,
-            //     color: Colors.deepPurple,
-            //   ),
-            // ),
-            // const SizedBox(height: 10),
-            // Row(
-            //   children: [
-            //     Expanded(
-            //       child: Container(
-            //         height: 150,
-            //         padding: const EdgeInsets.all(12),
-            //         decoration: BoxDecoration(
-            //           color: Colors.deepPurple.shade100,
-            //           borderRadius: BorderRadius.circular(12),
-            //         ),
-            //         child: const Center(
-            //           child: Text("Adicionar instituição\nO que você aprendeu?"),
-            //         ),
-            //       ),
-            //     ),
-            //     const SizedBox(width: 12),
-            //     Expanded(
-            //       child: Container(
-            //         height: 150,
-            //         padding: const EdgeInsets.all(12),
-            //         decoration: BoxDecoration(
-            //           color: Colors.deepPurple.shade200,
-            //           borderRadius: BorderRadius.circular(12),
-            //         ),
-            //         child: const Center(
-            //           child: Text("Detalhes da instituição..."),
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            // const SizedBox(height: 20),
-
-            // // DIFERENCIAIS
-            // const Text(
-            //   "Diferenciais",
-            //   style: TextStyle(
-            //     fontWeight: FontWeight.bold,
-            //     color: Colors.deepPurple,
-            //   ),
-            // ),
-            // const SizedBox(height: 10),
-            // const Text(
-            //   "✦ Este profissional atende a domicílio",
-            //   style: TextStyle(
-            //     color: Colors.deepPurple,
-            //     fontWeight: FontWeight.bold,
-            //     fontSize: 16,
-            //   ),
-            // ),
-            // const Text(
-            //   "✦ Este profissional oferece atendimento adaptado a pessoas neurodivergentes",
-            //   style: TextStyle(
-            //     color: Colors.deepPurple,
-            //     fontWeight: FontWeight.bold,
-            //     fontSize: 16,
-            //   ),
-            // ),
+            
             SizedBox(height: 20),
 
+            const Text(
+              "Endereço",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.deepPurple,
+              ),
+            ),
+            SizedBox(height: 20),
             Container(
-              height: 150,
+              height: 130,
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -215,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "${professional?.addressStreet}, ${professional?.addressNumber}",
+                    "Rua ${professional?.addressStreet}, ${professional?.addressNumber}",
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -243,53 +185,6 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
 
             const SizedBox(height: 20),
-
-            // // MÍDIAS SOCIAIS
-            // const Text(
-            //   "Mídias Sociais",
-            //   style: TextStyle(
-            //     fontWeight: FontWeight.bold,
-            //     color: Colors.deepPurple,
-            //   ),
-            // ),
-            // const SizedBox(height: 10),
-            // Column(
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   children: const [
-            //     Row(
-            //       children: [
-            //         FaIcon(FontAwesomeIcons.instagram, color: Colors.deepPurple),
-            //         SizedBox(width: 8),
-            //         Text("Seu link do Instagram"),
-            //       ],
-            //     ),
-            //     SizedBox(height: 8),
-            //     Row(
-            //       children: [
-            //         FaIcon(FontAwesomeIcons.linkedin, color: Colors.deepPurple),
-            //         SizedBox(width: 8),
-            //         Text("Seu link do LinkedIn"),
-            //       ],
-            //     ),
-            //     SizedBox(height: 8),
-            //     Row(
-            //       children: [
-            //         FaIcon(FontAwesomeIcons.tiktok, color: Colors.deepPurple),
-            //         SizedBox(width: 8),
-            //         Text("Seu link do TikTok"),
-            //       ],
-            //     ),
-            //     SizedBox(height: 8),
-            //     Row(
-            //       children: [
-            //         FaIcon(FontAwesomeIcons.xTwitter, color: Colors.deepPurple),
-            //         SizedBox(width: 8),
-            //         Text("Seu link do X"),
-            //       ],
-            //     ),
-            //   ],
-            // ),
-            // const SizedBox(height: 30),
           ],
         ),
       ),
