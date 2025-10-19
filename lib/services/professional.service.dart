@@ -4,6 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import '../models/professional.dart'; 
 import '../models/professional_profile.dart';
+import '../models/search_result.dart';
+import '../models/search_filter.dart';
+
+
 
 class ProfessionalService {
   final String baseUrl = "http://localhost:3000/professionals";
@@ -55,5 +59,30 @@ class ProfessionalService {
 
     return await request.send();
   }
+
+// search professionals
+Future<List<SearchResult>> searchProfessionals({String? query, SearchFilter? filter}) async {
+  final filterParams = filter?.toQueryParameters() ?? {};
+  
+  if (query != null && query.isNotEmpty) {
+    filterParams['q'] = query;
+  }
+
+  final url = Uri.parse('$baseUrl/search').replace(queryParameters: filterParams);
+
+print('URL DE BUSCA SENDO CHAMADA: $url');
+
+
+  final response = await http.get(url);
+
+  if (response.statusCode == 200) {
+    final List<dynamic> data = jsonDecode(response.body);
+    return data.map((json) => SearchResult.fromJson(json)).toList();
+  } else {
+    throw Exception('Falha ao buscar profissionais: ${response.body}');
+  }
+}
+
+
 
 }
