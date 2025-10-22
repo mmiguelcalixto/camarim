@@ -7,12 +7,12 @@ class PersonalDataField extends StatelessWidget {
   final String? secondLabel;
 
   const PersonalDataField({
-    Key? key,
+    super.key,
     required this.icon,
     required this.label,
     this.isMultiField = false,
     this.secondLabel,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

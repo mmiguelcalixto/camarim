@@ -173,7 +173,7 @@ class _ProfHorariosPageBody extends StatelessWidget {
               onTapAction: () => state._showActionDialog(context, data['id'], data['status']),
             ),
           );
-        }).toList(),
+        }),
 
         const SizedBox(height: 32),
 
@@ -201,7 +201,7 @@ class _ProfHorariosPageBody extends StatelessWidget {
               onTapAction: null, 
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }

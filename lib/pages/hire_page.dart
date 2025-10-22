@@ -80,7 +80,7 @@ class _ContratarPageState extends State<ContratarPage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                value: _selectedService,
+                initialValue: _selectedService,
                 items: _services.map((service) {
                   return DropdownMenuItem(
                     value: service,
