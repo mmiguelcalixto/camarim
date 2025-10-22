@@ -1,8 +1,11 @@
+import 'package:camarim_backend/widgets/professional_bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:camarim_backend/widgets/prof_appointment_card.dart';
 
 class ProfHorariosPage extends StatefulWidget {
-  const ProfHorariosPage({super.key});
+  final String professionalId;
+
+  const ProfHorariosPage(this.professionalId, {super.key});
 
   @override
   State<ProfHorariosPage> createState() => _ProfHorariosPageState();
@@ -126,6 +129,8 @@ Widget build(BuildContext context) {
       centerTitle: true, 
     ),
     body: const _ProfHorariosPageBody(),
+    bottomNavigationBar: ProfessionalBottomNavBar(professionalId: widget.professionalId, currentIndex: 0),
+    
   );
 }
 

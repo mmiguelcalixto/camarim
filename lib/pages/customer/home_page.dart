@@ -5,7 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'search_prof.dart';
 import '../../widgets/category_chip.dart';
 import '../../widgets/section.dart';
-import '../../widgets/square_card.dart';
 import '../../widgets/circle_card.dart';
 import '../../widgets/horizontal_list.dart';
 
