@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+// [NOVO] Importa o Gatilho (O botão de tema)
+import '../widgets/theme_toggle_button.dart'; 
+
 import 'edit_menu_page.dart';
 import 'privacy_policy_page.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -28,12 +31,13 @@ class _MenuPageState extends State<MenuPage> {
                     height: 40,
                   ),
                   const SizedBox(height: 5),
-                  const Text(
+                  Text(
                     'Menu Principal',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 92, 98, 158),
+                      // Adaptado para usar a cor primária do tema
+                      color: Theme.of(context).colorScheme.primary, 
                     ),
                   ),
                 ],
@@ -43,7 +47,7 @@ class _MenuPageState extends State<MenuPage> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                      _CustomButton(
+                  _CustomButton(
                     icon: Icons.lock,
                     label: 'Privacidade',
                     onTap: () {
@@ -58,12 +62,12 @@ class _MenuPageState extends State<MenuPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 'Meus Dados',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 92, 98, 158),
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
               const SizedBox(height: 10),
@@ -93,9 +97,16 @@ class _MenuPageState extends State<MenuPage> {
           ),
         ),
       ),
+      
+      // 🔥 O GATILHO: Adiciona o botão flutuante que dispara a mudança de tema (completa o Observer).
+      floatingActionButton: const ThemeToggleButton(),
     );
   }
 }
+
+// ------------------------------------------------------------------
+// WIDGETS DE SUPORTE (Com adaptações de tema)
+// ------------------------------------------------------------------
 
 class _UsernameField extends StatelessWidget {
   const _UsernameField();
@@ -105,27 +116,30 @@ class _UsernameField extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.grey[300],
+        // Usa cardColor que se adapta a temas Light/Dark
+        color: Theme.of(context).cardColor, 
         borderRadius: BorderRadius.circular(10),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Icon(Icons.person, color: Colors.black),
-          SizedBox(width: 10),
+          Icon(Icons.person, color: Theme.of(context).colorScheme.primary),
+          const SizedBox(width: 10),
           Text(
             '@username',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
+              // Usa a cor de texto que se adapta a temas Light/Dark
+              color: Theme.of(context).textTheme.bodyLarge?.color, 
             ),
           ),
-          Spacer(),
-          Icon(Icons.star, color: Color.fromARGB(255, 92, 98, 158)),
-          SizedBox(width: 5),
+          const Spacer(),
+          Icon(Icons.star, color: Theme.of(context).colorScheme.secondary),
+          const SizedBox(width: 5),
           Text(
             '4.5',
             style: TextStyle(
-              color: Color.fromARGB(255, 92, 98, 158),
+              color: Theme.of(context).colorScheme.secondary,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -141,11 +155,11 @@ class _CustomButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const _CustomButton({
-    super.key,
+    Key? key,
     required this.icon,
     required this.label,
     required this.onTap,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -156,15 +170,15 @@ class _CustomButton extends StatelessWidget {
         child: Container(
           height: 80,
           decoration: BoxDecoration(
-            color: Colors.grey[300],
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 30),
+              Icon(icon, size: 30, color: Theme.of(context).textTheme.bodyLarge?.color),
               const SizedBox(height: 5),
-              Text(label),
+              Text(label, style: Theme.of(context).textTheme.bodyMedium),
             ],
           ),
         ),
@@ -180,15 +194,20 @@ class _PersonalDataField extends StatelessWidget {
   final String? secondLabel;
 
   const _PersonalDataField({
-    super.key,
+    Key? key,
     required this.icon,
     required this.label,
     this.isMultiField = false,
     this.secondLabel,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Color fieldColor = Theme.of(context).cardColor;
+    Color iconBackgroundColor = Theme.of(context).colorScheme.primary;
+    // Garante que o texto seja legível em Light/Dark
+    Color textColor = Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black; 
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: isMultiField
@@ -198,7 +217,7 @@ class _PersonalDataField extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(0),
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
+                      color: fieldColor,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
@@ -206,9 +225,9 @@ class _PersonalDataField extends StatelessWidget {
                         Container(
                           width: 50,
                           height: 50,
-                          decoration: const BoxDecoration(
-                            color: Color.fromARGB(255, 92, 98, 158),
-                            borderRadius: BorderRadius.only(
+                          decoration: BoxDecoration(
+                            color: iconBackgroundColor,
+                            borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(10),
                               bottomLeft: Radius.circular(10),
                             ),
@@ -219,7 +238,7 @@ class _PersonalDataField extends StatelessWidget {
                         Expanded(
                           child: Text(
                             label,
-                            style: const TextStyle(color: Colors.grey),
+                            style: TextStyle(color: textColor),
                           ),
                         ),
                       ],
@@ -232,14 +251,14 @@ class _PersonalDataField extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
+                      color: fieldColor,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         secondLabel!,
-                        style: const TextStyle(color: Colors.grey),
+                        style: TextStyle(color: textColor),
                       ),
                     ),
                   ),
@@ -249,7 +268,7 @@ class _PersonalDataField extends StatelessWidget {
           : Container(
               padding: const EdgeInsets.all(0),
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: fieldColor,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(
@@ -257,9 +276,9 @@ class _PersonalDataField extends StatelessWidget {
                   Container(
                     height: 50,
                     width: 50,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 92, 98, 158),
-                      borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                      color: iconBackgroundColor,
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(10),
                         bottomLeft: Radius.circular(10),
                       ),
@@ -269,7 +288,7 @@ class _PersonalDataField extends StatelessWidget {
                   const SizedBox(width: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12.0),
-                    child: Text(label, style: const TextStyle(color: Colors.grey)),
+                    child: Text(label, style: TextStyle(color: textColor)),
                   ),
                 ],
               ),
@@ -279,11 +298,11 @@ class _PersonalDataField extends StatelessWidget {
 }
 
 class _EditDataButton extends StatelessWidget {
-  const _EditDataButton({super.key});
+  const _EditDataButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    const Color primaryColor = Color.fromARGB(255, 92, 98, 158);
+    Color primaryColor = Theme.of(context).colorScheme.primary;
 
     return InkWell(
       onTap: () {
@@ -323,17 +342,20 @@ class _EditDataButton extends StatelessWidget {
 
 
 class _LogoutButton extends StatelessWidget {
-  const _LogoutButton({super.key});
+  const _LogoutButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Color fieldColor = Theme.of(context).cardColor;
+    Color errorColor = Theme.of(context).colorScheme.error;
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
       decoration: BoxDecoration(
-        color: Colors.grey[300],
+        color: fieldColor,
         borderRadius: BorderRadius.circular(10),
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
@@ -341,10 +363,10 @@ class _LogoutButton extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
-              color: Colors.red,
+              color: errorColor,
             ),
           ),
-          Icon(Icons.arrow_forward_ios, size: 16, color: Colors.red),
+          Icon(Icons.arrow_forward_ios, size: 16, color: errorColor),
         ],
       ),
     );
