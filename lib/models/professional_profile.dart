@@ -1,66 +1,45 @@
 import 'service.dart';
 
-List<String> parseList(dynamic json) {
-  if (json == null) return [];
-  if (json is List) {
-    return json
-        .map((e) => e?.toString() ?? '')
-        .where((s) => s.isNotEmpty)
-        .toList();
-  }
-  if (json is String) {
-    return json
-        .split(',')
-        .map((s) => s.trim())
-        .where((s) => s.isNotEmpty)
-        .toList();
-  }
-  return [];
-}
-
 class ProfessionalProfile {
-  final int id;
+  final String id;
   final String name;
-  final String email;
-  final String phone;
+  final String bio;
   final String profileImageUrl;
   final String headerImageUrl;
-  final String bio;
-  final List<String> socialMediaLinks;
   final List<Service> services;
   final List<String> workImages;
+  final List<String> socialMediaLinks;
 
   ProfessionalProfile({
     required this.id,
     required this.name,
-    required this.email,
-    required this.phone,
+    required this.bio,
     required this.profileImageUrl,
     required this.headerImageUrl,
-    required this.bio,
-    required this.socialMediaLinks,
     required this.services,
     required this.workImages,
+    required this.socialMediaLinks,
   });
 
   factory ProfessionalProfile.fromJson(Map<String, dynamic> json) {
-    var serviceListFromJson = json['services'] as List<dynamic>? ?? [];
-    List<Service> serviceList =
-        serviceListFromJson
-            .map((serviceJson) => Service.fromJson(serviceJson))
-            .toList();
+    var servicesFromJson = json['services'] as List? ?? [];
+    List<Service> serviceList = servicesFromJson.map((s) => Service.fromJson(s)).toList();
+    
+    var workImagesFromJson = json['portfolio'] as List? ?? [];
+    List<String> workImagesList = workImagesFromJson.map((i) => i['imageUrl'] as String).toList();
+    
+    var socialMediaFromJson = json['socialMedia'] as List? ?? [];
+    List<String> socialMediaList = socialMediaFromJson.map((l) => l['link'] as String).toList();
 
     return ProfessionalProfile(
-      id: int.tryParse(json['id'].toString()) ?? 0,
+      id: json['id'],
       name: json['name'] ?? '',
-      email: json['email'] ?? '',
-      phone: json['phone'] ?? '',
+      bio: json['bio'] ?? 'Nenhuma bio disponível.',
       profileImageUrl: json['profileImageUrl'] ?? '',
       headerImageUrl: json['headerImageUrl'] ?? '',
-      bio: json['bio'] ?? 'Bio não disponível.',
-      socialMediaLinks: parseList(json['socialMediaLinks']),
       services: serviceList,
-      workImages: parseList(json['workImages']),
+      workImages: workImagesList,
+      socialMediaLinks: socialMediaList,
     );
   }
 }

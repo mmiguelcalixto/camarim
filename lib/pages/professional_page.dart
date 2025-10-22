@@ -144,16 +144,24 @@ Widget build(BuildContext context) {
                   ),
                   const SizedBox(height: 12),
                   ElevatedButton(
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ContratarPage())),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 92, 98, 158)),
-                    child: const Text("Contratar",
-                        style: TextStyle(color: Colors.white)),
-                  ),
+  onPressed: () => Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ContratarPage(
+        professionalId: widget.professionalId.toString(),
+        serviceId: '',
+      ),
+    ),
+  ),
+  style: ElevatedButton.styleFrom(
+    backgroundColor: const Color.fromARGB(255, 92, 98, 158),
+  ),
+  child: const Text(
+    "Contratar",
+    style: TextStyle(color: Colors.white),
+  ),
+),
+
                   const SizedBox(height: 20),
 
                   const Text("Serviços",
