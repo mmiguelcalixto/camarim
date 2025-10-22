@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'signup_page.dart';
-import 'professional_pages/signup_page_prof.dart';
+import 'customer/signup_page.dart';
+import 'professional/signup_page_prof.dart';
 
 class ChooseRolePage extends StatefulWidget {
   const ChooseRolePage({super.key});

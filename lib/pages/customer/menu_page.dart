@@ -1,6 +1,6 @@
+import 'package:camarim_backend/pages/privacy_policy_page.dart';
 import 'package:flutter/material.dart';
 import 'edit_menu_page.dart';
-import 'privacy_policy_page.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MenuPage extends StatefulWidget {
@@ -141,7 +141,6 @@ class _CustomButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const _CustomButton({
-    super.key,
     required this.icon,
     required this.label,
     required this.onTap,
@@ -180,7 +179,6 @@ class _PersonalDataField extends StatelessWidget {
   final String? secondLabel;
 
   const _PersonalDataField({
-    super.key,
     required this.icon,
     required this.label,
     this.isMultiField = false,
@@ -279,7 +277,7 @@ class _PersonalDataField extends StatelessWidget {
 }
 
 class _EditDataButton extends StatelessWidget {
-  const _EditDataButton({super.key});
+  const _EditDataButton();
 
   @override
   Widget build(BuildContext context) {
@@ -323,7 +321,7 @@ class _EditDataButton extends StatelessWidget {
 
 
 class _LogoutButton extends StatelessWidget {
-  const _LogoutButton({super.key});
+  const _LogoutButton();
 
   @override
   Widget build(BuildContext context) {

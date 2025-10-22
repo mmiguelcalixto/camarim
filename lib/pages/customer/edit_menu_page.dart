@@ -254,7 +254,7 @@ class _EditableMultiField extends StatelessWidget {
 }
 
 class _SaveDataButton extends StatelessWidget {
-  const _SaveDataButton({super.key});
+  const _SaveDataButton();
 
   @override
   Widget build(BuildContext context) {
@@ -330,7 +330,6 @@ class _CustomButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const _CustomButton({
-    super.key,
     required this.icon,
     required this.label,
     required this.onTap,
@@ -363,7 +362,7 @@ class _CustomButton extends StatelessWidget {
 }
 
 class _LogoutButton extends StatelessWidget {
-  const _LogoutButton({super.key});
+  const _LogoutButton();
 
   @override
   Widget build(BuildContext context) {

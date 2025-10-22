@@ -1,5 +1,5 @@
 //import 'package:camarim_backend/firebase_options.dart';
-import 'package:camarim_backend/pages/splash_screen.dart';
+import 'package:camarim_backend/pages/customer/splash_screen.dart';
 //import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 

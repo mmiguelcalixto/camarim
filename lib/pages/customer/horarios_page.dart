@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/appointment_card.dart';
+import '../../widgets/appointment_card.dart';
 
 class HorariosPage extends StatefulWidget {
   const HorariosPage({super.key});

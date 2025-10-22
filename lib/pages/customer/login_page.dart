@@ -1,8 +1,11 @@
-import 'package:camarim_backend/pages/home_page.dart';
-import 'package:camarim_backend/services/firestore.service.dart';
+import 'dart:convert';
+
+import 'package:camarim_backend/pages/customer/home_page.dart';
+import 'package:camarim_backend/pages/professional/professional_profile_page.dart';
+import 'package:camarim_backend/services/login.service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'choose_role_page.dart';
+import '../choose_role_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,7 +19,6 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscure = true;
   late TapGestureRecognizer _tapGestureRecognizer;
 
-  final FirestoreService firestoreService = FirestoreService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -38,6 +40,31 @@ class _LoginPageState extends State<LoginPage> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _login() async {
+    final service = LoginService();
+
+    final response = await service.login(_emailController.text, _passwordController.text);
+
+    if(response != null && response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final userType = data['user']['userType'];
+
+      if (!mounted) return;
+
+      if (userType == "customer") {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage(data['user']['id'])),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => ProfessionalProfilePage(data['user']['id'])),
+        );
+      }
+    }
   }
 
   @override
@@ -149,26 +176,13 @@ class _LoginPageState extends State<LoginPage> {
                         },
                       ),
 
-                      const SizedBox(height: 8),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            'Esqueceu sua senha?',
-                            style: TextStyle(color: Color(0xFF393939)),
-                          ),
-                        ),
-                      ),
                       const SizedBox(height: 16),
 
                       SizedBox(
                         width: double.infinity,
                         height: 48,
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
-                          },
+                          onPressed: _login,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF626BBA),
                             shape: RoundedRectangleBorder(
@@ -198,59 +212,6 @@ class _LoginPageState extends State<LoginPage> {
                               recognizer: _tapGestureRecognizer,
                             ),
                           ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      Row(
-                        children: const [
-                          Expanded(child: Divider()),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              'or',
-                              style: TextStyle(color: Color(0xFF737373)),
-                            ),
-                          ),
-                          Expanded(child: Divider()),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-
-                      OutlinedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.apple),
-                        label: const Text('Continue with Apple'),
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(48),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      OutlinedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.facebook),
-                        label: const Text('Continue with Facebook'),
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(48),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      OutlinedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.g_mobiledata),
-                        label: const Text('Continue with Google'),
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(48),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
                         ),
                       ),
                     ],
