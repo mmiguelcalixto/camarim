@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:camarim_backend/models/professional.dart';
-import 'package:camarim_backend/pages/professional/page_perfil.dart';
+import 'package:camarim_backend/pages/professional/professional_profile_page.dart';
 import 'package:camarim_backend/services/professional.service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -121,7 +121,7 @@ class _SignupPageProfState extends State<SignupPageProf> {
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ProfilePage(professionalId)),
+        MaterialPageRoute(builder: (context) => ProfessionalProfilePage(professionalId)),
       );
     }
   }

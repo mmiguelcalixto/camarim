@@ -5,15 +5,15 @@ import 'package:camarim_backend/services/professional.service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class EditProfilePage extends StatefulWidget {
+class EditProfessionalProfessionalProfilePage extends StatefulWidget {
   final String professionalId;
-  const EditProfilePage(this.professionalId, {super.key});
+  const EditProfessionalProfessionalProfilePage(this.professionalId, {super.key});
 
   @override
-  State<EditProfilePage> createState() => _EditProfilePageState();
+  State<EditProfessionalProfessionalProfilePage> createState() => _EditProfessionalProfessionalProfilePageState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
+class _EditProfessionalProfessionalProfilePageState extends State<EditProfessionalProfessionalProfilePage> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _servicesController = TextEditingController();

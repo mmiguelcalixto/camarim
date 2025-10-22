@@ -159,7 +159,6 @@ class ProfessionalService {
 
       return response;
     } catch (e) {
-      print("$e --------------------------------------------------");
       Fluttertoast.showToast(
         msg: "Ocorreu um erro",
         toastLength: Toast.LENGTH_SHORT,

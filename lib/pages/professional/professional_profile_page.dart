@@ -6,17 +6,17 @@ import 'package:camarim_backend/services/professional.service.dart';
 import 'package:camarim_backend/services/professionalPortfolio.service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'edit_profile_page.dart'; 
+import 'edit_professional_profile_page.dart'; 
 
-class ProfilePage extends StatefulWidget {
+class ProfessionalProfilePage extends StatefulWidget {
   final String professionalId;
-  const ProfilePage(this.professionalId, {super.key});
+  const ProfessionalProfilePage(this.professionalId, {super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ProfessionalProfilePage> createState() => _ProfessionalProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
   @override
   void initState() {
     super.initState();
@@ -95,7 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 final updated = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EditProfilePage(professional!.id!),
+                    builder: (context) => EditProfessionalProfessionalProfilePage(professional!.id!),
                   ),
                 );
 

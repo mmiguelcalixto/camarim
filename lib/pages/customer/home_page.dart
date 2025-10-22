@@ -9,16 +9,10 @@ import '../../widgets/square_card.dart';
 import '../../widgets/circle_card.dart';
 import '../../widgets/horizontal_list.dart';
 
-// classe modelo ficticia p os profissionais
-class Professional {
-  final String name;
-  final String imagePath;
-
-  Professional({required this.name, required this.imagePath});
-}
-// NAV BAR ----------------------------------------------------------------
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String customerId;
+
+  const HomePage(this.customerId, {super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -31,7 +25,6 @@ class _HomePageState extends State<HomePage> {
     HomePageContent(),
     SearchProfPage(),
     HorariosPage(),
-    //const Center(child: Text("Página do Perfil do Cliente")),
     MenuPage(),
   ];
 
@@ -111,11 +104,11 @@ class HomePageContent extends StatefulWidget {
 
 class _HomePageContentState extends State<HomePageContent> {
 
-  final List<Professional> topRatedProfessionals = [
-    Professional(name: 'Bruna Nails', imagePath: 'lib/assets/img/nails.jpg'),
-    Professional(name: 'Gabriel Hair', imagePath: 'lib/assets/img/gabriel.jpg'),
-    Professional(name: 'Jorge SPA', imagePath: 'lib/assets/img/jorge.jpg'),
-  ];
+  // final List<Professional> topRatedProfessionals = [
+  //   Professional(name: 'Bruna Nails', imagePath: 'lib/assets/img/nails.jpg'),
+  //   Professional(name: 'Gabriel Hair', imagePath: 'lib/assets/img/gabriel.jpg'),
+  //   Professional(name: 'Jorge SPA', imagePath: 'lib/assets/img/jorge.jpg'),
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -235,14 +228,14 @@ class _HomePageContentState extends State<HomePageContent> {
             ),
           ),
           const SizedBox(height: 16),
-          Section(
-            title: "Bem avaliados",
-            child: HorizontalList(
-              children: topRatedProfessionals.map((prof) {
-                return SquareCard(prof.name, prof.imagePath);
-              }).toList(),
-            ),
-          ),
+          // Section(
+          //   title: "Bem avaliados",
+          //   child: HorizontalList(
+          //     children: topRatedProfessionals.map((prof) {
+          //       return SquareCard(prof.name, prof.imagePath);
+          //     }).toList(),
+          //   ),
+          // ),
           Section(
             title: "Baseado nas suas escolhas",
             child: HorizontalList(
