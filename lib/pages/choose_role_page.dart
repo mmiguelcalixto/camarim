@@ -46,7 +46,7 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'lib/assets/img/newwoman.jpg',
+              'lib/assets/img/cadastrobackground.jpg',
               fit: BoxFit.cover,
               alignment: const Alignment(0, -0.2),
             ),
