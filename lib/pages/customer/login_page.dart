@@ -45,27 +45,28 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _login() async {
     final service = LoginService();
 
-    final response = await service.login(_emailController.text, _passwordController.text);
+     final response = await service.login(_emailController.text, _passwordController.text);
 
-    if(response != null && response.statusCode == 200) {
+     if(response != null && response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final userType = data['user']['userType'];
+
 
       if (!mounted) return;
 
       if (userType == "customer") {
-        Navigator.pushReplacement(
+       Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomePage(data['user']['id'])),
         );
       } else {
-        Navigator.pushReplacement(
+       Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => ProfessionalProfilePage(data['user']['id'])),
         );
       }
     }
-  }
+   }
 
   @override
   Widget build(BuildContext context) {

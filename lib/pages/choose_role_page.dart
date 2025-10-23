@@ -46,9 +46,9 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'lib/assets/img/woman_skincare.png',
+              'lib/assets/img/newwoman.png',
               fit: BoxFit.cover,
-              alignment: const Alignment(0, -0.3),
+              alignment: const Alignment(0, -0.2),
             ),
           ),
           Positioned(
@@ -150,7 +150,7 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
       onTap: onTap,
       child: Container(
         width: 160,
-        height: 220,
+        height: 250,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),

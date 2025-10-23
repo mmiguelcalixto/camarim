@@ -16,7 +16,12 @@ class EditProfessionalProfessionalProfilePage extends StatefulWidget {
 class _EditProfessionalProfessionalProfilePageState extends State<EditProfessionalProfessionalProfilePage> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _servicesController = TextEditingController();
+  final _serviceController = TextEditingController();
+  final _serviceDescriptionController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _typeController = TextEditingController();
+  final _valueController = TextEditingController();
+  final _durationController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _birthDateController = TextEditingController();
@@ -38,7 +43,12 @@ class _EditProfessionalProfessionalProfilePageState extends State<EditProfession
   void dispose() {
     _nameController.dispose();
     _descriptionController.dispose();
-    _servicesController.dispose();
+    _serviceController.dispose();
+    _serviceDescriptionController.dispose();
+    _priceController.dispose();
+    _typeController.dispose();
+    _valueController.dispose();
+    _durationController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
     _birthDateController.dispose();
@@ -55,6 +65,25 @@ class _EditProfessionalProfessionalProfilePageState extends State<EditProfession
   final ImagePicker _picker = ImagePicker();
   Professional? professional;
   final service = ProfessionalService();
+
+  String? selectedType;
+  String? selectedDuration;
+
+  final List<String> serviceTypes = [
+    "Maquiagem",
+    "Cabelo",
+    "Pedicure",
+    "Manicure",
+    "Estética"
+  ];
+
+  final List<String> durations = [
+    "30 minutos",
+    "45 minutos",
+    "1 hora",
+    "1h30",
+    "2 horas"
+  ];
 
   Future<void> _loadProfessional() async {
     final result = await service.getProfessionalById(widget.professionalId);
@@ -75,8 +104,8 @@ class _EditProfessionalProfessionalProfilePageState extends State<EditProfession
         _addressCityController.text = professional!.addressCity;
         _addressStateController.text = professional!.addressState;
         _addressCepController.text = professional!.addressCep;
-
-      });
+      
+       });
     }
   }
   
@@ -93,6 +122,7 @@ class _EditProfessionalProfessionalProfilePageState extends State<EditProfession
       addressState: _addressStateController.text, 
       addressCep: _addressCepController.text,
       description: _descriptionController.text,
+    
     );
 
     final response = await service.updateProfessional(widget.professionalId, professionalToEdit, _profileImage);
@@ -182,15 +212,71 @@ class _EditProfessionalProfessionalProfilePageState extends State<EditProfession
               border: OutlineInputBorder(),
             ),
           ),
-          const SizedBox(height: 12),
+                const SizedBox(height: 30),
           TextField(
-            controller: _servicesController,
+            controller: _serviceController,
             decoration: const InputDecoration(
-              labelText: "Serviços Prestados",
+              labelText: "Serviço",
               border: OutlineInputBorder(),
             ),
           ),
+
           const SizedBox(height: 12),
+          TextField(
+            controller: _serviceDescriptionController,
+            maxLines: 4,
+            decoration: const InputDecoration(
+              labelText: "Descrição do serviço",
+              border: OutlineInputBorder(),
+            ),
+          ),
+          
+          const SizedBox(height: 12),
+          DropdownButtonFormField<String>(
+            decoration: const InputDecoration(
+              labelText: "Tipo de Serviço",
+              border: OutlineInputBorder(),
+            ),
+            initialValue: selectedType,
+            items: serviceTypes
+                .map((type) => DropdownMenuItem(value: type, child: Text(type)))
+                .toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedType = value;
+              });
+            },
+          ),
+
+          const SizedBox(height: 12),
+          DropdownButtonFormField<String>(
+            decoration: const InputDecoration(
+              labelText: "Duração",
+              border: OutlineInputBorder(),
+            ),
+            initialValue: selectedDuration,
+            items: durations
+                .map((d) => DropdownMenuItem(value: d, child: Text(d)))
+                .toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedDuration = value;
+              });
+            },
+          ),
+
+          const SizedBox(height: 12),
+          TextField(
+            controller: _priceController,
+            decoration: const InputDecoration(
+              labelText: "Preço",
+              prefixText: "R\$ ",
+              border: OutlineInputBorder(),
+            ),
+            keyboardType: TextInputType.number,
+          ),
+     
+          const SizedBox(height: 30),
           TextField(
             controller: _addressStreetController,
             decoration: const InputDecoration(
@@ -198,6 +284,7 @@ class _EditProfessionalProfessionalProfilePageState extends State<EditProfession
               border: OutlineInputBorder(),
             ),
           ),
+        
           const SizedBox(height: 12),
           TextField(
             controller: _addressNumberController,
