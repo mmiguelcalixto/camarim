@@ -62,7 +62,7 @@ class _ContratarPageState extends State<ContratarPage> {
   void _fetchProfessionalTimes() {
     setState(() {
       _slotsFuture =
-          _appointmentService.getProfessionalTimes(widget.professionalId, _selectedDate);
+          _appointmentService.getProfessionalTimes(widget.professionalId);
       _selectedSlot = null;
     });
   }

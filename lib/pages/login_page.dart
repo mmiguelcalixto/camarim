@@ -1,6 +1,4 @@
-import 'package:camarim_backend/services/customer.service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:camarim_backend/pages/home_page.dart';
+import 'package:camarim_backend/pages/home_page.dart'; 
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'choose_role_page.dart';
@@ -20,8 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  final CustomerService _customerService = CustomerService();
-  bool _isLoading = false;
 
   @override
   void initState() {
@@ -33,37 +29,6 @@ class _LoginPageState extends State<LoginPage> {
           MaterialPageRoute(builder: (context) => const ChooseRolePage()),
         );
       };
-  }
-
-  Future<void> _performLogin() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    setState(() => _isLoading = true);
-
-    try {
-      final userData = await _customerService.login(
-        _emailController.text,
-        _passwordController.text,
-      );
-
-      final String customerId = userData['user']['id'];
-
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('customerId', customerId);
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Falha no login: ${e.toString()}')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
   }
 
   @override
@@ -191,32 +156,28 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 48,
-                        child: ElevatedButton(
-                          onPressed: _isLoading ? null : _performLogin,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF626BBA),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: _isLoading
-                              ? const SizedBox(
-                                  height: 24,
-                                  width: 24,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 3,
-                                  ),
-                                )
-                              : const Text(
-                                  'Log In',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                        ),
-                      ),
+                    SizedBox(
+  width: double.infinity,
+  height: 48,
+  child: ElevatedButton(
+    onPressed: () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    },
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF626BBA),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
+    child: const Text(
+      'Log In',
+      style: TextStyle(color: Colors.white),
+    ),
+  ),
+),
                       const SizedBox(height: 16),
                       RichText(
                         text: TextSpan(

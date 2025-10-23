@@ -75,24 +75,4 @@ class CustomerService {
   }
 
 
-    // login customer
-  Future<Map<String, dynamic>> login(String email, String password) async {
-    final url = Uri.parse('$_baseUrl/login');
-
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json; charset=UTF-8'},
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
-      return responseData;
-    } else {
-      throw Exception('Falha no login: ${response.body}');
-    }
-  }
 }
