@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:camarim_backend/models/professional.dart';
 import 'package:camarim_backend/services/professional.service.dart';
 import 'package:camarim_backend/services/professionalPortfolio.service.dart';
+import 'package:camarim_backend/widgets/professional_bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'edit_professional_profile_page.dart'; 
@@ -47,7 +48,6 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            // HEADER
             Container(
               height: 150,
               decoration: const BoxDecoration(
@@ -59,7 +59,6 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
             ),
             const SizedBox(height: 20),
 
-            // FOTO DE PERFIL
             Center(
               child: CircleAvatar(
                 radius: 60,
@@ -71,7 +70,6 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
             ),
             const SizedBox(height: 12),
 
-            // NOME E BIO
             Center(
               child: Text(
                 professional?.name ?? "",
@@ -89,7 +87,6 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
               ),
             ),
 
-            // BOTÃO EDITAR PERFIL
             ElevatedButton(
               onPressed: () async {
                 final updated = await Navigator.push(
@@ -113,7 +110,6 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
               ),
             ),
 
-            // TRABALHOS RECENTES
             SizedBox(height: 20),
 
             _buildLatestWorks(),
@@ -188,6 +184,7 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
           ],
         ),
       ),
+      bottomNavigationBar: ProfessionalBottomNavBar(professionalId: widget.professionalId, currentIndex: 1),
     );
   }
 
