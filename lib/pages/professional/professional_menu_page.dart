@@ -29,7 +29,6 @@ class _ProfessionalMenuPageState extends State<ProfessionalMenuPage> {
   final loginService = LoginService();
 
   Future<void> _loadProfessional() async {
-    print("-----------------------------------------------");
     final result = await professionalService.getProfessionalById(widget.professionalId);
     if (result != null) {
       final data = jsonDecode(result.body);
