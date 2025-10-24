@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../widgets/appointment_card.dart';
-import '../models/appointment.dart';
-import '../services/appointment.service.dart';
+import 'package:camarim_backend/widgets/appointment_card.dart';
+import 'package:camarim_backend/models/appointment.dart';
+import 'package:camarim_backend/services/appointment.service.dart';
 
 class HorariosPage extends StatefulWidget {
   const HorariosPage({super.key});

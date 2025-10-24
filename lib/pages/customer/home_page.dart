@@ -1,19 +1,20 @@
-import 'package:camarim_backend/pages/horarios_page.dart';
-import 'package:camarim_backend/pages/menu_page.dart';  
+import 'package:camarim_backend/models/professional.dart';
+import 'package:camarim_backend/pages/customer/horarios_page.dart';
+import 'package:camarim_backend/pages/customer/menu_page.dart';
+import 'package:camarim_backend/pages/customer/professional_page.dart';
+import 'package:camarim_backend/services/professional.service.dart';
+import 'package:camarim_backend/widgets/square_card.dart';  
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'search_prof.dart';
-import 'package:camarim_backend/pages/professional_page.dart';
-import '../widgets/category_chip.dart';
-import '../widgets/section.dart';
-import '../widgets/square_card.dart';
-import '../widgets/circle_card.dart';
-import '../widgets/horizontal_list.dart';
-import '../models/professional.dart'; 
-import '../services/professional.service.dart';
+import 'package:camarim_backend/widgets/category_chip.dart';
+import 'package:camarim_backend/widgets/section.dart';
+import 'package:camarim_backend/widgets/circle_card.dart';
+import 'package:camarim_backend/widgets/horizontal_list.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String customerId;
+  const HomePage(this.customerId, {super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -106,11 +107,19 @@ class HomePageContent extends StatefulWidget {
 class _HomePageContentState extends State<HomePageContent> {
   late Future<List<Professional>> _futureProfessionals;
   final ProfessionalService _professionalService = ProfessionalService();
+final String serverIp = "192.168.1.3";
 
   @override
   void initState() {
     super.initState();
     _futureProfessionals = _professionalService.getProfessionals();
+  }
+
+String getImageUrl(String? url) {
+    if (url == null || url.isEmpty) {
+      return ""; // Return empty string if no URL, so Image.network can use its errorBuilder
+    }
+    return url.replaceAll("localhost", serverIp);
   }
 
   @override
@@ -249,25 +258,25 @@ class _HomePageContentState extends State<HomePageContent> {
             ),
           ),
           const SizedBox(height: 16),
-Section(
-                title: "Bem avaliados",
-                child: HorizontalList(
-                  children: professionals.map((prof) {
-                    return GestureDetector(
-                      onTap: () {
-                        print('Clicou em (SquareCard): ${prof.name} com ID: ${prof.id}'); 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfessionalPageClient(professionalId: prof.id), 
-                          ),
-                        );
-                      },
-                      child: SquareCard(prof.name, prof.profileImageUrl),
-                    );
-                  }).toList(),
-                ),
-              ),
+  Section(
+  title: "Bem avaliados",
+  child: HorizontalList(
+    children: professionals.map((prof) {
+      return GestureDetector(
+        onTap: () {
+          print('Clicou em (SquareCard): ${prof.name} com ID: ${prof.id}'); 
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfessionalPageClient(professionalId: int.tryParse(prof.id ?? '') ?? 0), 
+            ),
+          );
+        },
+          child: SquareCard(prof.name, getImageUrl(prof.profileImage)),// networkimage
+      );
+    }).toList(),
+  ),
+),
 
               Section(
                 title: "Baseado nas suas escolhas",
@@ -279,11 +288,11 @@ Section(
                          Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProfessionalPageClient(professionalId: prof.id), 
+                            builder: (context) => ProfessionalPageClient(professionalId: int.tryParse(prof.id ?? '') ?? 0), 
                           ),
                         );
                       },
-                      child: CircleCard(prof.name),
+                      child: CircleCard(prof.name, getImageUrl(prof.profileImage)),
                     );
                   }).toList(),
                 ),
@@ -297,7 +306,7 @@ Section(
                      Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProfessionalPageClient(professionalId: firstProfessional.id), 
+                        builder: (context) => ProfessionalPageClient(professionalId: int.tryParse(firstProfessional.id ?? '') ?? 0), 
                       ),
                     );
                   },
@@ -314,7 +323,7 @@ Section(
                           ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: Image.network(
-                              firstProfessional.profileImageUrl,
+                              getImageUrl(firstProfessional.profileImage),
                               width: 80, height: 80, fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
                                 return Container(width: 80, height: 80, color: Colors.grey, child: const Icon(Icons.person, color: Colors.white));

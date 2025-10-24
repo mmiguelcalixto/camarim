@@ -1,4 +1,4 @@
-import 'package:camarim_backend/pages/menu_page.dart';
+import 'package:camarim_backend/pages/customer/menu_page.dart';
 import 'package:flutter/material.dart';
 
 class PrivacyPolicyPage extends StatefulWidget {

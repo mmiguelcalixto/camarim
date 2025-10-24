@@ -1,7 +1,11 @@
-import 'package:camarim_backend/pages/home_page.dart'; 
+import 'dart:convert';
+
+import 'package:camarim_backend/pages/customer/home_page.dart';
+import 'package:camarim_backend/pages/professional/professional_profile_page.dart';
+import 'package:camarim_backend/services/login.service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'choose_role_page.dart';
+import '../choose_role_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,7 +21,6 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
 
   @override
   void initState() {
@@ -37,6 +40,31 @@ class _LoginPageState extends State<LoginPage> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _login() async {
+    final service = LoginService();
+
+    final response = await service.login(_emailController.text, _passwordController.text);
+
+    if(response != null && response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final userType = data['user']['userType'];
+
+      if (!mounted) return;
+
+      if (userType == "customer") {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage(data['user']['id'])),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => ProfessionalProfilePage(data['user']['id'])),
+        );
+      }
+    }
   }
 
   @override
@@ -87,11 +115,12 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: [
                       const SizedBox(height: 24),
+
                       TextFormField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          labelText: 'Digite seu e-mail...',
+                          labelText: 'Digite seu e‑mail...',
                           labelStyle: const TextStyle(color: Color(0xFF737373)),
                           floatingLabelStyle:
                               const TextStyle(color: Color(0xFF737373)),
@@ -108,7 +137,9 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         },
                       ),
+
                       const SizedBox(height: 16),
+
                       TextFormField(
                         controller: _passwordController,
                         obscureText: _obscure,
@@ -144,41 +175,28 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 8),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {},
+
+                      const SizedBox(height: 16),
+
+                      SizedBox(
+                        width: double.infinity,
+                        height: 48,
+                        child: ElevatedButton(
+                          onPressed: _login,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF626BBA),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
                           child: const Text(
-                            'Esqueceu sua senha?',
-                            style: TextStyle(color: Color(0xFF393939)),
+                            'Log In',
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ),
                       const SizedBox(height: 16),
-                    SizedBox(
-  width: double.infinity,
-  height: 48,
-  child: ElevatedButton(
-    onPressed: () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
-    },
-    style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0xFF626BBA),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-    ),
-    child: const Text(
-      'Log In',
-      style: TextStyle(color: Colors.white),
-    ),
-  ),
-),
-                      const SizedBox(height: 16),
+
                       RichText(
                         text: TextSpan(
                           text: "Ainda não tem uma conta? ",
@@ -194,56 +212,6 @@ class _LoginPageState extends State<LoginPage> {
                               recognizer: _tapGestureRecognizer,
                             ),
                           ],
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Row(
-                        children: const [
-                          Expanded(child: Divider()),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              'or',
-                              style: TextStyle(color: Color(0xFF737373)),
-                            ),
-                          ),
-                          Expanded(child: Divider()),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-                      OutlinedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.apple),
-                        label: const Text('Continue with Apple'),
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(48),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      OutlinedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.facebook),
-                        label: const Text('Continue with Facebook'),
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(48),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      OutlinedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.g_mobiledata),
-                        label: const Text('Continue with Google'),
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(48),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
                         ),
                       ),
                     ],

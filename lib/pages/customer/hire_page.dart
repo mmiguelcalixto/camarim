@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../services/appointment.service.dart';
-import '../models/professional_time_slot.dart';
-import '../models/schedule_time.dart';
-import 'pagamento_page.dart';
+import 'package:camarim_backend/services/appointment.service.dart';
+import 'package:camarim_backend/models/professional_time_slot.dart';
+import 'package:camarim_backend/models/schedule_time.dart';
+import 'package:camarim_backend/pages/customer/pagamento_page.dart';
 
 const Color kPurpleMain = Colors.deepPurple;
 const Color kWhite = Color(0xFFFFFFFF);
@@ -61,8 +61,7 @@ class _ContratarPageState extends State<ContratarPage> {
 
   void _fetchProfessionalTimes() {
     setState(() {
-      _slotsFuture =
-          _appointmentService.getProfessionalTimes(widget.professionalId);
+    _slotsFuture = _appointmentService.getProfessionalTimes(widget.professionalId, _selectedDate);
       _selectedSlot = null;
     });
   }
@@ -428,4 +427,3 @@ class _ContratarPageState extends State<ContratarPage> {
     );
   }
 }
-

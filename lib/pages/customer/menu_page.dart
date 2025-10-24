@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:camarim_backend/services/customer.service.dart';
 import 'package:camarim_backend/models/customer_profile.dart';
 import 'edit_menu_page.dart';
-import 'privacy_policy_page.dart';
+import 'package:camarim_backend/pages/privacy_policy_page.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -325,7 +325,6 @@ class _EditDataButton extends StatelessWidget {
     );
   }
 }
-
 class _LogoutButton extends StatelessWidget {
   const _LogoutButton({Key? key}) : super(key: key);
 

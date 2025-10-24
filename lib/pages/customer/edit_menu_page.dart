@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:camarim_backend/services/customer.service.dart';
 import 'package:camarim_backend/models/customer_profile.dart';
 import 'package:camarim_backend/models/customer_update_request.dart';
-import 'privacy_policy_page.dart';
+import 'package:camarim_backend/pages/privacy_policy_page.dart';
 
 class EditMenuPage extends StatefulWidget {
   final CustomerProfile customerProfile;

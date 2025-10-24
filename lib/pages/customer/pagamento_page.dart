@@ -112,7 +112,7 @@ class _PagamentoPageState extends State<PagamentoPage> {
         ),
       ),
 
-      // NAVBAR igual à sua EditProfilePage
+      // NAVBAR igual à sua EditProfessionalProfessionalProfilePage
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: const Color(0xFFF9F9FF),

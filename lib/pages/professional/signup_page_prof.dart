@@ -1,8 +1,16 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:camarim_backend/models/professional.dart';
+import 'package:camarim_backend/pages/professional/professional_profile_page.dart';
+import 'package:camarim_backend/services/professional.service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import '../login_page.dart';
+import '../customer/login_page.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SignupPageProf extends StatefulWidget {
   const SignupPageProf({super.key});
@@ -17,19 +25,30 @@ class _SignupPageProfState extends State<SignupPageProf> {
 
   final _nameController = TextEditingController();
   final _birthDateController = TextEditingController();
-  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
-  final _cnpjController = TextEditingController();
+  final _documentController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _addressStreetController = TextEditingController();
+  final _addressNumberController = TextEditingController();
+  final _addressNeighborhoodController = TextEditingController();
+  final _addressCityController = TextEditingController();
+  final _addressStateController = TextEditingController();
+  final _addressCepController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  final _cnpjFormatter = MaskTextInputFormatter(mask: '##.###.###/####-##');
+  // final _cnpjFormatter = MaskTextInputFormatter(mask: '##.###.###/####-##');
   final _phoneFormatter = MaskTextInputFormatter(mask: '(##) #####-####');
   final _birthDateMask = MaskTextInputFormatter(
     mask: '##/##/####',
     filter: {"#": RegExp(r'\d')},
   );
+
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
+  final professionalService = ProfessionalService();
+  bool _imageError = false;
+
 
   @override
   void initState() {
@@ -48,13 +67,63 @@ class _SignupPageProfState extends State<SignupPageProf> {
     _loginTapRecognizer.dispose();
     _nameController.dispose();
     _birthDateController.dispose();
-    _usernameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
-    _cnpjController.dispose();
+    _documentController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _createProfessional() async {
+    if (_selectedImage == null) {
+      setState(() {
+        _imageError = true;
+      });
+      Fluttertoast.showToast(
+        msg: 'Por favor, selecione uma foto de perfil',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 10,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+      return;
+    }
+    if (_imageError) {
+      setState(() {
+        _imageError = false;
+      });
+    }
+
+    final data = Professional(
+      name: _nameController.text, 
+      document: _documentController.text, 
+      email: _emailController.text, 
+      phone: _phoneFormatter.getUnmaskedText(), 
+      addressStreet: _addressStreetController.text, 
+      addressNumber: _addressNumberController.text, 
+      addressNeighborhood: _addressNeighborhoodController.text,
+      addressCity: _addressCityController.text, 
+      addressState: _addressStateController.text, 
+      addressCep: _addressCepController.text, 
+      password: _passwordController.text,
+    );
+
+    final response = await professionalService.createProfessional(data, _selectedImage!);
+
+    if(response != null && response.statusCode == 201) {
+      final data = jsonDecode(response.body);
+      final professionalId = data['id'];
+
+      if (!mounted) return;
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProfessionalProfilePage(professionalId)),
+      );
+    }
   }
 
   @override
@@ -112,10 +181,6 @@ class _SignupPageProfState extends State<SignupPageProf> {
                         },
                       ),
                       _buildTextFormField(
-                        controller: _usernameController,
-                        label: 'Nome de usuário',
-                      ),
-                      _buildTextFormField(
                         controller: _emailController,
                         label: 'E-mail',
                         keyboardType: TextInputType.emailAddress,
@@ -127,6 +192,7 @@ class _SignupPageProfState extends State<SignupPageProf> {
                           return null;
                         },
                       ),
+                      _buildImagePicker(),
                       _buildTextFormField(
                         controller: _phoneController,
                         label: 'Número de telefone',
@@ -139,15 +205,39 @@ class _SignupPageProfState extends State<SignupPageProf> {
                         },
                       ),
                       _buildTextFormField(
-                        controller: _cnpjController,
-                        label: 'CNPJ',
-                        inputFormatters: [_cnpjFormatter],
+                        controller: _documentController,
+                        label: 'CPF/CNPJ',
+                        // inputFormatters: [_cnpjFormatter],
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value == null || value.isEmpty) return 'Preencha este campo';
-                          if (value.length != 14) return 'CNPJ incompleto';
+                          // if (value.length != 14) return 'CNPJ incompleto';
                           return null;
                         },
+                      ),
+                      _buildTextFormField(
+                        controller: _addressStreetController,
+                        label: 'Rua',
+                      ),
+                      _buildTextFormField(
+                        controller: _addressNeighborhoodController,
+                        label: 'Bairro',
+                      ),
+                       _buildTextFormField(
+                        controller: _addressNumberController,
+                        label: 'Número',
+                      ),                   
+                      _buildTextFormField(
+                        controller: _addressCepController,
+                        label: 'CEP',
+                      ),                      
+                      _buildTextFormField(
+                        controller: _addressCityController,
+                        label: 'Cidade',
+                      ),                      
+                      _buildTextFormField(
+                        controller: _addressStateController,
+                        label: 'Estado',
                       ),
                       _buildTextFormField(
                         controller: _passwordController,
@@ -176,7 +266,7 @@ class _SignupPageProfState extends State<SignupPageProf> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              debugPrint('Nome: ${_nameController.text}');
+                              _createProfessional();
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -252,6 +342,61 @@ class _SignupPageProfState extends State<SignupPageProf> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildImagePicker() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Foto de Perfil',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: () async {
+            final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+            if (pickedFile != null) {
+              setState(() {
+                _selectedImage = File(pickedFile.path);
+              });
+            }
+          },
+          child: Container(
+            height: 150,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.shade400),
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.grey.shade100,
+            ),
+            child: _selectedImage == null
+                ? const Center(
+                    child: Text(
+                      'Toque para selecionar uma imagem',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.file(
+                      _selectedImage!,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
+                  ),
+          ),
+        ),
+        if (_imageError)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              'Selecione uma foto de perfil',
+              style: TextStyle(color: Colors.red[700], fontSize: 12),
+            ),
+          ),
+      ],
     );
   }
 
