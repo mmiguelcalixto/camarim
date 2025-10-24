@@ -42,4 +42,6 @@ class ProfessionalProfile {
       socialMediaLinks: socialMediaList,
     );
   }
+
+  String get body => bio;
 }

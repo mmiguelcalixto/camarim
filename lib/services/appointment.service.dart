@@ -7,29 +7,29 @@ import '../models/schedule_time.dart';
 class AppointmentService {
   final String _baseUrl = "http://localhost:3000";
 
-  // busca os horários disponíveis de um profissional
-  Future<List<ProfessionalTimeSlot>> getProfessionalTimes(String professionalId) async {
-    final url = Uri.parse('$_baseUrl/professionalTime/professional/$professionalId');
+ // buscar horarios de um profissional
+Future<List<ProfessionalTimeSlot>> getProfessionalTimes(String professionalId, DateTime date) async {
+  final dateString = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+    final url = Uri.parse('$_baseUrl/professionalTimes/professional/$professionalId?date=$dateString');
+  print('Tentando acessar a URL ${url.toString()}');
 
-    print('DEBUG: Tentando acessar a URL -> ${url.toString()}');
-
-    try {
-      final response = await http.get(url);
-      if (response.statusCode == 200) {
-        List<dynamic> data = jsonDecode(response.body);
-        return data.map((item) => ProfessionalTimeSlot.fromJson(item)).toList();
-      } else {
-        throw Exception('Falha ao carregar horários. Status: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Erro em getProfessionalTimes: $e');
-      throw Exception('Não foi possível buscar os horários. Verifique sua conexão.');
+  try {
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((item) => ProfessionalTimeSlot.fromJson(item)).toList();
+    } else {
+      throw Exception('Falha ao carregar horários. Status: ${response.statusCode}');
     }
+  } catch (e) {
+    print('Erro em getProfessionalTimes: $e');
+    throw Exception('Não foi possível buscar os horários. Verifique o CORS ou a conexão com o servidor.');
   }
+}
 
-  /// agenda um horário (PATCH /professionalTime/schedule)
+  /// agenda um horário 
   Future<bool> scheduleTime(ScheduleTimeRequest request) async {
-    final url = Uri.parse('$_baseUrl/professionalTime/schedule');
+    final url = Uri.parse('$_baseUrl/professionalTimes/schedule');
     final response = await http.patch(
       url,
       headers: {'Content-Type': 'application/json; charset=UTF-8'},

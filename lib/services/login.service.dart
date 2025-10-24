@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class LoginService {
-  final url = Uri.parse("http://192.168.15.69:3000/login");
+  final url = Uri.parse("http://localhost:3000/login");
 
   Future<Response?> login(String email, String password) async {
 

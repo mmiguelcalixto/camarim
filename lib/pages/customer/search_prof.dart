@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/search_filter.dart';
-import '../models/search_result.dart';
-import '../services/professional.service.dart';
+import 'package:camarim_backend/models/search_filter.dart';
+import 'package:camarim_backend/models/search_result.dart';
+import 'package:camarim_backend/services/professional.service.dart';
 import 'professional_page.dart';
 
 class SearchProfPage extends StatefulWidget {

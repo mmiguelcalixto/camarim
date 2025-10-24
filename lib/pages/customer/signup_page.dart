@@ -3,8 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'login_page.dart';
-import '../models/customer.dart';
-import '../services/customer.service.dart';
+import 'package:camarim_backend/models/customer.dart';
+import 'package:camarim_backend/services/customer.service.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});

@@ -36,16 +36,4 @@ class Service {
       "type": type,
     };
   }
-
-factory Service.fromJson(Map<String, dynamic> json) {
-    return Service(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'] ?? '',
-      duration: json['duration'],
-      price: (json['price'] as num).toDouble(),
-      type: json['type'],
-      professionalId: json['professionalId'],
-    );
-  }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'hire_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../models/professional_profile.dart';
-import '../services/professional.service.dart';
+import 'package:camarim_backend/models/professional_profile.dart';
+import 'package:camarim_backend/services/professional.service.dart';
 
 class ProfessionalPageClient extends StatefulWidget {
   final int professionalId;
@@ -14,15 +14,15 @@ class ProfessionalPageClient extends StatefulWidget {
 }
 
 class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
-late Future<ProfessionalProfile> _futureProfile;
+  late Future<ProfessionalProfile?> _futureProfile;
   final ProfessionalService _service = ProfessionalService();
 
   @override
   void initState() {
     super.initState();
-    _futureProfile = _service.getProfessionalById(widget.professionalId);
+    _futureProfile = _service.getProfessionalById(widget.professionalId.toString());
   }
-  
+
   Widget _buildWorkImage(String imageUrl) {
     return Container(
       width: 80,
@@ -75,136 +75,144 @@ late Future<ProfessionalProfile> _futureProfile;
       }).toList(),
     );
   }
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: FutureBuilder<ProfessionalProfile>(
-      future: _futureProfile,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
 
-        if (snapshot.hasError) {
-          return Center(
-              child: Text('Erro ao carregar o perfil: ${snapshot.error}'));
-        }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: FutureBuilder<ProfessionalProfile?>(
+        future: _futureProfile,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-        if (!snapshot.hasData) {
-          return const Center(child: Text('Profissional não encontrado.'));
-        }
+          if (snapshot.hasError) {
+            return Center(
+                child: Text('Erro ao carregar o perfil: ${snapshot.error}'));
+          }
 
-        final profile = snapshot.data!;
+          if (!snapshot.hasData || snapshot.data == null) {
+            return const Center(child: Text('Profissional não encontrado.'));
+          }
 
-        return SafeArea(
-          child: Stack(
-            children: [
-              ListView(
-                padding: const EdgeInsets.fromLTRB(16, 60, 16, 16), 
-                children: [
-                  Container(
-                    height: 150,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 211, 203, 234),
-                      image: profile.headerImageUrl.isNotEmpty
-                          ? DecorationImage(
-                              image: NetworkImage(profile.headerImageUrl),
-                              fit: BoxFit.cover,
-                            )
-                          : null,
+          final profile = snapshot.data!;
+
+          return SafeArea(
+            child: Stack(
+              children: [
+                ListView(
+                  padding: const EdgeInsets.fromLTRB(16, 60, 16, 16),
+                  children: [
+                    Container(
+                      height: 150,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 211, 203, 234),
+                        image: profile.headerImageUrl.isNotEmpty
+                            ? DecorationImage(
+                                image: NetworkImage(profile.headerImageUrl),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundImage: NetworkImage(profile.profileImageUrl),
-                      backgroundColor: Colors.white,
+                    const SizedBox(height: 20),
+                    Center(
+                      child: CircleAvatar(
+                        radius: 60,
+                        backgroundImage: NetworkImage(profile.profileImageUrl),
+                        backgroundColor: Colors.white,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  Center(
-                    child: Text(
-                      profile.name,
-                      style: const TextStyle(
-                        fontSize: 20,
+                    const SizedBox(height: 12),
+                    Center(
+                      child: Text(
+                        profile.name,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 92, 98, 158),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Center(
+                      child: Text(
+                        profile.bio,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: Colors.black54),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    ElevatedButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ContratarPage(
+                            professionalId: widget.professionalId.toString(),
+                            serviceId: '',
+                          ),
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 92, 98, 158),
+                      ),
+                      child: const Text(
+                        "Contratar",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Serviços",
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 92, 98, 158),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Center(
-                    child: Text(
-                      profile.bio,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.black54),
+                    const SizedBox(height: 10),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: profile.services.isNotEmpty
+                          ? profile.services.map((service) {
+                              return Chip(
+                                label: Text(
+                                    '${service.name} - R\$${service.price.toStringAsFixed(2)}'),
+                              );
+                            }).toList()
+                          : [
+                              const Chip(
+                                  label: Text("Nenhum serviço cadastrado"))
+                            ],
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  ElevatedButton(
-  onPressed: () => Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => ContratarPage(
-        professionalId: widget.professionalId.toString(),
-        serviceId: '',
-      ),
-    ),
-  ),
-  style: ElevatedButton.styleFrom(
-    backgroundColor: const Color.fromARGB(255, 92, 98, 158),
-  ),
-  child: const Text(
-    "Contratar",
-    style: TextStyle(color: Colors.white),
-  ),
-),
-
-                  const SizedBox(height: 20),
-
-                  const Text("Serviços",
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Trabalhos já Feitos",
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 92, 98, 158))),
-                  const SizedBox(height: 10),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: profile.services.isNotEmpty
-                        ? profile.services.map((service) {
-                            return Chip(
-                              label: Text(
-                                  '${service.name} - R\$${service.price.toStringAsFixed(2)}'),
-                            );
-                          }).toList()
-                        : [const Chip(label: Text("Nenhum serviço cadastrado"))],
-                  ),
-                  const SizedBox(height: 20),
-
-                  const Text("Trabalhos já Feitos",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 92, 98, 158))),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    height: 100,
-                    child: profile.workImages.isNotEmpty
-                        ? ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: profile.workImages
-                                .map((imageUrl) => _buildWorkImage(imageUrl))
-                                .toList(),
-                          )
-                        : Container(
-                            alignment: Alignment.center,
-                            child: Text(
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 92, 98, 158),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: 100,
+                      child: profile.workImages.isNotEmpty
+                          ? ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: profile.workImages
+                                  .map((imageUrl) => _buildWorkImage(imageUrl))
+                                  .toList(),
+                            )
+                          : Container(
+                              alignment: Alignment.center,
+                              child: Text(
                                 "O portfólio ainda não foi cadastrado.",
-                                style: TextStyle(color: Colors.grey.shade600)),
-                          ),
-                  ),
-                  const SizedBox(height: 20),
+                                style: TextStyle(color: Colors.grey.shade600),
+                              ),
+                            ),
+                    ),
+                    const SizedBox(height: 20),
                     const Text(
                       "Trajetória",
                       style: TextStyle(
@@ -224,7 +232,8 @@ Widget build(BuildContext context) {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Center(
-                              child: Text("Instituição de ensino \nO que aprendi"),
+                              child:
+                                  Text("Instituição de ensino \nO que aprendi"),
                             ),
                           ),
                         ),
@@ -245,7 +254,6 @@ Widget build(BuildContext context) {
                       ],
                     ),
                     const SizedBox(height: 20),
-
                     const Text(
                       "Diferenciais",
                       style: TextStyle(
@@ -271,8 +279,6 @@ Widget build(BuildContext context) {
                       ),
                     ),
                     const SizedBox(height: 20),
-
-                    
                     Container(
                       height: 150,
                       decoration: BoxDecoration(
@@ -284,42 +290,45 @@ Widget build(BuildContext context) {
                       ),
                     ),
                     const SizedBox(height: 20),
-
-                  const Text("Mídias Sociais",
+                    const Text(
+                      "Mídias Sociais",
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 92, 98, 158))),
-                  const SizedBox(height: 10),
-                  _buildSocialMediaRow(
-                      profile.socialMediaLinks,
-                      const Color.fromARGB(255, 92, 98, 158)),
-                  const SizedBox(height: 30),
-                ],
-              ),
-
-              Positioned(
-                top: 16,
-                left: 16,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [BoxShadow(blurRadius: 5, color: Colors.black26)]
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back,
-                        color: Color.fromARGB(255, 92, 98, 158), size: 30),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 92, 98, 158),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _buildSocialMediaRow(
+                        profile.socialMediaLinks,
+                        const Color.fromARGB(255, 92, 98, 158)),
+                    const SizedBox(height: 30),
+                  ],
+                ),
+                Positioned(
+                  top: 16,
+                  left: 16,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(blurRadius: 5, color: Colors.black26)
+                      ],
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back,
+                          color: Color.fromARGB(255, 92, 98, 158), size: 30),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
-    ),
-  );
-}
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
 }

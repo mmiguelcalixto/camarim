@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class ProfessionalPortfolioService {
-  final url = Uri.parse("http://192.168.15.69:3000/professionalPortfolio");
+  final url = Uri.parse("http://localhost:3000/professionalPortfolio");
 
   Future<Response?> addImageToPortfolio(String professionalId, File imageFile) async {
 
