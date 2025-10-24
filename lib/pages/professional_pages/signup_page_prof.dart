@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import '../login_page.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart'; 
+import '../login_page.dart'; 
 
 class SignupPageProf extends StatefulWidget {
   const SignupPageProf({super.key});
@@ -24,8 +24,10 @@ class _SignupPageProfState extends State<SignupPageProf> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  final _cnpjFormatter = MaskTextInputFormatter(mask: '##.###.###/####-##');
-  final _phoneFormatter = MaskTextInputFormatter(mask: '(##) #####-####');
+  final _cnpjFormatter = MaskTextInputFormatter(
+      mask: '##.###.###/####-##', filter: {"#": RegExp(r'\d')});
+  final _phoneFormatter = MaskTextInputFormatter(
+      mask: '(##) #####-####', filter: {"#": RegExp(r'\d')});
   final _birthDateMask = MaskTextInputFormatter(
     mask: '##/##/####',
     filter: {"#": RegExp(r'\d')},
@@ -57,6 +59,13 @@ class _SignupPageProfState extends State<SignupPageProf> {
     super.dispose();
   }
 
+  String? _defaultRequiredValidator(String? value, String fieldName) {
+    if (value == null || value.isEmpty || value.trim().isEmpty) {
+      return '$fieldName não pode ser vazio.';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -84,7 +93,7 @@ class _SignupPageProfState extends State<SignupPageProf> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: size.height * 0.80,
+              height: size.height * 0.85, 
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
               decoration: const BoxDecoration(
                 color: Colors.white,
@@ -96,79 +105,106 @@ class _SignupPageProfState extends State<SignupPageProf> {
                   child: Column(
                     children: [
                       const SizedBox(height: 24),
+                      
                       _buildTextFormField(
                         controller: _nameController,
                         label: 'Seu nome completo',
+                        validator: (value) => _defaultRequiredValidator(value, 'Nome'),
                       ),
+
                       _buildTextFormField(
                         controller: _birthDateController,
-                        label: 'Data de nascimento',
+                        label: 'Data de nascimento (DD/MM/AAAA)',
                         inputFormatters: [_birthDateMask],
-                        keyboardType: TextInputType.datetime,
+                        keyboardType: TextInputType.number, 
                         validator: (value) {
-                          if (value == null || value.isEmpty) return 'Preencha este campo';
-                          if (value.length != 10) return 'Formato DD/MM/AAAA';
+                          final requiredValidation = _defaultRequiredValidator(value, 'Data de Nascimento');
+                          if (requiredValidation != null) return requiredValidation;
+                          
+                          if (_birthDateMask.getUnmaskedText().length != 8) {
+                             return 'Data incompleta. Formato DD/MM/AAAA';
+                          }
                           return null;
                         },
                       ),
+
                       _buildTextFormField(
                         controller: _usernameController,
                         label: 'Nome de usuário',
+                        validator: (value) => _defaultRequiredValidator(value, 'Nome de Usuário'),
                       ),
+
                       _buildTextFormField(
                         controller: _emailController,
                         label: 'E-mail',
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
-                          if (value == null || value.isEmpty) return 'Preencha este campo';
-                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                            return 'E-mail inválido';
+                          final requiredValidation = _defaultRequiredValidator(value, 'E-mail');
+                          if (requiredValidation != null) return requiredValidation;
+
+                          if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value!)) {
+                            return 'E-mail inválido. Ex: nome@dominio.com';
                           }
                           return null;
                         },
                       ),
+
                       _buildTextFormField(
                         controller: _phoneController,
                         label: 'Número de telefone',
                         inputFormatters: [_phoneFormatter],
-                        keyboardType: TextInputType.phone,
+                        keyboardType: TextInputType.phone, 
                         validator: (value) {
-                          if (value == null || value.isEmpty) return 'Preencha este campo';
-                          if (value.length < 14) return 'Telefone incompleto';
+                          final requiredValidation = _defaultRequiredValidator(value, 'Telefone');
+                          if (requiredValidation != null) return requiredValidation;
+                          
+                          if (_phoneFormatter.getUnmaskedText().length < 10 || _phoneFormatter.getUnmaskedText().length > 11) {
+                            return 'Número incompleto. Ex: (99) 99999-9999';
+                          }
                           return null;
                         },
                       ),
+
                       _buildTextFormField(
                         controller: _cnpjController,
                         label: 'CNPJ',
                         inputFormatters: [_cnpjFormatter],
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.number, 
                         validator: (value) {
-                          if (value == null || value.isEmpty) return 'Preencha este campo';
-                          if (value.length != 14) return 'CNPJ incompleto';
+                          final requiredValidation = _defaultRequiredValidator(value, 'CNPJ');
+                          if (requiredValidation != null) return requiredValidation;
+                          
+                          if (_cnpjFormatter.getUnmaskedText().length != 14) {
+                            return 'CNPJ incompleto';
+                          }
                           return null;
                         },
                       ),
+
                       _buildTextFormField(
                         controller: _passwordController,
                         label: 'Senha',
                         isPassword: true,
                         validator: (value) {
-                          if (value == null || value.isEmpty) return 'Preencha este campo';
-                          if (value.length < 6) return 'Mínimo de 6 caracteres';
+                          final requiredValidation = _defaultRequiredValidator(value, 'Senha');
+                          if (requiredValidation != null) return requiredValidation;
+                          if (value!.length < 6) return 'A senha deve ter no mínimo 6 caracteres';
                           return null;
                         },
                       ),
+
                       _buildTextFormField(
                         controller: _confirmPasswordController,
                         label: 'Confirme sua senha',
                         isPassword: true,
                         validator: (value) {
-                          if (value == null || value.isEmpty) return 'Preencha este campo';
+                          final requiredValidation = _defaultRequiredValidator(value, 'Confirmação de Senha');
+                          if (requiredValidation != null) return requiredValidation;
                           if (value != _passwordController.text) return 'As senhas não coincidem';
                           return null;
                         },
                       ),
+                      
                       const SizedBox(height: 16),
                       SizedBox(
                         width: double.infinity,
@@ -176,7 +212,10 @@ class _SignupPageProfState extends State<SignupPageProf> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
+                              debugPrint('Formulário válido! Iniciando cadastro...');
                               debugPrint('Nome: ${_nameController.text}');
+                            } else {
+                              debugPrint('Formulário inválido. Corrija os erros.');
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -230,6 +269,7 @@ class _SignupPageProfState extends State<SignupPageProf> {
                       _buildSocialButton('Continue com Facebook', Icons.facebook),
                       const SizedBox(height: 12),
                       _buildSocialButton('Continue com Google', Icons.g_mobiledata),
+                      const SizedBox(height: 24), 
                     ],
                   ),
                 ),
@@ -261,7 +301,7 @@ class _SignupPageProfState extends State<SignupPageProf> {
     bool isPassword = false,
     List<TextInputFormatter>? inputFormatters,
     TextInputType? keyboardType,
-    String? Function(String?)? validator,
+    required String? Function(String?)? validator,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -279,11 +319,7 @@ class _SignupPageProfState extends State<SignupPageProf> {
               ? const Icon(Icons.visibility_off, color: Color(0xFF737373))
               : null,
         ),
-        validator: validator ??
-            (value) {
-              if (value == null || value.isEmpty) return 'Preencha este campo';
-              return null;
-            },
+        validator: validator, 
       ),
     );
   }
