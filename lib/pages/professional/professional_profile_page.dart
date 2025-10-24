@@ -40,6 +40,135 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
     }
   }
 
+  void _showDeletePortfolioDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Gerenciar Portfólio',
+            style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.bold),
+          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: GridView.builder(
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemCount: _userImages.where((img) => img != null).length,
+              itemBuilder: (context, index) {
+                final nonNullImages = _userImages
+                    .asMap()
+                    .entries
+                    .where((entry) => entry.value != null)
+                    .toList();
+                
+                if (index >= nonNullImages.length) return const SizedBox.shrink();
+                
+                final imageEntry = nonNullImages[index];
+                final imageBytes = imageEntry.value!;
+                final originalIndex = imageEntry.key;
+
+                return Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.grey[200],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.memory(
+                          imageBytes,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 5,
+                      right: 5,
+                      child: GestureDetector(
+                        onTap: () async {
+                          final confirm = await showDialog<bool>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Confirmar exclusão'),
+                                content: const Text(
+                                  'Deseja realmente excluir esta foto do portfólio?',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(false),
+                                    child: const Text('Cancelar'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(true),
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: Colors.red,
+                                    ),
+                                    child: const Text('Excluir'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+
+                          if (confirm == true) {
+                            final service = ProfessionalPortfolioService();
+                            
+                            // Aqui você deve chamar o método do serviço para excluir
+                            // Exemplo: await service.deleteImageFromPortfolio(professional!.id!, imageId);
+                            
+                            setState(() {
+                              _userImages[originalIndex] = null;
+                            });
+
+                            Navigator.of(context).pop();
+                            
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Foto excluída com sucesso!'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Fechar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +190,7 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
 
             Center(
               child: CircleAvatar(
-                radius: 60,
+                radius: 100,
                 backgroundImage: NetworkImage(
                   professional?.profileImage?.replaceAll("localhost", "192.168.15.69") ?? "",
                 ),
@@ -87,6 +216,8 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
               ),
             ),
 
+            const SizedBox(height: 16),
+
             ElevatedButton(
               onPressed: () async {
                 final updated = await Navigator.push(
@@ -110,7 +241,20 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 8),
+
+            ElevatedButton(
+              onPressed: _showDeletePortfolioDialog,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              child: const Text(
+                "Gerenciar Fotos do Portfólio",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+
+            const SizedBox(height: 20),
 
             _buildLatestWorks(),
 
@@ -130,7 +274,7 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
                   : [const Text('Nenhum serviço cadastrado')],
             ),
             
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             const Text(
               "Endereço",
@@ -139,7 +283,7 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
                 color: Colors.deepPurple,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               height: 130,
               width: double.infinity,
@@ -246,7 +390,6 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
       ],
     );
   }
-}
 
   Widget _buildDefaultAsset(String path) {
     return Container(
@@ -279,3 +422,4 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
       ),
     );
   }
+}
