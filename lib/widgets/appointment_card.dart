@@ -4,7 +4,6 @@ class AppointmentCard extends StatelessWidget {
   final String name;
   final String time;
   final String date;
-  final String imageUrl;
   final bool isHistory;
   final bool isCancelled;
   final VoidCallback? onCancel;
@@ -16,7 +15,6 @@ class AppointmentCard extends StatelessWidget {
     required this.name,
     required this.time,
     required this.date,
-    required this.imageUrl,
     this.isHistory = false,
     this.isCancelled = false,
     this.rating = 0.0, 
@@ -93,15 +91,6 @@ class AppointmentCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(
-                    imageUrl,
-                    width: 90,
-                    height: 90,
-                    fit: BoxFit.cover,
-                  ),
-                ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15),

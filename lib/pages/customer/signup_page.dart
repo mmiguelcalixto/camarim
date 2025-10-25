@@ -3,6 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'login_page.dart';
+import 'package:camarim_backend/models/customer.dart';
+import 'package:camarim_backend/services/customer.service.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -24,6 +26,13 @@ class _SignupPageState extends State<SignupPage> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  final _addressCepController = TextEditingController();
+  final _addressStreetController = TextEditingController();
+  final _addressNumberController = TextEditingController();
+  final _addressNeighborhoodController = TextEditingController();
+  final _addressCityController = TextEditingController();
+  final _addressStateController = TextEditingController();
+
   final _cpfFormatter = MaskTextInputFormatter(mask: '###.###.###-##');
   final _phoneFormatter = MaskTextInputFormatter(mask: '(##) #####-####');
   final _birthDateMask = MaskTextInputFormatter(
@@ -31,16 +40,20 @@ class _SignupPageState extends State<SignupPage> {
     filter: {"#": RegExp(r'\d')},
   );
 
+  final CustomerService _customerService = CustomerService();
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
-    _loginTapRecognizer = TapGestureRecognizer()
-      ..onTap = () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-        );
-      };
+    _loginTapRecognizer =
+        TapGestureRecognizer()
+          ..onTap = () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+            );
+          };
   }
 
   @override
@@ -54,9 +67,69 @@ class _SignupPageState extends State<SignupPage> {
     _cpfController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _addressCepController.dispose();
+    _addressStreetController.dispose();
+    _addressNumberController.dispose();
+    _addressNeighborhoodController.dispose();
+    _addressCityController.dispose();
+    _addressStateController.dispose();
     super.dispose();
   }
 
+  void _registerCustomer() async {
+if (!_formKey.currentState!.validate()) return;
+
+  setState(() => _isLoading = true);
+
+  try { 
+    final dateParts = _birthDateController.text.split('/');
+    final day = int.parse(dateParts[0]);
+    final month = int.parse(dateParts[1]);
+    final year = int.parse(dateParts[2]);
+    final birthDate = DateTime.utc(year, month, day);
+
+    final newCustomer = Customer(
+      fullName: _nameController.text,
+      birthDate: birthDate,
+      username: _usernameController.text,
+      email: _emailController.text,
+      phone: _phoneFormatter.getUnmaskedText(),
+      password: _passwordController.text,
+      cpf: _cpfFormatter.getUnmaskedText(),
+      addressStreet: _addressStreetController.text,
+      addressNumber: _addressNumberController.text,
+      addressNeighborhood: _addressNeighborhoodController.text,
+      addressCity: _addressCityController.text,
+      addressState: _addressStateController.text,
+      addressCep: _addressCepController.text.replaceAll(RegExp(r'[^0-9]'), ''),
+    );
+
+    final bool success = await _customerService.registerCustomer(newCustomer);
+
+    if (!mounted) return;
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Conta criada com sucesso!'), backgroundColor: Colors.green),
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Erro ao criar conta. O servidor recusou os dados.'), backgroundColor: Colors.red),
+      );
+    }
+  } catch (e) { 
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Erro de conexão: $e'), backgroundColor: Colors.red),
+    );
+  } finally {
+    setState(() => _isLoading = false);
+  }
+}
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -106,7 +179,9 @@ class _SignupPageState extends State<SignupPage> {
                         inputFormatters: [_birthDateMask],
                         keyboardType: TextInputType.datetime,
                         validator: (value) {
-                          if (value == null || value.isEmpty) return 'Preencha este campo';
+                          if (value == null || value.isEmpty) {
+                            return 'Preencha este campo';
+                          }
                           if (value.length != 10) return 'Formato DD/MM/AAAA';
                           return null;
                         },
@@ -120,7 +195,9 @@ class _SignupPageState extends State<SignupPage> {
                         label: 'E-mail',
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
-                          if (value == null || value.isEmpty) return 'Preencha este campo';
+                          if (value == null || value.isEmpty) {
+                            return 'Preencha este campo';
+                          }
                           if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
                             return 'E-mail inválido';
                           }
@@ -133,7 +210,9 @@ class _SignupPageState extends State<SignupPage> {
                         inputFormatters: [_phoneFormatter],
                         keyboardType: TextInputType.phone,
                         validator: (value) {
-                          if (value == null || value.isEmpty) return 'Preencha este campo';
+                          if (value == null || value.isEmpty) {
+                            return 'Preencha este campo';
+                          }
                           if (value.length < 14) return 'Telefone incompleto';
                           return null;
                         },
@@ -144,17 +223,53 @@ class _SignupPageState extends State<SignupPage> {
                         inputFormatters: [_cpfFormatter],
                         keyboardType: TextInputType.number,
                         validator: (value) {
-                          if (value == null || value.isEmpty) return 'Preencha este campo';
+                          if (value == null || value.isEmpty) {
+                            return 'Preencha este campo';
+                          }
                           if (value.length != 14) return 'CPF incompleto';
                           return null;
                         },
                       ),
+
+                      _buildTextFormField(
+                        controller: _addressCepController,
+                        label: 'CEP',
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          MaskTextInputFormatter(mask: '#####-###'),
+                        ],
+                      ),
+                      _buildTextFormField(
+                        controller: _addressStreetController,
+                        label: 'Rua / Logradouro',
+                      ),
+                      _buildTextFormField(
+                        controller: _addressNumberController,
+                        label: 'Número',
+                        keyboardType: TextInputType.number,
+                      ),
+                      _buildTextFormField(
+                        controller: _addressNeighborhoodController,
+                        label: 'Bairro',
+                      ),
+                      _buildTextFormField(
+                        controller: _addressCityController,
+                        label: 'Cidade',
+                      ),
+                      _buildTextFormField(
+                        controller: _addressStateController,
+                        label: 'Estado (UF)',
+                      ),
+
                       _buildTextFormField(
                         controller: _passwordController,
                         label: 'Senha',
                         isPassword: true,
                         validator: (value) {
-                          if (value == null || value.isEmpty) return 'Preencha este campo';
+                          if (value == null || value.isEmpty) {
+                            return 'Preencha este campo';
+                          }
                           if (value.length < 6) return 'Mínimo de 6 caracteres';
                           return null;
                         },
@@ -164,8 +279,12 @@ class _SignupPageState extends State<SignupPage> {
                         label: 'Confirme sua senha',
                         isPassword: true,
                         validator: (value) {
-                          if (value == null || value.isEmpty) return 'Preencha este campo';
-                          if (value != _passwordController.text) return 'As senhas não coincidem';
+                          if (value == null || value.isEmpty) {
+                            return 'Preencha este campo';
+                          }
+                          if (value != _passwordController.text) {
+                            return 'As senhas não coincidem';
+                          }
                           return null;
                         },
                       ),
@@ -173,23 +292,29 @@ class _SignupPageState extends State<SignupPage> {
                       SizedBox(
                         width: double.infinity,
                         height: 48,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              debugPrint('Nome: ${_nameController.text}');
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF626BBA),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: const Text(
-                            'Criar minha conta!',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
+                        child:
+                            _isLoading
+                                ? const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Color(0xFF626BBA),
+                                  ),
+                                )
+                                : ElevatedButton(
+                                  onPressed: _registerCustomer,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF626BBA),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Criar minha conta!',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
                       ),
                       const SizedBox(height: 16),
                       RichText(
@@ -227,16 +352,21 @@ class _SignupPageState extends State<SignupPage> {
                       const SizedBox(height: 24),
                       _buildSocialButton('Continue com Apple', Icons.apple),
                       const SizedBox(height: 12),
-                      _buildSocialButton('Continue com Facebook', Icons.facebook),
+                      _buildSocialButton(
+                        'Continue com Facebook',
+                        Icons.facebook,
+                      ),
                       const SizedBox(height: 12),
-                      _buildSocialButton('Continue com Google', Icons.g_mobiledata),
+                      _buildSocialButton(
+                        'Continue com Google',
+                        Icons.g_mobiledata,
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
           ),
-
           Positioned(
             top: size.height * 0.14,
             left: 20,
@@ -275,11 +405,13 @@ class _SignupPageState extends State<SignupPage> {
           labelStyle: const TextStyle(color: Color(0xFF737373)),
           floatingLabelStyle: const TextStyle(color: Color(0xFF737373)),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-          suffixIcon: isPassword
-              ? const Icon(Icons.visibility_off, color: Color(0xFF737373))
-              : null,
+          suffixIcon:
+              isPassword
+                  ? const Icon(Icons.visibility_off, color: Color(0xFF737373))
+                  : null,
         ),
-        validator: validator ??
+        validator:
+            validator ??
             (value) {
               if (value == null || value.isEmpty) return 'Preencha este campo';
               return null;

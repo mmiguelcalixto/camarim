@@ -4,6 +4,7 @@ class Customer {
   final String username;
   final String email;
   final String phone;
+  final String cpf;
   final String password;
   final String addressStreet;
   final String addressNumber;
@@ -18,6 +19,7 @@ class Customer {
     required this.username,
     required this.email,
     required this.phone,
+    required this.cpf,
     required this.password,
     required this.addressStreet,
     required this.addressNumber,
@@ -27,13 +29,14 @@ class Customer {
     required this.addressCep,
   });
 
-  Map<String, dynamic> getCustomer() {
+  Map<String, dynamic> toJson() {
     return {
       "fullName": fullName,
       "birthDate": birthDate.toIso8601String(),
       "username": username,
       "email": email,
       "phone": phone,
+      "cpf": cpf,
       "password": password,
       "addressStreet": addressStreet,
       "addressNumber": addressNumber,

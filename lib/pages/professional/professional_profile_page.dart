@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:camarim_backend/models/professional.dart';
 import 'package:camarim_backend/services/professional.service.dart';
 import 'package:camarim_backend/services/professionalPortfolio.service.dart';
@@ -10,8 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'edit_professional_profile_page.dart'; 
 
 class ProfessionalProfilePage extends StatefulWidget {
-  final String professionalId;
-  const ProfessionalProfilePage(this.professionalId, {super.key});
+  const ProfessionalProfilePage({super.key});
 
   @override
   State<ProfessionalProfilePage> createState() => _ProfessionalProfilePageState();
@@ -29,11 +29,24 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _loadProfessional() async {
+    final prefs = await SharedPreferences.getInstance();
+    
+    final professionalId = prefs.getString('professionalId');
+
+    if (professionalId == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Erro: ID do profissional não encontrado. Faça o login novamente.')),
+        );
+      }
+      return;
+    }
+
     final service = ProfessionalService();
-    final result = await service.getProfessionalById(widget.professionalId);
+    final result = await service.getProfessionalById(professionalId); 
+
     if (result != null) {
       final data = jsonDecode(result.body);
-
       setState(() {
         professional = Professional.fromJson(data);
       });
