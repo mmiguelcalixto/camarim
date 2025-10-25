@@ -1,10 +1,14 @@
+import 'dart:convert';
+
+import 'package:camarim_backend/models/appointment.dart';
+import 'package:camarim_backend/models/professional.dart';
+import 'package:camarim_backend/services/appointment.service.dart';
 import 'package:camarim_backend/widgets/professional_bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:camarim_backend/widgets/prof_appointment_card.dart';
 
 class ProfHorariosPage extends StatefulWidget {
   final String professionalId;
-
   const ProfHorariosPage(this.professionalId, {super.key});
 
   @override
@@ -12,49 +16,47 @@ class ProfHorariosPage extends StatefulWidget {
 }
 
 class _ProfHorariosPageState extends State<ProfHorariosPage> {
-  List<Map<String, dynamic>> upcomingAppointments = [
-    {
-      "id": 1,
-      "clientName": "Laura Rodrigues", 
-      "service": "Manicure",
-      "time": "15:00hs",
-      "date": "07 de outubro",
-      "status": "Agendado", 
-    },
-    {
-      "id": 5,
-      "clientName": "Miguel Calixto",
-      "service": "Corte Masculino",
-      "time": "10:30hs",
-      "date": "13 de Outubro",
-      "status": "Confirmado",
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _loadProfessional();
+  }
 
-  List<Map<String, dynamic>> historyAppointments = [
-    {
-      "id": 2,
-      "clientName": "Caio",
-      "service": "Corte Masculino",
-      "time": "17:00hs",
-      "date": "17 de Abril",
-      "status": "Concluído",
-      "rating": 5.0,
-    },
-    {
-      "id": 3,
-      "clientName": "Natalia",
-      "service": "Manicure",
-      "time": "14:00hs",
-      "date": "17 de Abril",
-      "status": "Cancelado",
-      "rating": 0.0,
-    },
-  ];
+  List<Appointment>? appointments;
+  List<Appointment>? upcomingAppointments;
+  List<Appointment>? pastAppointments;
 
-  void _updateAppointmentStatus(int appointmentId, String newStatus) {
+
+  Future<void> _loadProfessional() async {
+    final service = AppointmentService();
+    final result = await service.getAppointmentsByProfessionalId(widget.professionalId);
+    if (result != null) {
+      final data = jsonDecode(result.body);
+
+      setState(() {
+        appointments = (data as List)
+              .map((item) => Appointment.fromJson(item))
+              .toList();
+
+
+        if (appointments != null && appointments!.isNotEmpty) {
+          for (var appointment in appointments!) {
+            if (appointment.startsAt!.isAfter(DateTime.now()) ) {
+              upcomingAppointments?.add(appointment);
+            }
+
+            if (appointment.endsAt!.isBefore(DateTime.now())) {
+              pastAppointments?.add(appointment);
+            }
+          }
+        }
+      });
+    }
+  }
+
+  void _updateAppointmentStatus(String appointmentId, String newStatus) {
     setState(() {
-      final index = upcomingAppointments.indexWhere((item) => item['id'] == appointmentId);
+      final index = upcomingAppointments?.indexWhere((item) => item.id == appointmentId);
 
       if (index != -1) {
         upcomingAppointments[index]['status'] = newStatus;
@@ -67,7 +69,7 @@ class _ProfHorariosPageState extends State<ProfHorariosPage> {
     });
   }
 
-  void _showActionDialog(BuildContext context, int appointmentId, String currentStatus) {
+  void _showActionDialog(BuildContext context, String appointmentId, String currentStatus) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
