@@ -1,31 +1,47 @@
+import 'service.dart';
+
 class ProfessionalProfile {
-  final String profileImageUrl;
-  final String headerImageUrl;
+  final String id;
   final String name;
   final String bio;
-  final List<String> socialMediaLinks;
-  final List<String> services;
+  final String profileImageUrl;
+  final String headerImageUrl;
+  final List<Service> services;
   final List<String> workImages;
+  final List<String> socialMediaLinks;
 
   ProfessionalProfile({
-    required this.profileImageUrl,
-    required this.headerImageUrl,
+    required this.id,
     required this.name,
     required this.bio,
-    required this.socialMediaLinks,
+    required this.profileImageUrl,
+    required this.headerImageUrl,
     required this.services,
     required this.workImages,
+    required this.socialMediaLinks,
   });
 
   factory ProfessionalProfile.fromJson(Map<String, dynamic> json) {
+    var servicesFromJson = json['services'] as List? ?? [];
+    List<Service> serviceList = servicesFromJson.map((s) => Service.fromJson(s)).toList();
+    
+    var workImagesFromJson = json['portfolio'] as List? ?? [];
+    List<String> workImagesList = workImagesFromJson.map((i) => i['imageUrl'] as String).toList();
+    
+    var socialMediaFromJson = json['socialMedia'] as List? ?? [];
+    List<String> socialMediaList = socialMediaFromJson.map((l) => l['link'] as String).toList();
+
     return ProfessionalProfile(
-      profileImageUrl: json['profileImageUrl'] as String,
-      headerImageUrl: json['headerImageUrl'] as String,
-      name: json['name'] as String,
-      bio: json['bio'] as String,
-      socialMediaLinks: List<String>.from(json['socialMediaLinks']),
-      services: List<String>.from(json['services']),
-      workImages: List<String>.from(json['workImages']),
+      id: json['id'],
+      name: json['name'] ?? '',
+      bio: json['bio'] ?? 'Nenhuma bio disponível.',
+      profileImageUrl: json['profileImageUrl'] ?? '',
+      headerImageUrl: json['headerImageUrl'] ?? '',
+      services: serviceList,
+      workImages: workImagesList,
+      socialMediaLinks: socialMediaList,
     );
   }
+
+  String get body => bio;
 }

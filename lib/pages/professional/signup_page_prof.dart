@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:camarim_backend/models/professional.dart';
 import 'package:camarim_backend/pages/professional/professional_profile_page.dart';
 import 'package:camarim_backend/services/professional.service.dart';
@@ -114,14 +112,12 @@ class _SignupPageProfState extends State<SignupPageProf> {
     final response = await professionalService.createProfessional(data, _selectedImage!);
 
     if(response != null && response.statusCode == 201) {
-      final data = jsonDecode(response.body);
-      final professionalId = data['id'];
 
       if (!mounted) return;
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ProfessionalProfilePage(professionalId)),
+        MaterialPageRoute(builder: (context) => ProfessionalProfilePage()),
       );
     }
   }

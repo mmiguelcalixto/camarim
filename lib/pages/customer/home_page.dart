@@ -1,17 +1,19 @@
+import 'package:camarim_backend/models/professional.dart';
 import 'package:camarim_backend/pages/customer/horarios_page.dart';
-import 'package:camarim_backend/pages/customer/menu_page.dart';  
+import 'package:camarim_backend/pages/customer/menu_page.dart';
+import 'package:camarim_backend/pages/customer/professional_page.dart';
+import 'package:camarim_backend/services/professional.service.dart';
+import 'package:camarim_backend/widgets/square_card.dart';  
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'search_prof.dart';
-import '../../widgets/category_chip.dart';
-import '../../widgets/section.dart';
-import '../../widgets/circle_card.dart';
-import '../../widgets/horizontal_list.dart';
+import 'package:camarim_backend/widgets/category_chip.dart';
+import 'package:camarim_backend/widgets/section.dart';
+import 'package:camarim_backend/widgets/circle_card.dart';
+import 'package:camarim_backend/widgets/horizontal_list.dart';
 
 class HomePage extends StatefulWidget {
-  final String customerId;
-
-  const HomePage(this.customerId, {super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -24,6 +26,7 @@ class _HomePageState extends State<HomePage> {
     HomePageContent(),
     SearchProfPage(),
     HorariosPage(),
+    //const Center(child: Text("Página do Perfil do Cliente")),
     MenuPage(),
   ];
 
@@ -92,8 +95,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// FIM DA NAV BAR ----------------------------------------------------------------
-
 class HomePageContent extends StatefulWidget {
   const HomePageContent({super.key});
 
@@ -101,21 +102,50 @@ class HomePageContent extends StatefulWidget {
   State<HomePageContent> createState() => _HomePageContentState();
 }
 
-class _HomePageContentState extends State<HomePageContent> {
 
-  // final List<Professional> topRatedProfessionals = [
-  //   Professional(name: 'Bruna Nails', imagePath: 'lib/assets/img/nails.jpg'),
-  //   Professional(name: 'Gabriel Hair', imagePath: 'lib/assets/img/gabriel.jpg'),
-  //   Professional(name: 'Jorge SPA', imagePath: 'lib/assets/img/jorge.jpg'),
-  // ];
+class _HomePageContentState extends State<HomePageContent> {
+  late Future<List<Professional>> _futureProfessionals;
+  final ProfessionalService _professionalService = ProfessionalService();
+final String serverIp = "192.168.1.3";
+
+  @override
+  void initState() {
+    super.initState();
+    _futureProfessionals = _professionalService.getProfessionals();
+  }
+
+String getImageUrl(String? url) {
+    if (url == null || url.isEmpty) {
+      return ""; 
+    }
+    return url.replaceAll("localhost", serverIp);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
+    return FutureBuilder<List<Professional>>(
+     future: _futureProfessionals,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(child: Text("Erro ao carregar dados: ${snapshot.error}"));
+        }
+
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text("Nenhum profissional foi encontrado"));
+        }
+        
+        final professionals = snapshot.data!;
+        final firstProfessional = professionals.first;
+
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+          Container( 
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             decoration: const BoxDecoration(
               color: Color(0xFF9FA0E4),
@@ -227,72 +257,107 @@ class _HomePageContentState extends State<HomePageContent> {
             ),
           ),
           const SizedBox(height: 16),
-          // Section(
-          //   title: "Bem avaliados",
-          //   child: HorizontalList(
-          //     children: topRatedProfessionals.map((prof) {
-          //       return SquareCard(prof.name, prof.imagePath);
-          //     }).toList(),
-          //   ),
-          // ),
-          Section(
-            title: "Baseado nas suas escolhas",
-            child: HorizontalList(
-              children: const [
-                CircleCard("Linda Make"),
-                CircleCard("Jorge Hair"),
-                CircleCard("Mary Nails"),
-              ],
+  Section(
+  title: "Bem avaliados",
+  child: HorizontalList(
+    children: professionals.map((prof) {
+      return GestureDetector(
+        onTap: () {
+          print('Clicou em (SquareCard): ${prof.name} com ID: ${prof.id}'); 
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfessionalPageClient(professionalId: int.tryParse(prof.id ?? '') ?? 0), 
             ),
-          ),
-          Section(
-            title: "Pertinho de você",
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(16),
+          );
+        },
+          child: SquareCard(prof.name, getImageUrl(prof.profileImage)),
+      );
+    }).toList(),
+  ),
+),
+
+              Section(
+                title: "Baseado nas suas escolhas",
+                child: HorizontalList(
+                  children: professionals.map((prof) {
+                    return GestureDetector(
+                      onTap: () {
+                        print('Clicou em (CircleCard): ${prof.name} com ID: ${prof.id}'); 
+                         Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfessionalPageClient(professionalId: int.tryParse(prof.id ?? '') ?? 0), 
+                          ),
+                        );
+                      },
+                      child: CircleCard(prof.name, getImageUrl(prof.profileImage)),
+                    );
+                  }).toList(),
                 ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(12),
+              ),
+
+              Section(
+                title: "Pertinho de você",
+                child: GestureDetector(
+                  onTap: () {
+                    print('Clicou em (Destaque): ${firstProfessional.name} com ID: ${firstProfessional.id}'); 
+                     Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfessionalPageClient(professionalId: int.tryParse(firstProfessional.id ?? '') ?? 0), 
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    const Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
                         children: [
-                          Text(
-                            "Giuliard",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              getImageUrl(firstProfessional.profileImage),
+                              width: 80, height: 80, fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(width: 80, height: 80, color: Colors.grey, child: const Icon(Icons.person, color: Colors.white));
+                              },
                             ),
                           ),
-                          SizedBox(height: 4),
-                          Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam...",
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  firstProfessional.name, 
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  "Especialista em ${firstProfessional.addressCity}",
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
+              const SizedBox(height: 24),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CircleCard extends StatelessWidget {
   final String label;
 
-  const CircleCard(this.label, {super.key});
+  const CircleCard(this.label, String imageUrl, {super.key});
 
   @override
   Widget build(BuildContext context) {

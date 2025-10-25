@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:camarim_backend/pages/customer/home_page.dart';
 import 'package:camarim_backend/pages/professional/professional_profile_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:camarim_backend/services/login.service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -45,25 +46,48 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _login() async {
     final service = LoginService();
 
+  try {
     final response = await service.login(_emailController.text, _passwordController.text);
 
-    if(response != null && response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      final userType = data['user']['userType'];
+      final user = data['user'];
+      final userType = user['userType'];
+      final userId = user['id'];
 
-      if (!mounted) return;
-
+      final prefs = await SharedPreferences.getInstance();
+      
       if (userType == "customer") {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage(data['user']['id'])),
-        );
+          await prefs.setString('customerId', userId);
+        } else {
+          await prefs.setString('professionalId', userId);
+        }
+        await prefs.setString('userType', userType);
+
+        if (!mounted) return;
+
+        if (userType == "customer") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProfessionalProfilePage()),
+          );
+        }
       } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ProfessionalProfilePage(data['user']['id'])),
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('E-mail ou senha inválidos.'), backgroundColor: Colors.red),
         );
       }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao tentar fazer login: $e'), backgroundColor: Colors.red),
+      );
     }
   }
 
@@ -225,3 +249,4 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
