@@ -65,6 +65,9 @@ cd camarim
 #### Instale as dependências do Flutter
 flutter pub get
 
+#### Importante: Trocar urls
+Caso você vá rodar o app em um emulador, coloque todas as urls da api (estão nas services) com o endereço localhost. Caso você vá rodar em um celular físico, coloque o ip do seu computador no endereço.
+
 #### Execute o aplicativo no dispositivo ou emulador
 flutter run
 
