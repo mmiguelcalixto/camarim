@@ -164,7 +164,6 @@ class _HorariosPageState extends State<HorariosPage> {
                       name: appointment.professionalName,
                       time: "${DateFormat('HH:mm').format(appointment.startTime.toLocal())}hs",
                       date: DateFormat("EEEE, d 'de' MMMM", 'pt_BR').format(appointment.startTime.toLocal()),
-                      imageUrl: "lib/assets/img/perfil.png",
                       onCancel: () => _cancelAppointment(appointment.id),
                     );
                   }).toList(),
@@ -182,7 +181,6 @@ class _HorariosPageState extends State<HorariosPage> {
                       name: appointment.professionalName,
                       time: "${DateFormat('HH:mm').format(appointment.startTime.toLocal())}hs",
                       date: DateFormat("EEEE, d 'de' MMMM", 'pt_BR').format(appointment.startTime.toLocal()),
-                      imageUrl: "lib/assets/img/perfil.png",
                       isHistory: true,
                       isCancelled: appointment.status == 'CANCELLED',
                       onRate: () => _showRatingDialog(context, appointment),

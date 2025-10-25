@@ -143,7 +143,7 @@ class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    ElevatedButton(
+                   /* ElevatedButton(
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -161,7 +161,7 @@ class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
                         "Contratar",
                         style: TextStyle(color: Colors.white),
                       ),
-                    ),
+                    ),*/
                     const SizedBox(height: 20),
                     const Text(
                       "Serviços",
@@ -171,21 +171,39 @@ class _ProfessionalPageClientState extends State<ProfessionalPageClient> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: profile.services.isNotEmpty
-                          ? profile.services.map((service) {
-                              return Chip(
-                                label: Text(
-                                    '${service.name} - R\$${service.price.toStringAsFixed(2)}'),
-                              );
-                            }).toList()
-                          : [
-                              const Chip(
-                                  label: Text("Nenhum serviço cadastrado"))
-                            ],
+              Column(
+  children: profile.services.isNotEmpty
+      ? profile.services.map((service) {
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 4),
+            child: ListTile(
+              title: Text(service.name),
+              subtitle: Text('R\$${service.price.toStringAsFixed(2)}'),
+              trailing: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 92, 98, 158),
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text("Agendar"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ContratarPage(
+                        professionalId: widget.professionalId.toString(),
+                        serviceId: service.id.toString(),
+                      ),
                     ),
+                  );
+                },
+              ),
+            ),
+          );
+        }).toList()
+      : [
+          const Text("Nenhum serviço cadastrado."),
+        ],
+),
                     const SizedBox(height: 20),
                     const Text(
                       "Trabalhos já Feitos",

@@ -5,7 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:camarim_backend/services/appointment.service.dart';
 import 'package:camarim_backend/models/professional_time_slot.dart';
 import 'package:camarim_backend/models/schedule_time.dart';
-import 'package:camarim_backend/pages/customer/pagamento_page.dart';
+import 'package:camarim_backend/pages/customer/horarios_page.dart';
+
 
 const Color kPurpleMain = Colors.deepPurple;
 const Color kWhite = Color(0xFFFFFFFF);
@@ -144,11 +145,11 @@ class _ContratarPageState extends State<ContratarPage> {
       customerId: customerId,
       serviceId: widget.serviceId,
     );
-
+print('DEBUG: Enviando para agendamento -> professionalTimeId: ${_selectedSlot!.id}, customerId: $customerId, serviceId: ${widget.serviceId}');
     try {
       final success = await _appointmentService.scheduleTime(request);
       if (success && mounted) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const PagamentoPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const HorariosPage()));
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Não foi possível agendar.'), backgroundColor: Colors.red));
       }

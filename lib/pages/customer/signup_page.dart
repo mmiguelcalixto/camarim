@@ -77,63 +77,59 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   void _registerCustomer() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() => _isLoading = true);
+if (!_formKey.currentState!.validate()) return;
 
-      final dateParts = _birthDateController.text.split('/');
-      final day = int.parse(dateParts[0]);
-      final month = int.parse(dateParts[1]);
-      final year = int.parse(dateParts[2]);
+  setState(() => _isLoading = true);
 
-      final birthDate = DateTime.utc(year, month, day);
+  try { 
+    final dateParts = _birthDateController.text.split('/');
+    final day = int.parse(dateParts[0]);
+    final month = int.parse(dateParts[1]);
+    final year = int.parse(dateParts[2]);
+    final birthDate = DateTime.utc(year, month, day);
 
-      final newCustomer = Customer(
-        fullName: _nameController.text,
-        birthDate: birthDate,
-        username: _usernameController.text,
-        email: _emailController.text,
-        phone: _phoneFormatter.getUnmaskedText(),
-        password: _passwordController.text,
+    final newCustomer = Customer(
+      fullName: _nameController.text,
+      birthDate: birthDate,
+      username: _usernameController.text,
+      email: _emailController.text,
+      phone: _phoneFormatter.getUnmaskedText(),
+      password: _passwordController.text,
+      cpf: _cpfFormatter.getUnmaskedText(),
+      addressStreet: _addressStreetController.text,
+      addressNumber: _addressNumberController.text,
+      addressNeighborhood: _addressNeighborhoodController.text,
+      addressCity: _addressCityController.text,
+      addressState: _addressStateController.text,
+      addressCep: _addressCepController.text.replaceAll(RegExp(r'[^0-9]'), ''),
+    );
 
-        addressStreet: _addressStreetController.text,
-        addressNumber: _addressNumberController.text,
-        addressNeighborhood: _addressNeighborhoodController.text,
-        addressCity: _addressCityController.text,
-        addressState: _addressStateController.text,
-        addressCep: _addressCepController.text.replaceAll(
-          RegExp(r'[^0-9]'),
-          '',
-        ),
+    final bool success = await _customerService.registerCustomer(newCustomer);
+
+    if (!mounted) return;
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Conta criada com sucesso!'), backgroundColor: Colors.green),
       );
-
-      final bool success = await _customerService.registerCustomer(newCustomer);
-
-      setState(() => _isLoading = false);
-
-      if (!mounted) return;
-
-      if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Conta criada com sucesso!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Erro ao criar conta. Verifique os dados.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Erro ao criar conta. O servidor recusou os dados.'), backgroundColor: Colors.red),
+      );
     }
+  } catch (e) { 
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Erro de conexão: $e'), backgroundColor: Colors.red),
+    );
+  } finally {
+    setState(() => _isLoading = false);
   }
-
+}
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

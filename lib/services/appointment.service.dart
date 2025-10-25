@@ -1,33 +1,35 @@
 import 'dart:convert';
+import 'package:camarim_backend/services/professional.service.dart';
 import 'package:http/http.dart' as http;
-import '../models/appointment.dart'; 
+import '../models/appointment.dart';
 import '../models/professional_time_slot.dart';
-import '../models/schedule_time.dart'; 
+import '../models/schedule_time.dart';
 
 class AppointmentService {
   final String _baseUrl = "http://localhost:3000";
 
- // buscar horarios de um profissional
-Future<List<ProfessionalTimeSlot>> getProfessionalTimes(String professionalId, DateTime date) async {
-  final dateString = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  // get professional times busca os horarios disponiveis do profissional
+  Future<List<ProfessionalTimeSlot>> getProfessionalTimes(String professionalId, DateTime date) async {
+    final dateString =
+        "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
     final url = Uri.parse('$_baseUrl/professionalTimes/professional/$professionalId?date=$dateString');
-  print('Tentando acessar a URL ${url.toString()}');
+    print('Tentando acessar a URL ${url.toString()}');
 
-  try {
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      List<dynamic> data = jsonDecode(response.body);
-      return data.map((item) => ProfessionalTimeSlot.fromJson(item)).toList();
-    } else {
-      throw Exception('Falha ao carregar horários. Status: ${response.statusCode}');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        List<dynamic> data = jsonDecode(response.body);
+        return data.map((item) => ProfessionalTimeSlot.fromJson(item)).toList();
+      } else {
+        throw Exception('Falha ao carregar horários. Status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro em getProfessionalTimes: $e');
+      throw Exception('Não foi possível buscar os horários. Verifique o CORS ou a conexão com o servidor.');
     }
-  } catch (e) {
-    print('Erro em getProfessionalTimes: $e');
-    throw Exception('Não foi possível buscar os horários. Verifique o CORS ou a conexão com o servidor.');
   }
-}
 
-  /// agenda um horário 
+  // agendar um horario
   Future<bool> scheduleTime(ScheduleTimeRequest request) async {
     final url = Uri.parse('$_baseUrl/professionalTimes/schedule');
     final response = await http.patch(
@@ -50,27 +52,47 @@ Future<List<ProfessionalTimeSlot>> getProfessionalTimes(String professionalId, D
     }
   }
 
-  /// busca os agendamentos de um cliente
+  // busca agendamentos do cliente
   Future<List<Appointment>> getCustomerAppointments(String customerId) async {
-    final url = Uri.parse('$_baseUrl/customers/$customerId/appointments');
-    print('DEBUG: Tentando acessar a URL -> ${url.toString()}');
+final url = Uri.parse('$_baseUrl/appointments/customer/$customerId');
+    print('DEBUG: Chamando $url');
 
     try {
       final response = await http.get(url);
+      print('DEBUG: Resposta -> ${response.body}');
 
       if (response.statusCode == 200) {
-        List<dynamic> data = jsonDecode(response.body);
-        return data.map((item) => Appointment.fromJson(item)).toList();
+        final List<dynamic> data = jsonDecode(response.body);
+        final professionalService = ProfessionalService();
+
+        List<Appointment> appointments = [];
+
+        for (var item in data) {
+          final appointment = Appointment.fromJson(item);
+
+          try {
+            final professional =
+                await professionalService.getProfessionalById(appointment.professionalId);
+            appointment.professionalName = professional?.name ?? "Profissional não encontrado";
+          } catch (e) {
+            print('Erro ao buscar profissional ${appointment.professionalId}: $e');
+            appointment.professionalName = "Profissional não encontrado";
+          }
+
+          appointments.add(appointment);
+        }
+
+        return appointments;
       } else {
-        throw Exception('Falha ao carregar seus agendamentos. Status: ${response.statusCode}');
+        throw Exception('Erro ao carregar agendamentos: ${response.statusCode}');
       }
     } catch (e) {
       print('Erro em getCustomerAppointments: $e');
-      throw Exception('Não foi possível carregar seus agendamentos. Verifique sua conexão.');
+      throw Exception('Não foi possível buscar os agendamentos');
     }
   }
 
-  // avaliar profissional
+  // rate professional
   Future<bool> rateProfessional(String professionalId, String customerId, double rating) async {
     final url = Uri.parse('$_baseUrl/professionalRatings');
     final response = await http.post(
@@ -90,7 +112,7 @@ Future<List<ProfessionalTimeSlot>> getProfessionalTimes(String professionalId, D
     }
   }
 
-  // atualizar status do agendamento
+  // atualiza o status do appointment
   Future<bool> updateAppointmentStatus(String appointmentId, String status) async {
     final url = Uri.parse('$_baseUrl/appointments/$appointmentId');
     final response = await http.patch(

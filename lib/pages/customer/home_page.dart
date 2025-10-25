@@ -13,8 +13,7 @@ import 'package:camarim_backend/widgets/circle_card.dart';
 import 'package:camarim_backend/widgets/horizontal_list.dart';
 
 class HomePage extends StatefulWidget {
-  final String customerId;
-  const HomePage(this.customerId, {super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -117,7 +116,7 @@ final String serverIp = "192.168.1.3";
 
 String getImageUrl(String? url) {
     if (url == null || url.isEmpty) {
-      return ""; // Return empty string if no URL, so Image.network can use its errorBuilder
+      return ""; 
     }
     return url.replaceAll("localhost", serverIp);
   }
@@ -272,7 +271,7 @@ String getImageUrl(String? url) {
             ),
           );
         },
-          child: SquareCard(prof.name, getImageUrl(prof.profileImage)),// networkimage
+          child: SquareCard(prof.name, getImageUrl(prof.profileImage)),
       );
     }).toList(),
   ),
