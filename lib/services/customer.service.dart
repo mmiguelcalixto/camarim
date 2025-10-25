@@ -5,9 +5,8 @@ import '../models/customer_update_request.dart';
 import '../models/customer_profile.dart';
 
 class CustomerService {
-  final String _baseUrl = "http://localhost:3000";
+  final String _baseUrl = "http://192.168.15.69:3000";
 
-  //register customer
   Future<bool> registerCustomer(Customer customer) async {
     final url = Uri.parse('$_baseUrl/customers');
 
@@ -34,7 +33,6 @@ class CustomerService {
     }
   }
 
-  //update customer
   Future<void> updateCustomer(
     String customerId,
     CustomerUpdateRequest request,
@@ -56,8 +54,6 @@ class CustomerService {
     }
   }
 
-
-  // get customer profile
   Future<CustomerProfile> getCustomerProfile(String customerId) async {
     final url = Uri.parse('$_baseUrl/customers/$customerId');
     try {
@@ -73,6 +69,4 @@ class CustomerService {
        throw Exception('Erro de conexão: $error');
     }
   }
-
-
 }

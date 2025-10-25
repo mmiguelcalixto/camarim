@@ -1,35 +1,62 @@
+enum AppointmentStatus {
+  SCHEDULED,
+  COMPLETED,
+  CANCELED,
+}
+
 class Appointment {
-  final String id;
-  final String professionalId;
-   String professionalName;
-  final String serviceName;
-  final DateTime startTime;
-  final DateTime endTime;
-  final String status; 
+  final String? id;
+  final String? professionalTimeId;
+  final DateTime? startsAt;
+  final DateTime? endsAt;
+  final String? customerId;
+  final String? professionalId;
+  final String? serviceId;
+  AppointmentStatus? status;
 
   Appointment({
-    required this.id,
-    required this.professionalId,
-    required this.professionalName,
-    required this.serviceName,
-    required this.startTime,
-    required this.endTime,
-    required this.status,
+    this.id,
+    this.professionalTimeId,
+    this.startsAt,
+    this.endsAt,
+    this.customerId,
+    this.professionalId,
+    this.serviceId,
+    this.status,
   });
 
-  factory Appointment.fromJson(Map<String, dynamic> json) {
-    final professional = json['professional'] as Map<String, dynamic>?;
-    final service = json['service'] as Map<String, dynamic>?;
+  Map<String, dynamic> getAppointment() {
+    return {
+      "id": id,
+      "professionalTimeId": professionalTimeId,
+      "startsAt": startsAt?.toIso8601String(),
+      "endsAt": endsAt?.toIso8601String(),
+      "customerId": customerId,
+      "professionalId": professionalId,
+      "serviceId": serviceId,
+      "status": status?.name,
+    };
+  }
 
+  factory Appointment.fromJson(Map<String, dynamic> json) {
     return Appointment(
       id: json['id'],
+      professionalTimeId: json['professionalTimeId'],
+      startsAt: json['startsAt'] != null
+          ? DateTime.parse(json['startsAt'])
+          : null,
+      endsAt: json['endsAt'] != null
+          ? DateTime.parse(json['endsAt'])
+          : null,
+      customerId: json['customerId'],
       professionalId: json['professionalId'],
-      professionalName: professional?['name'] ?? 'Profissional não encontrado',
-      serviceName: service?['name'] ?? 'Serviço não encontrado',
-      startTime: DateTime.parse(json['startsAt']),
-      endTime: DateTime.parse(json['endsAt']),
-      status: json['status'],
+      serviceId: json['serviceId'],
+      status: json['status'] != null
+          ? AppointmentStatus.values.firstWhere(
+              (e) => e.name == json['status'],
+              orElse: () => AppointmentStatus.SCHEDULED,
+            )
+          : null,
     );
   }
 }
-
