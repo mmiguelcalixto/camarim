@@ -12,7 +12,7 @@ class Appointment {
   final String? customerId;
   final String? professionalId;
   final String? serviceId;
-  final AppointmentStatus? status;
+  AppointmentStatus? status;
 
   Appointment({
     this.id,
