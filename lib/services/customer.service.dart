@@ -5,9 +5,9 @@ import '../models/customer_update_request.dart';
 import '../models/customer_profile.dart';
 
 class CustomerService {
-  final String _baseUrl = "http://192.168.15.69:3000";
+  final String _baseUrl = "http://localhost:3000";
 
-  Future<bool> registerCustomer(Customer customer) async {
+  Future<http.Response> registerCustomer(Customer customer) async {
     final url = Uri.parse('$_baseUrl/customers');
 
     try {
@@ -18,18 +18,18 @@ class CustomerService {
         body: jsonEncode(customer.toJson()),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         print("Sucesso! Cliente cadastrado.");
         print("Resposta da API: ${response.body}");
-        return true;
+        return response;
       } else {
         print("Erro ao cadastrar. Status: ${response.statusCode}");
         print("Mensagem de erro: ${response.body}");
-        return false;
+        return response;
       }
     } catch (error) {
       print("Ocorreu um erro na conexão: $error");
-      return false;
+      return http.Response('Erro de conexão', 500);
     }
   }
 

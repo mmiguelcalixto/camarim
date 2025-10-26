@@ -9,6 +9,7 @@ class PrivacyPolicyPage extends StatefulWidget {
 }
 
 class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
+  final String customerId = "";
   bool concordo = false;
 
   @override
@@ -292,7 +293,7 @@ ____________________________________________ - Nome completo / CPF
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const MenuPage(),
+                              builder: (context) => MenuPage(customerId),
                             ),
                           );
                         }

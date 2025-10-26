@@ -205,6 +205,7 @@ class ProfessionalService {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
+      print('Dados recebidos na busca: $data');
       return data.map((json) => SearchResult.fromJson(json)).toList();
     } else {
       throw Exception('Falha ao buscar profissionais: ${response.body}');

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:camarim_backend/models/appointment.dart';
 import 'package:camarim_backend/services/appointment.service.dart';
 import 'package:camarim_backend/services/customer.service.dart';
@@ -31,29 +29,26 @@ class _ProfHorariosPageState extends State<ProfHorariosPage> {
 
   Future<void> _loadAppointments() async {
     final result = await appointmentService.getAppointmentsByProfessionalId(widget.professionalId);
-    if (result != null) {
-      final data = jsonDecode(result.body);
 
-      setState(() {
-        appointments = (data as List)
-              .map((item) => Appointment.fromJson(item))
-              .toList();
+    setState(() {
+      appointments = (result as List)
+            .map((item) => Appointment.fromJson(item))
+            .toList();
 
 
-        if (appointments.isNotEmpty) {
-          for (var appointment in appointments) {
-            if (appointment.startsAt != null && appointment.startsAt!.isAfter(DateTime.now())) {
-              upcomingAppointments.add(appointment);
-            }
+      if (appointments.isNotEmpty) {
+        for (var appointment in appointments) {
+          if (appointment.startsAt != null && appointment.startsAt!.isAfter(DateTime.now())) {
+            upcomingAppointments.add(appointment);
+          }
 
-            if (appointment.endsAt != null && appointment.endsAt!.isBefore(DateTime.now())) {
-              pastAppointments.add(appointment);
-            }
+          if (appointment.endsAt != null && appointment.endsAt!.isBefore(DateTime.now())) {
+            pastAppointments.add(appointment);
           }
         }
-      });
+      }
+    });
     }
-  }
 
   Future<String> getCustomerById(String? id) async {
     if (id == null) return 'Cliente';
@@ -78,7 +73,7 @@ class _ProfHorariosPageState extends State<ProfHorariosPage> {
       final appt = upcomingAppointments[index];
       appt.status = newStatus;
 
-      await appointmentService.updateAppointmentStatus(appointmentId, newStatus);
+      await appointmentService.updateAppointmentStatus(appointmentId, newStatus.toString());
 
       setState(() {
         if (newStatus == AppointmentStatus.COMPLETED || newStatus == AppointmentStatus.CANCELED) {

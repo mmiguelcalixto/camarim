@@ -113,7 +113,7 @@ class _HorariosPageState extends State<HorariosPage> {
                   onPressed: () {
                     if (currentRating > 0) {
                        Navigator.of(context).pop();
-                       _rateProfessional(appointment.professionalId, currentRating);
+                       _rateProfessional(appointment.professionalId.toString(), currentRating);
                     }
                   },
                 ),
@@ -144,11 +144,12 @@ class _HorariosPageState extends State<HorariosPage> {
             }
 
             final now = DateTime.now();
-            final upcoming = snapshot.data!.where((a) => a.startTime.isAfter(now) && a.status != 'CANCELLED').toList();
-            final history = snapshot.data!.where((a) => a.startTime.isBefore(now) || a.status == 'CANCELLED').toList();
-            
-            upcoming.sort((a,b) => a.startTime.compareTo(b.startTime));
-            history.sort((a, b) => b.startTime.compareTo(a.startTime));
+            final data = snapshot.data ?? <Appointment>[];
+            final upcoming = data.where((a) => a.startsAt != null && a.startsAt!.isAfter(now) && a.status != 'CANCELLED').toList();
+            final history = data.where((a) => a.startsAt != null && (a.startsAt!.isBefore(now) || a.status == 'CANCELLED')).toList();
+
+            upcoming.sort((a,b) => a.startsAt!.compareTo(b.startsAt!));
+            history.sort((a, b) => b.startsAt!.compareTo(a.startsAt!));
 
             return ListView(
               padding: const EdgeInsets.all(16),
@@ -161,10 +162,10 @@ class _HorariosPageState extends State<HorariosPage> {
                   const SizedBox(height: 12),
                   ...upcoming.map((appointment) {
                     return AppointmentCard(
-                      name: appointment.professionalName,
-                      time: "${DateFormat('HH:mm').format(appointment.startTime.toLocal())}hs",
-                      date: DateFormat("EEEE, d 'de' MMMM", 'pt_BR').format(appointment.startTime.toLocal()),
-                      onCancel: () => _cancelAppointment(appointment.id),
+                      name: appointment.professionalName.toString(),
+                      time: "${DateFormat('HH:mm').format(appointment.startsAt!.toLocal())}hs",
+                      date: DateFormat("EEEE, d 'de' MMMM", 'pt_BR').format(appointment.startsAt!.toLocal()),
+                      onCancel: () => _cancelAppointment(appointment.id.toString()),
                     );
                   }).toList(),
                   const SizedBox(height: 24),
@@ -178,9 +179,9 @@ class _HorariosPageState extends State<HorariosPage> {
                 else
                   ...history.map((appointment) {
                     return AppointmentCard(
-                      name: appointment.professionalName,
-                      time: "${DateFormat('HH:mm').format(appointment.startTime.toLocal())}hs",
-                      date: DateFormat("EEEE, d 'de' MMMM", 'pt_BR').format(appointment.startTime.toLocal()),
+                      name: appointment.professionalName.toString(),
+                      time: "${DateFormat('HH:mm').format(appointment.startsAt!.toLocal())}hs",
+                      date: DateFormat("EEEE, d 'de' MMMM", 'pt_BR').format(appointment.startsAt!.toLocal()),
                       isHistory: true,
                       isCancelled: appointment.status == 'CANCELLED',
                       onRate: () => _showRatingDialog(context, appointment),

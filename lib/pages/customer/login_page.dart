@@ -69,12 +69,12 @@ class _LoginPageState extends State<LoginPage> {
         if (userType == "customer") {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(builder: (context) => HomePage(user['id'])),
           );
         } else {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => ProfessionalProfilePage()),
+            MaterialPageRoute(builder: (context) => ProfessionalProfilePage(userId)),
           );
         }
       } else {

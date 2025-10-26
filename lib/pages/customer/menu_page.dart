@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:camarim_backend/services/customer.service.dart';
@@ -6,7 +9,8 @@ import 'edit_menu_page.dart';
 import 'package:camarim_backend/pages/privacy_policy_page.dart';
 
 class MenuPage extends StatefulWidget {
-  const MenuPage({super.key});
+  final String customerId;
+  const MenuPage(this.customerId, {super.key});
 
   @override
   State<MenuPage> createState() => _MenuPageState();
@@ -23,15 +27,16 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   Future<CustomerProfile> _loadCustomerProfile() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? customerId = prefs.getString('customerId');
+    final service = CustomerService();
+    final result = await service.getCustomerProfile(widget.customerId);
 
-    if (customerId == null) {
+    if (result == null) {
       throw Exception('ID do cliente não encontrado. Faça o login novamente.');
     }
 
-    return await _customerService.getCustomerProfile(customerId);
+    return await _customerService.getCustomerProfile(widget.customerId);
   }
+
 
   void _refreshData() {
     setState(() {

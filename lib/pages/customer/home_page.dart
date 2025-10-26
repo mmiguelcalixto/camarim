@@ -13,7 +13,8 @@ import 'package:camarim_backend/widgets/circle_card.dart';
 import 'package:camarim_backend/widgets/horizontal_list.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String customerId;
+  const HomePage(this.customerId, {super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -22,12 +23,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
+  List<Widget> get _pages => [
     HomePageContent(),
     SearchProfPage(),
     HorariosPage(),
     //const Center(child: Text("Página do Perfil do Cliente")),
-    MenuPage(),
+    MenuPage(widget.customerId),
   ];
 
   void _onItemTapped(int index) {
@@ -106,7 +107,7 @@ class HomePageContent extends StatefulWidget {
 class _HomePageContentState extends State<HomePageContent> {
   late Future<List<Professional>> _futureProfessionals;
   final ProfessionalService _professionalService = ProfessionalService();
-final String serverIp = "192.168.1.3";
+final String serverIp = "localhost";
 
   @override
   void initState() {

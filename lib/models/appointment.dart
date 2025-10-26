@@ -12,6 +12,7 @@ class Appointment {
   final String? customerId;
   final String? professionalId;
   final String? serviceId;
+ String? professionalName;
   AppointmentStatus? status;
 
   Appointment({
@@ -22,6 +23,7 @@ class Appointment {
     this.customerId,
     this.professionalId,
     this.serviceId,
+    this.professionalName,
     this.status,
   });
 
@@ -34,6 +36,7 @@ class Appointment {
       "customerId": customerId,
       "professionalId": professionalId,
       "serviceId": serviceId,
+      "professionalName": professionalName,
       "status": status?.name,
     };
   }
@@ -50,6 +53,7 @@ class Appointment {
           : null,
       customerId: json['customerId'],
       professionalId: json['professionalId'],
+      professionalName: json['professionalName'],
       serviceId: json['serviceId'],
       status: json['status'] != null
           ? AppointmentStatus.values.firstWhere(
@@ -59,4 +63,5 @@ class Appointment {
           : null,
     );
   }
+
 }

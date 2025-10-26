@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:camarim_backend/pages/customer/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
@@ -104,17 +107,19 @@ if (!_formKey.currentState!.validate()) return;
       addressCep: _addressCepController.text.replaceAll(RegExp(r'[^0-9]'), ''),
     );
 
-    final bool success = await _customerService.registerCustomer(newCustomer);
 
-    if (!mounted) return;
+    final response = await _customerService.registerCustomer(newCustomer);
 
-    if (success) {
+    if(response.statusCode == 201) {
+      final data = jsonDecode(response.body);
+      final customerId = data['id'];
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Conta criada com sucesso!'), backgroundColor: Colors.green),
       );
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
+        MaterialPageRoute(builder: (context) =>  HomePage(customerId)),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:camarim_backend/models/professional.dart';
 import 'package:camarim_backend/pages/professional/professional_profile_page.dart';
@@ -109,15 +110,17 @@ class _SignupPageProfState extends State<SignupPageProf> {
       password: _passwordController.text,
     );
 
-    final response = await professionalService.createProfessional(data, _selectedImage!);
+   final response = await professionalService.createProfessional(data, _selectedImage!);
 
     if(response != null && response.statusCode == 201) {
+      final data = jsonDecode(response.body);
+      final professionalId = data['id'];
 
       if (!mounted) return;
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ProfessionalProfilePage()),
+        MaterialPageRoute(builder: (context) => ProfessionalProfilePage(professionalId)),
       );
     }
   }

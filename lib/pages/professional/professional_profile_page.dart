@@ -11,7 +11,8 @@ import 'package:image_picker/image_picker.dart';
 import 'edit_professional_profile_page.dart'; 
 
 class ProfessionalProfilePage extends StatefulWidget {
-  const ProfessionalProfilePage({super.key});
+  final String professionalId;
+  const ProfessionalProfilePage(this.professionalId, {super.key});
 
   @override
   State<ProfessionalProfilePage> createState() => _ProfessionalProfilePageState();
