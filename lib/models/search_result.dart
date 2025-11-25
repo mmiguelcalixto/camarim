@@ -18,7 +18,7 @@ class SearchResult {
     return SearchResult(
       id: int.tryParse(json['id'].toString()) ?? 0,
       name: json['name'] ?? 'Nome não encontrado',
-      profileImageUrl: json['profileImageUrl'] ?? '',
+      profileImageUrl: json['profileImage'] ?? '',
       addressCity: json['addressCity'] ?? 'Cidade não informada',
       rating: (json['averageRating'] as num?)?.toDouble() ?? 0.0,
     );

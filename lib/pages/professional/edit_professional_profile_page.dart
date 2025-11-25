@@ -141,7 +141,7 @@ class _EditProfessionalProfessionalProfilePageState extends State<EditProfession
                   backgroundImage: _profileImage != null
                     ?  FileImage(_profileImage!)
                     : NetworkImage(
-                      professional?.profileImage?.replaceAll("localhost", "192.168.15.69") ?? "",
+                      professional?.profileImage ?? "",
                     ),
                   backgroundColor: Colors.grey[300],
                 ),

@@ -4,7 +4,7 @@ import 'package:camarim_backend/models/service.dart';
 import 'package:http/http.dart' as http;
 
 class ServiceService {
-  final String _baseUrl = "http://localhost:3000";
+  final String _baseUrl = "https://camarim-api.onrender.com";
 
   Future<Service> getById(String serviceId) async {
     final url = Uri.parse('$_baseUrl/services/$serviceId');

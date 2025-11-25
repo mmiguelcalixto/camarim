@@ -10,7 +10,7 @@ import '../models/search_result.dart';
 import '../models/search_filter.dart';
 
 class ProfessionalService {
-  final String baseUrl = "http://localhost:3000/professionals";
+  final String baseUrl = "https://camarim-api.onrender.com/professionals";
 
   // ==========================
   // CREATE PROFESSIONAL
@@ -82,8 +82,11 @@ class ProfessionalService {
     try {
       final response = await http.get(Uri.parse("$baseUrl/$id"));
 
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+      print("$data data------------------------------------------------------------");
+
         return ProfessionalProfile.fromJson(data);
       } else {
         throw Exception('Falha ao carregar dados do profissional');
@@ -199,13 +202,12 @@ class ProfessionalService {
     }
 
     final url = Uri.parse('$baseUrl/search').replace(queryParameters: filterParams);
-    print('URL DE BUSCA SENDO CHAMADA: $url');
 
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      print('Dados recebidos na busca: $data');
+      print('Dados recebidos na busca: $data--------------------------------------------------------');
       return data.map((json) => SearchResult.fromJson(json)).toList();
     } else {
       throw Exception('Falha ao buscar profissionais: ${response.body}');

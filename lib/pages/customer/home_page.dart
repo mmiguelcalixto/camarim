@@ -115,11 +115,11 @@ final String serverIp = "localhost";
     _futureProfessionals = _professionalService.getProfessionals();
   }
 
-String getImageUrl(String? url) {
+  String getImageUrl(String? url) {
     if (url == null || url.isEmpty) {
       return ""; 
     }
-    return url.replaceAll("localhost", serverIp);
+    return url;
   }
 
   @override
@@ -264,7 +264,6 @@ String getImageUrl(String? url) {
     children: professionals.map((prof) {
       return GestureDetector(
         onTap: () {
-          print('Clicou em (SquareCard): ${prof.name} com ID: ${prof.id}'); 
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -272,7 +271,7 @@ String getImageUrl(String? url) {
             ),
           );
         },
-          child: SquareCard(prof.name, getImageUrl(prof.profileImage)),
+          child: SquareCard(prof.name, prof.profileImage ?? ""),
       );
     }).toList(),
   ),
@@ -284,7 +283,6 @@ String getImageUrl(String? url) {
                   children: professionals.map((prof) {
                     return GestureDetector(
                       onTap: () {
-                        print('Clicou em (CircleCard): ${prof.name} com ID: ${prof.id}'); 
                          Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -292,7 +290,7 @@ String getImageUrl(String? url) {
                           ),
                         );
                       },
-                      child: CircleCard(prof.name, getImageUrl(prof.profileImage)),
+                      child: CircleCard(prof.name, prof.profileImage ?? ""),
                     );
                   }).toList(),
                 ),
@@ -302,7 +300,6 @@ String getImageUrl(String? url) {
                 title: "Pertinho de você",
                 child: GestureDetector(
                   onTap: () {
-                    print('Clicou em (Destaque): ${firstProfessional.name} com ID: ${firstProfessional.id}'); 
                      Navigator.push(
                       context,
                       MaterialPageRoute(

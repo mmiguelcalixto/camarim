@@ -44,7 +44,7 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
     }
 
     final service = ProfessionalService();
-    final result = await service.getProfessionalById(professionalId); 
+    final result = await service.getProfessionalById(professionalId);
 
     if (result != null) {
       final data = jsonDecode(result.body);
@@ -77,7 +77,7 @@ class _ProfessionalProfilePageState extends State<ProfessionalProfilePage> {
               child: CircleAvatar(
                 radius: 60,
                 backgroundImage: NetworkImage(
-                  professional?.profileImage?.replaceAll("localhost", "192.168.15.69") ?? "",
+                  professional?.profileImage ?? "",
                 ),
                 backgroundColor: Colors.white,
               ),

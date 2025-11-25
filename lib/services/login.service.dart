@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class LoginService {
-  final url = Uri.parse("http://localhost:3000");
+  final url = Uri.parse("https://camarim-api.onrender.com");
 
   Future<Response?> login(String email, String password) async {
     try {

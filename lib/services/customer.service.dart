@@ -5,7 +5,7 @@ import '../models/customer_update_request.dart';
 import '../models/customer_profile.dart';
 
 class CustomerService {
-  final String _baseUrl = "http://localhost:3000";
+  final String _baseUrl = "https://camarim-api.onrender.com";
 
   Future<http.Response> registerCustomer(Customer customer) async {
     final url = Uri.parse('$_baseUrl/customers');

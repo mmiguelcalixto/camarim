@@ -174,6 +174,7 @@ class _SearchProfPageState extends State<SearchProfPage> {
   }
 
   Widget _buildProfessionalCard(SearchResult result) {
+    print("${result.profileImageUrl}---------------------------------------------------------------------");
     return GestureDetector(
       onTap:
           () => Navigator.push(

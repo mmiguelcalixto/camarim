@@ -7,7 +7,7 @@ import '../models/schedule_time.dart';
 import './professional.service.dart';
 
 class AppointmentService {
-  final String _baseUrl = "http://localhost:3000"; 
+  final String _baseUrl = "https://camarim-api.onrender.com"; 
 
 // METODOS PROFESSIONAL - MIGUEL ________________________________________________________________________________________________________
   /// nisca todos os agendamentos de um profissional

@@ -54,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
       final user = data['user'];
       final userType = user['userType'];
       final userId = user['id'];
+      print("$userId USERID-------------------------------------------------------");
 
       final prefs = await SharedPreferences.getInstance();
       
@@ -74,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
         } else {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => ProfessionalProfilePage(userId)),
+            MaterialPageRoute(builder: (context) => ProfessionalProfilePage(user['id'])),
           );
         }
       } else {
