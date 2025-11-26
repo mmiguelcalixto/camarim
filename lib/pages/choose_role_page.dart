@@ -117,7 +117,7 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
                           ),
                           onTap: _goToClienteSignup,
                           subtitle: 'Quero agendar serviços',
-                         ),
+                        ),
                         _buildRoleCard(
                           label: 'Sou profissional',
                           icon: Image.asset(
@@ -141,56 +141,58 @@ class _ChooseRolePageState extends State<ChooseRolePage> {
   }
 
   Widget _buildRoleCard({
-    required String label,
-    required Widget icon,
-    required VoidCallback onTap,
-    String? subtitle,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 160,
-        height: 220,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: const Color.fromARGB(31, 147, 120, 247),
-              blurRadius: 8,
-              offset: Offset(0, 4),
+  required String label,
+  required Widget icon,
+  required VoidCallback onTap,
+  String? subtitle,
+}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      width: 160,
+      height: 240, 
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: const Color.fromARGB(31, 147, 120, 247),
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 120,
+            height: 120,
+            child: icon,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: Color.fromARGB(255, 92, 98, 158),
             ),
-          ],
-        ),
-        child: Padding( 
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(width: 120, height: 120, child: icon),
-            const SizedBox(height: 12),
+            textAlign: TextAlign.center,
+          ),
+          if (subtitle != null) ...[
+            const SizedBox(height: 4),
             Text(
-              label,
+              subtitle,
               style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Color.fromARGB(255, 92, 98, 158),
+                fontSize: 12,
+                color: Color(0xFF818181),
               ),
               textAlign: TextAlign.center,
             ),
-            if (subtitle != null) ...[
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Color(0xFF818181),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
           ],
-        ),
+        ],
       ),
     ),
   );
